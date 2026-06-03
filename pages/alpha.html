@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../sources/icon.ico">
+    <title>DIABLOxMJ | Resource pack</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Déclaration de ta police personnalisée locale */
+        @font-face {
+            font-family: 'customfonts';
+            src: url('../sources/Mojangles.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'customfonts', sans-serif;
+        }
+
+        .text-ombre {
+            text-shadow: 2px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Personnalisation de la barre de défilement pour coller à la maquette */
+        .scroll-list::-webkit-scrollbar {
+            width: 14px;
+        }
+        .scroll-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-left: 1px solid #a3a3a3;
+        }
+        .scroll-list::-webkit-scrollbar-thumb {
+            background: #d4d4d4;
+            border: 1px solid #a3a3a3;
+        }
+        .scroll-list::-webkit-scrollbar-thumb:hover {
+            background: #a3a3a3;
+        }
+        
+        /* Style pour l'élément sélectionné dans la liste */
+        .item-selection {
+            background-color: #d1d5db; /* Gris clair */
+            color: #000;
+        }
+    </style>
+</head>
+<body class="bg-[#f0f0f0] flex flex-col min-h-screen" style="background-image: url('../sources/background_dark.png'); background-size: 5%; background-repeat: repeat;">
+
+    <!-- En-tête (Header) -->
+    <div id="global-header"></div>
+    <script src="../page.js"></script>
+    <script>
+        // On l'exécute. Comme index.html est à la racine, le chemin est juste './'
+        injecterHeader('./');
+    </script>
+
+    <main class="flex-grow w-full max-w-6xl mx-auto px-6 py-6 flex flex-col lg:flex-row gap-12 items-start">
+        
+        <div class="flex-grow w-full lg:w-2/3 space-y-10 text-white text-ombre">
+            <section class="space-y-4">
+                <h1 class="text-4xl font-bold tracking-wide">Faithful Legacy</h1>
+                <div class="bg-black/60 p-3 rounded border border-black/40 max-w-3xl shadow-md backdrop-blur-sm">
+                    <p class="text-xl leading-relaxed text-justify">
+                        Le pack de textures a pour but de reproduire les textures et son de Minecraft Alpha.
+                    </p>
+                </div>
+            </section>
+            
+            <section class="space-y-3">
+                <h2 class="text-3xl font-bold tracking-wide">Galerie</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="bg-black/40 border-2 border-black aspect-video flex items-center justify-center rounded shadow-md hover:border-white transition-colors duration-200 group relative overflow-hidden cursor-zoom-in">
+                        <img src="sources/alpha_screen_1.png" alt="Illustration" class="w-full h-full object-cover gallery-trigger transition-transform duration-300 group-hover:scale-105">
+                    </div>
+                    <div class="bg-black/40 border-2 border-black aspect-video flex items-center justify-center rounded shadow-md hover:border-white transition-colors duration-200 group relative overflow-hidden cursor-zoom-in">
+                        <img src="sources/alpha_screen_2.png" alt="Illustration" class="w-full h-full object-cover gallery-trigger transition-transform duration-300 group-hover:scale-105">
+                    </div>
+                    <div class="bg-black/40 border-2 border-black aspect-video flex items-center justify-center rounded shadow-md hover:border-white transition-colors duration-200 group relative overflow-hidden cursor-zoom-in">
+                        <img src="sources/alpha_screen_3.png" alt="Illustration" class="w-full h-full object-cover gallery-trigger transition-transform duration-300 group-hover:scale-105">
+                    </div>
+                    <div class="bg-black/40 border-2 border-black aspect-video flex items-center justify-center rounded shadow-md hover:border-white transition-colors duration-200 group relative overflow-hidden cursor-zoom-in">
+                        <img src="sources/alpha_screen_4.png" alt="Illustration" class="w-full h-full object-cover gallery-trigger transition-transform duration-300 group-hover:scale-105">
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="w-full lg:w-[260px] shrink-0 flex flex-col lg:justify-end">
+            <h2 class="text-3xl font-bold text-center mb-4 w-full max-w-[260px] mx-auto lg:mx-0 text-white text-ombre">Téléchargement</h2>
+            <div id="colonnes-container" class="w-full max-w-[260px] mx-auto lg:mx-0"></div>
+        </div>
+    </main>
+
+    <!-- Pied de page (Footer) -->
+    <div id="global-footer"></div>
+    <script src="../page.js"></script>
+    <script>
+        // On l'exécute. Comme index.html est à la racine, le chemin est juste './'
+        injecterFooter('./');
+    </script>
+
+    <div id="notification-toast" class="fixed bottom-8 right-8 bg-gray-900 text-white font-semibold px-6 py-4 rounded shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none z-50">
+        <p id="notification-message">Message ici</p>
+    </div>
+
+    <div id="lightbox" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center cursor-zoom-out hidden opacity-0 transition-opacity duration-300">
+        <img id="lightbox-img" src="" alt="Zoom" class="max-w-[90vw] max-h-[90vh] object-contain rounded border-2 border-white/10 shadow-2xl scale-95 transition-transform duration-300">
+    </div>
+
+    <script src="../packs.js"></script>
+
+    <script>
+        const container = document.getElementById('colonnes-container');
+        const notificationToast = document.getElementById('notification-toast');
+        const notificationMessage = document.getElementById('notification-message');
+        let timeoutNotification;
+
+        function afficherNotification(message) {
+            notificationMessage.textContent = message;
+            notificationToast.classList.remove('opacity-0');
+            notificationToast.classList.add('opacity-100');
+            
+            clearTimeout(timeoutNotification);
+            timeoutNotification = setTimeout(() => {
+                notificationToast.classList.remove('opacity-100');
+                notificationToast.classList.add('opacity-0');
+            }, 3500);
+        }
+
+        // LIGNE MAGIQUE POUR LA PAGE ALPHA
+        // Paramètres : (id du conteneur, id unique du pack à filtrer, recul d'un dossier '../')
+        initialiserTelechargements('colonnes-container', 'alpha', '../');
+
+
+        // --- SYSTÈME DE ZOOM DES IMAGES (LIGHTBOX) ---
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const triggers = document.querySelectorAll('.gallery-trigger');
+
+        triggers.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.remove('hidden');
+                setTimeout(() => {
+                    lightbox.classList.remove('opacity-0');
+                    lightboxImg.classList.remove('scale-95');
+                }, 10);
+            });
+        });
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.add('opacity-0');
+            lightboxImg.classList.add('scale-95');
+            setTimeout(() => {
+                lightbox.classList.add('hidden');
+            }, 300);
+        });
+    </script>
+</body>
+</html>
