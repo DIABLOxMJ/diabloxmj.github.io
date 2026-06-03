@@ -27,11 +27,11 @@ function injecterFooter(cheminRacine) {
     if (!FooterContainer) return; // Sécurité si la balise n'existe pas
 
     // On écrit le HTML du menu en adaptant les liens grâce à "cheminRacine"
+    // <a href="#" class="hover:text-gray-300 underline decoration-2 underline-offset-4">Contact</a>
     FooterContainer.innerHTML = `
         <footer class="bg-[#b3b3b3]/25 backdrop-blur-sm py-5 px-10 text-xl font-bold text-white text-ombre flex flex-col sm:flex-row justify-between items-center gap-4">
             <p>2026 © DIABLOxMJ. Tous droits réservés.</p>
             <div class="flex space-x-6">
-                <a href="#" class="hover:text-gray-300 underline decoration-2 underline-offset-4">Contact</a>
                 <a href="https://bio.link/diabloxmj" class="hover:text-gray-300 underline decoration-2 underline-offset-4">Réseau</a>
             </div>
         </footer>
