@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCPackIndex - Catalogue de Ressources</title>
+    <style>
+        :root {
+            --bg-principal: #1e1e24;
+            --bg-cadre: #2a2a32;
+            --bg-bouton: #3f3f4e;
+            --bg-bouton-hover: #57576c;
+            --texte: #f5f5f5;
+            --accent: #4caf50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-principal);
+            color: var(--texte);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .cadre {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border-right: 2px solid #121214;
+            padding: 15px;
+        }
+
+        #cadre-outils { width: 20%; background-color: #22222b; }
+        #cadre-liste { width: 30%; background-color: var(--bg-cadre); }
+        #cadre-aperçu { width: 50%; background-color: #2d2d38; border-right: none; overflow-y: auto; }
+
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--bg-bouton);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-outil, .btn-catalogue {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background-color: var(--bg-bouton);
+            color: var(--texte);
+            border: none;
+            border-radius: 4px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-outil:hover, .btn-catalogue:hover { background-color: var(--bg-bouton-hover); }
+        .btn-outil:active, .btn-catalogue:active { transform: scale(0.98); }
+        .btn-run-script { background-color: var(--accent); font-weight: bold; margin-bottom: 20px; }
+        .btn-run-script:hover { background-color: #45a049; }
+
+        .liste-scroll { flex: 1; overflow-y: auto; padding-right: 5px; }
+        .search-bar {
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            background-color: var(--bg-principal);
+            border: 1px solid var(--bg-bouton);
+            border-radius: 4px;
+            color: var(--texte);
+        }
+
+        .onglets { display: flex; margin-bottom: 10px; gap: 5px; }
+        .onglet-btn {
+            flex: 1;
+            padding: 8px;
+            background-color: var(--bg-principal);
+            border: 1px solid var(--bg-bouton);
+            color: var(--texte);
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .onglet-btn.actif { background-color: var(--accent); border-color: var(--accent); }
+
+        /* Liens cliquables pour les fichiers JSON */
+        .clickable-path {
+            color: #64b5f6;
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: monospace;
+            word-break: break-all;
+        }
+        .clickable-path:hover { color: #90caf9; }
+
+        /* --- DESIGN SECTION TEXTURES --- */
+        .section-title-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .btn-toggle-errors {
+            background: var(--bg-bouton);
+            color: var(--texte);
+            border: 1px solid #555;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-toggle-errors:hover { background: var(--bg-bouton-hover); }
+
+        .preview-header { margin-bottom: 20px; }
+        .preview-section { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 6px; margin-bottom: 15px; }
+        .grid-textures { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 10px; }
+        
+        .card-texture {
+            background: var(--bg-principal);
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: border 0.2s;
+        }
+        .card-texture:hover { border-color: var(--accent); background: #25252d; }
+        
+        .card-texture img {
+            width: 128px;
+            height: 128px;
+            object-fit: contain;
+            image-rendering: pixelated;
+            display: block;
+            margin: 0 auto 8px auto;
+            background-image: linear-gradient(45deg, #333 25%, transparent 25%), linear-gradient(-45deg, #333 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #333 75%), linear-gradient(-45deg, transparent 75%, #333 75%);
+            background-size: 16px 16px;
+            background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+        }
+        .card-texture span { font-size: 0.75rem; color: #aaa; word-break: break-all; }
+
+        .card-texture.has-error { display: block; }
+        body.hide-errors .card-texture.has-error { display: none !important; }
+
+        /* Style pour l'élément validé dans le catalogue */
+        .btn-catalogue.valide {
+            border-left: 5px solid #4caf50 !important;
+            background-color: #243425 !important;
+        }
+        /* Bouton check dans l'aperçu */
+        .btn-check-task {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .btn-check-task:hover { background-color: #388e3c; }
+        .btn-check-task.is-done { background-color: #c62828; }
+        .btn-check-task.is-done:hover { background-color: #d32f2f; }
+    </style>
+</head>
+<body class="hide-errors">
+
+    <div id="cadre-outils" class="cadre">
+        <h2>Outils</h2>
+        <button class="btn-outil btn-run-script" onclick="runIndexer('blocks')">⚡ Indexer les Blocs</button>
+        <button class="btn-outil btn-run-script" onclick="runIndexer('items')">⚡ Indexer les Items</button>
+        <button class="btn-outil btn-run-script" style="background-color: #0288d1;" onclick="runIndexer('categories')">⚡ Indexer les Catégories</button>
+        <button class="btn-outil btn-run-script" onclick="runIndexer('sounds')">🎵 Extraire les Sons</button>
+        
+        <h2>Catégories</h2>
+        <div id="liste-categories-scroll" class="liste-scroll"></div>
+    </div>
+
+    <div id="cadre-liste" class="cadre">
+        <h2>Catalogue</h2>
+        <div class="onglets">
+            <button id="tab-blocks" class="onglet-btn actif" onclick="switchTab('blocks')">Blocs</button>
+            <button id="tab-items" class="onglet-btn" onclick="switchTab('items')">Items</button>
+        </div>
+        <input type="text" id="search" class="search-bar" placeholder="Rechercher un élément..." oninput="filtrerElements()">
+        <div id="liste-elements" class="liste-scroll">
+            <p style="color: #888; text-align: center; margin-top: 20px;">Chargement du catalogue...</p>
+        </div>
+    </div>
+
+    <div id="cadre-aperçu" class="cadre">
+        <h2>Aperçu des fichiers liés</h2>
+        <div id="zone-aperçu-vide" style="color: #888; text-align: center; margin: auto;">
+            Cliquez sur un élément de la liste pour inspecter ses fichiers.
+        </div>
+        <div id="zone-aperçu-contenu" style="display: none;">
+            <div class="preview-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 id="preview-title">Nom de l'élément</h1>
+                    <span id="preview-id" style="color: var(--accent); font-family: monospace;">id_technique</span>
+                </div>
+                <button id="task-btn" class="btn-check-task" onclick="toggleTaskStatus()">✔️ Marquer comme fait</button>
+            </div>
+            
+            <div class="preview-section">
+                <h3>Fichiers de Structure (.json)</h3>
+                <p style="margin-top: 8px;"><strong>Blockstate :</strong> <span id="path-blockstate" class="clickable-path">-</span></p>
+                <p style="margin-top: 4px;"><strong>Modèle :</strong> <span id="path-model" class="clickable-path">-</span></p>
+            </div>
+
+            <div class="preview-section">
+                <div class="section-title-container">
+                    <h3>Textures Détectées</h3>
+                    <button id="toggle-err-btn" class="btn-toggle-errors" onclick="toggleErrorsVisibility()">Afficher les erreurs</button>
+                </div>
+                <div id="preview-textures-grid" class="grid-textures"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = localStorage.getItem('mcp_currentTab') || 'blocks'; 
+        let currentSelectedId = localStorage.getItem('mcp_currentSelectedId') || null;
+        let dbBlocks = [];
+        let dbItems = [];
+        let dbCategories = {};
+
+        // Charger la liste des tâches terminées depuis le disque
+        let completedTasks = JSON.parse(localStorage.getItem('mcp_completedTasks')) || [];
+
+        window.onload = function() {
+            Promise.all([
+                fetch(`http://localhost:5000/get-index/blocks`).then(r => r.ok ? r.json() : []),
+                fetch(`http://localhost:5000/get-index/items`).then(r => r.ok ? r.json() : []),
+                fetch(`http://localhost:5000/get-categories`).then(r => r.ok ? r.json() : {})
+            ]).then(([blocks, items, categories]) => {
+                dbBlocks = blocks;
+                dbItems = items;
+                dbCategories = categories;
+
+                genererBoutonsCategories();
+
+                if (currentTab === 'blocks' || currentTab === 'items') {
+                    switchTab(currentTab, false);
+                } else {
+                    switchToCategory(currentTab, false);
+                }
+
+                if (currentSelectedId) {
+                    restaurerDernierElement();
+                }
+            });
+        };
+
+        function genererBoutonsCategories() {
+            const conteneur = document.getElementById('liste-categories-scroll');
+            if (!conteneur) return;
+            conteneur.innerHTML = '';
+
+            Object.keys(dbCategories).forEach(catName => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-outil btn-cat-dynamique';
+                btn.style.borderLeft = '4px solid #64b5f6';
+                btn.style.marginBottom = '6px';
+                btn.innerText = `📂 ${catName.toUpperCase()}`;
+                btn.onclick = () => switchToCategory(catName);
+                conteneur.appendChild(btn);
+            });
+        }
+
+        function genererListe(elements) {
+            const conteneur = document.getElementById('liste-elements');
+            conteneur.innerHTML = '';
+            if(!elements || elements.length === 0) {
+                conteneur.innerHTML = `<p style="color: #888; text-align: center; margin-top: 20px;">Aucun élément.</p>`;
+                return;
+            }
+            elements.forEach(elem => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-catalogue';
+                btn.innerText = elem.buttonName;
+                
+                if (completedTasks.includes(elem.id)) {
+                    btn.classList.add('valide');
+                }
+
+                btn.onclick = () => {
+                    currentSelectedId = elem.id;
+                    localStorage.setItem('mcp_currentSelectedId', elem.id);
+                    
+                    if (currentTab === 'blocks' || currentTab === 'items') {
+                        afficherDetails(elem);
+                    } else {
+                        afficherDetailsCategorie(elem);
+                    }
+                    updateTaskButtonVisual();
+                };
+                conteneur.appendChild(btn);
+            });
+        }
+
+        function switchTab(type, resetSelection = true) {
+            currentTab = type;
+            localStorage.setItem('mcp_currentTab', type);
+            if(resetSelection) resetSelectedElement();
+
+            document.getElementById('tab-blocks').classList.toggle('actif', type === 'blocks');
+            document.getElementById('tab-items').classList.toggle('actif', type === 'items');
+            document.getElementById('search').value = '';
+            genererListe(type === 'blocks' ? dbBlocks : dbItems);
+        }
+
+        function switchToCategory(catName, resetSelection = true) {
+            currentTab = catName;
+            localStorage.setItem('mcp_currentTab', catName);
+            if(resetSelection) resetSelectedElement();
+
+            document.getElementById('tab-blocks').classList.remove('actif');
+            document.getElementById('tab-items').classList.remove('actif');
+            document.getElementById('search').value = '';
+            genererListe(dbCategories[catName]);
+        }
+
+        function resetSelectedElement() {
+            currentSelectedId = null;
+            localStorage.removeItem('mcp_currentSelectedId');
+            document.getElementById('zone-aperçu-vide').style.display = 'block';
+            document.getElementById('zone-aperçu-contenu').style.display = 'none';
+        }
+
+        function restaurerDernierElement() {
+            let listToSearch = [];
+            if (currentTab === 'blocks') listToSearch = dbBlocks;
+            else if (currentTab === 'items') listToSearch = dbItems;
+            else listToSearch = dbCategories[currentTab] || [];
+
+            const target = listToSearch.find(e => e.id === currentSelectedId);
+            if (target) {
+                if (currentTab === 'blocks' || currentTab === 'items') afficherDetails(target);
+                else afficherDetailsCategorie(target);
+                updateTaskButtonVisual();
+            }
+        }
+
+        function filtrerElements() {
+            const query = document.getElementById('search').value.toLowerCase();
+            let baseData = [];
+            if(currentTab === 'blocks') baseData = dbBlocks;
+            else if(currentTab === 'items') baseData = dbItems;
+            else baseData = dbCategories[currentTab] || [];
+
+            const filtres = baseData.filter(elem => elem.buttonName.toLowerCase().includes(query) || elem.id.toLowerCase().includes(query));
+            genererListe(filtres);
+        }
+
+        function afficherDetails(elem) {
+            document.getElementById('zone-aperçu-vide').style.display = 'none';
+            document.getElementById('zone-aperçu-contenu').style.display = 'block';
+            document.getElementById('preview-title').innerText = elem.buttonName;
+            document.getElementById('preview-id').innerText = elem.id;
+            
+            const jsonSection = document.getElementById('path-blockstate').closest('.preview-section');
+            jsonSection.style.display = 'block';
+
+            const blockstateRow = document.getElementById('path-blockstate').parentElement;
+            const bStateSpan = document.getElementById('path-blockstate');
+            
+            if (currentTab === 'blocks' && elem.blockstate) {
+                blockstateRow.style.display = 'block';
+                bStateSpan.innerText = elem.blockstate;
+                bStateSpan.className = "clickable-path";
+                bStateSpan.onclick = () => systemOpen(elem.blockstate, 'file');
+            } else {
+                blockstateRow.style.display = 'none';
+                bStateSpan.onclick = null;
+            }
+
+            const modelSpan = document.getElementById('path-model');
+            if (elem.model && elem.model !== "Pack/assets/minecraft/models/None.json") {
+                modelSpan.innerText = elem.model;
+                modelSpan.className = "clickable-path";
+                modelSpan.onclick = () => systemOpen(elem.model, 'file');
+            } else {
+                modelSpan.innerText = "Non défini (Généré par le code du jeu)";
+                modelSpan.className = "";
+                modelSpan.onclick = null;
+            }
+
+            const grid = document.getElementById('preview-textures-grid');
+            grid.innerHTML = '';
+            
+            if(!elem.textures || Object.keys(elem.textures).length === 0) {
+                grid.innerHTML = '<p style="color: #aaa; font-style: italic;">Aucune texture détectée pour cet élément.</p>';
+                return;
+            }
+
+            Object.keys(elem.textures).forEach(key => {
+                const cheminTexture = elem.textures[key];
+                const card = document.createElement('div');
+                card.className = 'card-texture';
+                card.onclick = () => systemOpen(cheminTexture, 'folder');
+                
+                const resId = `res-${key}-${elem.id}`.replace(/:/g, '-').replace(/\//g, '-');
+                
+                card.innerHTML = `
+                    <img src="${cheminTexture}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
+                    <strong>${key}</strong><br>
+                    <span>${cheminTexture.split('/').pop()}</span><br>
+                    <span id="${resId}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function afficherDetailsCategorie(elem) {
+            document.getElementById('zone-aperçu-vide').style.display = 'none';
+            document.getElementById('zone-aperçu-contenu').style.display = 'block';
+            
+            document.getElementById('preview-title').innerText = elem.buttonName;
+            document.getElementById('preview-id').innerText = `Dossier : ${elem.folder_path}`;
+            
+            const jsonSection = document.getElementById('path-blockstate').closest('.preview-section');
+            jsonSection.style.display = 'none';
+
+            const grid = document.getElementById('preview-textures-grid');
+            grid.innerHTML = '';
+            
+            if(!elem.textures || elem.textures.length === 0) {
+                grid.innerHTML = '<p style="color: #aaa; font-style: italic;">Aucune image dans ce dossier.</p>';
+                return;
+            }
+
+            elem.textures.forEach(tex => {
+                const card = document.createElement('div');
+                card.className = 'card-texture';
+                card.onclick = () => systemOpen(tex.path, 'folder');
+                
+                const resId = `res-cat-${elem.id}-${tex.name}`.replace(/[^a-zA-Z0-9]/g, '-');
+                
+                card.innerHTML = `
+                    <img src="${tex.path}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
+                    <strong>${tex.name.replace(/_/g, ' ')}</strong><br>
+                    <span>${tex.filename}</span><br>
+                    <span id="${resId}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function afficherResolution(img, spanId) {
+            const span = document.getElementById(spanId);
+            if (span) {
+                span.innerText = `${img.naturalWidth}x${img.naturalHeight}`;
+            }
+        }
+
+        function handleImgError(img) {
+            img.src = 'https://placehold.co/64x64/333/fff?text=Error';
+            const card = img.closest('.card-texture');
+            if(card) card.classList.add('has-error');
+        }
+
+        function toggleErrorsVisibility() {
+            const body = document.body;
+            const btn = document.getElementById('toggle-err-btn');
+            if (body.classList.contains('hide-errors')) {
+                body.classList.remove('hide-errors');
+                btn.innerText = "Cacher les erreurs";
+            } else {
+                body.classList.add('hide-errors');
+                btn.innerText = "Afficher les erreurs";
+            }
+        }
+
+        function systemOpen(path, type) {
+            const endpoint = type === 'file' ? 'open-file' : 'open-folder';
+            fetch(`http://localhost:5000/${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: path })
+            });
+        }
+
+        function runIndexer(scriptType) {
+            const btn = event.target;
+            const textOrigine = btn.innerText;
+            btn.innerText = "⏳ Calcul...";
+            btn.disabled = true;
+
+            fetch(`http://localhost:5000/run/${scriptType}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.status === 'success') {
+                        if (scriptType === 'categories') {
+                            fetch(`http://localhost:5000/get-categories`)
+                                .then(r => r.ok ? r.json() : {})
+                                .then(categories => {
+                                    dbCategories = categories;
+                                    genererBoutonsCategories();
+                                    if (currentTab !== 'blocks' && currentTab !== 'items') {
+                                        genererListe(dbCategories[currentTab]);
+                                    }
+                                });
+                        } else {
+                            fetch(`http://localhost:5000/get-index/${scriptType}`)
+                                .then(r => r.ok ? r.json() : [])
+                                .then(dataIndex => {
+                                    if(scriptType === 'blocks') dbBlocks = dataIndex;
+                                    else dbItems = dataIndex;
+                                    if(currentTab === scriptType) genererListe(dataIndex);
+                                });
+                        }
+                    }
+                })
+                .finally(() => {
+                    btn.innerText = textOrigine;
+                    btn.disabled = false;
+                });
+        }
+
+        function toggleTaskStatus() {
+            if (!currentSelectedId) return;
+
+            const index = completedTasks.indexOf(currentSelectedId);
+            if (index > -1) {
+                completedTasks.splice(index, 1);
+            } else {
+                completedTasks.push(currentSelectedId);
+            }
+
+            localStorage.setItem('mcp_completedTasks', JSON.stringify(completedTasks));
+            
+            if (currentTab === 'blocks' || currentTab === 'items') {
+                genererListe(currentTab === 'blocks' ? dbBlocks : dbItems);
+            } else {
+                genererListe(dbCategories[currentTab]);
+            }
+            updateTaskButtonVisual();
+        }
+
+        function updateTaskButtonVisual() {
+            const btn = document.getElementById('task-btn');
+            if (completedTasks.includes(currentSelectedId)) {
+                btn.innerText = "❌ Annuler la validation";
+                btn.className = "btn-check-task is-done";
+            } else {
+                btn.innerText = "✔️ Marquer comme fait";
+                btn.className = "btn-check-task";
+            }
+        }
+    </script>
+</body>
+</html>
