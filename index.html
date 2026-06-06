@@ -93,10 +93,15 @@
         let timeoutNotification;
 
         function afficherNotification(message) {
+            // SON : On joue le clic lors de l'apparition du bandeau noir
+            if (typeof PlaySound === 'function') {
+                PlaySound('notification.mp3', ''); // racine, donc recul vide ''
+            }
+
             notificationMessage.textContent = message;
             notificationToast.classList.remove('opacity-0');
             notificationToast.classList.add('opacity-100');
-            
+
             clearTimeout(timeoutNotification);
             timeoutNotification = setTimeout(() => {
                 notificationToast.classList.remove('opacity-100');

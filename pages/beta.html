@@ -117,11 +117,17 @@
         const notificationMessage = document.getElementById('notification-message');
         let timeoutNotification;
 
+        // --- 1. SYSTÈME DE NOTIFICATION ---
         function afficherNotification(message) {
+            // SON : Notification (on passe '../' car on est dans le sous-dossier pages)
+            if (typeof PlaySound === 'function') {
+                PlaySound('notification.mp3', '../');
+            }
+
             notificationMessage.textContent = message;
             notificationToast.classList.remove('opacity-0');
             notificationToast.classList.add('opacity-100');
-            
+    
             clearTimeout(timeoutNotification);
             timeoutNotification = setTimeout(() => {
                 notificationToast.classList.remove('opacity-100');
@@ -129,18 +135,22 @@
             }, 3500);
         }
 
-        // LIGNE MAGIQUE POUR LA PAGE BETA
+        // --- 2. GÉNÉRATION DE LA COLONNE DE TÉLÉCHARGEMENT ---
         // Paramètres : (id du conteneur, id unique du pack à filtrer, recul d'un dossier '../')
         initialiserTelechargements('colonnes-container', 'beta', '../');
 
 
-        // --- SYSTÈME DE ZOOM DES IMAGES (LIGHTBOX) ---
+        // --- 3. SYSTÈME DE ZOOM DES IMAGES (LIGHTBOX UNIQUE ET PROPRE) ---
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const triggers = document.querySelectorAll('.gallery-trigger');
 
+        // Événement : Ouvrir le zoom au clic sur une image de la galerie
         triggers.forEach(img => {
             img.addEventListener('click', () => {
+                // SON : Clic à l'ouverture de l'image
+                if (typeof PlaySound === 'function') PlaySound('screen_in.mp3', '../');
+
                 lightboxImg.src = img.src;
                 lightbox.classList.remove('hidden');
                 setTimeout(() => {
@@ -150,7 +160,11 @@
             });
         });
 
+        // Événement : Fermer le zoom au clic n'importe où sur l'écran noir
         lightbox.addEventListener('click', () => {
+            // SON : Clic à la fermeture de l'image
+            if (typeof PlaySound === 'function') PlaySound('screen_out.mp3', '../');
+
             lightbox.classList.add('opacity-0');
             lightboxImg.classList.add('scale-95');
             setTimeout(() => {

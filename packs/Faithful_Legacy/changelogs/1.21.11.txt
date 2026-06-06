@@ -1,0 +1,13 @@
+[04/06/2026]
+[Ajout]
+- Publication
+
+[05/06/2026]
+[Correction]
+- Correction de la rotation des textures (Netherrack et Bedrock)
+- Correction de la texture de la Bedrock incorrect (Causer par le fichier miroir)
+
+[06/06/2026]
+[Modification]
+- Changement de texture pour le Basalt, Stripped Wood, Purpur block, Nether bricks et End Stone Brick
+- Ajout de nouvelle texture pour le côté des dalles (Bloc double dalle personnalisé)
