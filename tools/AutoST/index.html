@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecteur & Traducteur Local de Sous-titres</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #121212; color: #fff; margin: 0; padding: 0;
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; overflow: hidden;
+        }
+
+        #top-bar {
+            position: absolute; top: 15px; left: 20px; right: 20px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 10;
+        }
+
+        h1 { font-size: 1.1em; font-weight: 400; color: #aaaaaa; margin: 0; max-width: 35%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .btn-group { display: flex; gap: 10px; align-items: center; }
+
+        select {
+            background: #222; color: white; border: 1px solid #444;
+            padding: 8px; border-radius: 4px; font-size: 0.85em; cursor: pointer;
+            display: none;
+        }
+
+        button { 
+            color: white; border: none; padding: 8px 16px; border-radius: 4px;
+            cursor: pointer; font-size: 0.85em; font-weight: 500; transition: background 0.2s;
+        }
+        
+        /* Boutons d'action principaux (Cachés au début) */
+        #generate-ia-btn { background: #28a745; display: none; }
+        #generate-ia-btn:hover { background: #218838; }
+        
+        #load-zip-btn { background: #007bff; display: none; }
+        #load-zip-btn:hover { background: #0069d9; }
+
+        /* Bouton Télécharger (Vert) */
+        #download-srt { background: #28a745; display: none; }
+        #download-srt:hover { background: #218838; }
+        #download-srt:disabled { background: #444 !important; color: #777 !important; cursor: not-allowed; }
+
+        /* Bouton Sauvegarder (Jaune) */
+        #save-project-btn { background: #ffc107; color: #121212; display: none; }
+        #save-project-btn:hover { background: #e0a800; }
+        #save-project-btn:disabled { background: #444 !important; color: #777 !important; cursor: not-allowed; }
+
+        #change-video-btn { background: #555; display: none; }
+        #change-video-btn:hover { background: #444; }
+
+        #drop-zone { 
+            border: 2px dashed #007bff; border-radius: 8px; padding: 60px 40px; 
+            width: 50%; max-width: 500px; cursor: pointer; text-align: center;
+            background: #1a1a1a; transition: background 0.3s;
+        }
+        #drop-zone:hover { background: #222; }
+
+        #video-container { position: relative; display: none; width: 92vw; max-width: 1300px; max-height: 82vh; }
+        video { width: 100%; max-height: 82vh; display: block; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
+
+        #subtitles-display { 
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            color: #ffffff; font-size: 1.6em; font-weight: bold; text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), -2px -2px 4px rgba(0, 0, 0, 0.9);
+            pointer-events: none; width: 85%; z-index: 5;
+        }
+
+        #status-message { position: absolute; bottom: 20px; font-size: 0.9em; color: #007bff; z-index: 10; }
+
+        /* Configuration Plein Écran */
+        #video-container:fullscreen { background-color: #000; display: flex; justify-content: center; align-items: center; }
+        #video-container:fullscreen #subtitles-display { font-size: 2.3em; bottom: 60px; }
+    </style>
+</head>
+<body>
+
+    <div id="top-bar">
+        <h1 id="app-title">Lecteur & Traducteur Local</h1>
+		<div class="btn-group">
+            <select id="language-select">
+                <option value="fr">Français 🇫🇷</option>
+                <option value="en">English 🇬🇧</option>
+            </select>
+            <button id="generate-ia-btn">🚀 Lancer la génération IA</button>
+            <button id="load-zip-btn">📂 Charger un pack (.ZIP)</button>
+            <button id="open-folder-btn" style="background: #17a2b8; display: none;">📂 Ouvrir le dossier</button>
+            <button id="change-video-btn">Changer de vidéo</button>
+            
+            <button id="download-srt" style="display: none;" disabled>📥 Télécharger</button>
+            <button id="save-project-btn" style="display: none;" disabled>💾 Sauvegarder</button>
+        </div>
+    </div>
+    
+    <div id="drop-zone">Glissez votre vidéo ici pour commencer</div>
+    
+    <input type="file" id="file-input" accept="video/*" style="display: none;">
+    <input type="file" id="zip-input" accept=".zip" style="display: none;">
+
+    <div id="video-container">
+        <video id="video-player" controls></video>
+        <div id="subtitles-display"></div>
+    </div>
+
+    <div id="status-message"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
