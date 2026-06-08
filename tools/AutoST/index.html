@@ -66,7 +66,7 @@
         }
         #drop-zone:hover { background: #1a1a1a; color: #bbb; }
 
-        #status-message { margin-top: 15px; font-size: 0.9em; color: #007bff; min-height: 20px; }
+        #status-message { margin-bottom: 25px; font-size: 1.5em; color: #00abff; min-height: -20px; }
 
         /* --- CONTENEUR LECTEUR (MODE NORMAL) --- */
         #video-container {
@@ -180,6 +180,13 @@
         #video-container.mode-cinema-total #exit-fullscreen-btn:hover {
             background: rgba(217, 83, 79, 0.9) !important; /* Un joli rouge alerte au survol */
         }
+
+		/* Ajustement dynamique si le fichier est un fichier audio pur (MP3, WAV) */
+        #video-container.format-audio-seul #subtitles-display {
+            bottom: 90px !important; /* Remonte le texte pour éviter la barre de lecture blanche */
+            font-style: italic;
+            color: #ffc107; /* Une jolie couleur jaune/or discrète pour les pistes musicales */
+        }
     </style>
 </head>
 <body>
@@ -188,13 +195,20 @@
         <h1 id="app-title">Lecteur & Traducteur Local</h1>
 		<div class="btn-group">
             <select id="language-select">
-                <option value="fr">Français 🇫🇷</option>
-                <option value="en">English 🇬🇧</option>
+                <option value="fr">Piste : Français 🇫🇷</option>
+                <option value="en">Piste : English 🇬🇧</option>
             </select>
+            
+            <select id="audio-mode-select" style="background: #343a40; border-color: #4f5962;">
+                <option value="standard">🎬 Mode : Film / Série</option>
+                <option value="music">🎶 Mode : Musique / Clip</option>
+            </select>
+
             <button id="generate-ia-btn">🚀 Lancer la génération IA</button>
             <button id="load-zip-btn">📂 Charger un pack (.ZIP)</button>
             <button id="change-video-btn">📂 Charger une vidéo</button>
             <button id="open-folder-btn" style="background: #17a2b8; display: none;">📂 Ouvrir le dossier</button>
+            
             <button id="download-srt" style="display: none;" disabled>📥 Télécharger</button>
             <button id="save-project-btn" style="display: none;" disabled>💾 Sauvegarder</button>
         </div>
@@ -205,14 +219,14 @@
     <input type="file" id="file-input" accept="video/*" style="display: none;">
     <input type="file" id="zip-input" accept=".zip" style="display: none;">
 
+    <div id="status-message"></div>
+
     <div id="video-container" style="display: none;">
         <video id="video-player" controls controlsList="nofullscreen"></video>
         <div id="subtitles-display"></div>
         <button id="fullscreen-btn" title="Passer en plein écran">➕</button>
         <button id="exit-fullscreen-btn" title="Quitter le plein écran">❌</button>
     </div>
-
-    <div id="status-message"></div>
 
     <script src="script.js"></script>
 </body>

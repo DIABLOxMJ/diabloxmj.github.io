@@ -4,6 +4,7 @@ const zipInput = document.getElementById('zip-input');
 const videoPlayer = document.getElementById('video-player');
 const videoContainer = document.getElementById('video-container');
 const fullscreenBtn = document.getElementById('fullscreen-btn');
+const audioModeSelect = document.getElementById('audio-mode-select');
 const subtitlesDisplay = document.getElementById('subtitles-display');
 const downloadBtn = document.getElementById('download-srt');
 const changeVideoBtn = document.getElementById('change-video-btn');
@@ -102,35 +103,29 @@ function traiterFichierZip(file) {
 
 // --- ÉTAPE 1 : AJOUT DE LA VIDÉO ---
 function handleVideo(file) {
-    videoPlayer.pause();
-    subtitlesFr = [];
-    subtitlesEn = [];
-    subtitlesDisplay.innerText = "";
-    
-    // Sécurité : Les boutons d'export se verrouillent et passent au gris
-    downloadBtn.disabled = true;
-    saveProjectBtn.disabled = true; 
-    languageSelect.style.display = 'none';
-    
-    currentVideoFile = file; 
-
-    const fileURL = URL.createObjectURL(file);
-    videoPlayer.src = fileURL;
-    
-    dropZone.style.display = 'none';
+    currentVideoFile = file;
+    const fileUrl = URL.createObjectURL(file);
+    videoPlayer.src = fileUrl;
     videoContainer.style.display = 'block';
-    changeVideoBtn.style.display = 'block';
+    dropZone.style.display = 'none';
     
-    // Affichage de tous les contrôles
-    generateIaBtn.style.display = 'block';
-    loadZipBtn.style.display = 'block';
-	openFolderBtn.style.display = 'block';
-	fullscreenBtn.style.display = 'block';
-    downloadBtn.style.display = 'block';
-    saveProjectBtn.style.display = 'block'; 
+    // --- NOUVEAU : DETECTION DU FORMAT AUDIO SEUL ---
+    // Si le fichier est un MP3 ou un WAV, on applique le style surélevé
+    if (file.name.endsWith('.mp3') || file.name.endsWith('.wav') || file.type.startsWith('audio/')) {
+        videoContainer.classList.add('format-audio-seul');
+        console.log("Format audio seul détecté : Ajustement de la hauteur des sous-titres.");
+    } else {
+        videoContainer.classList.remove('format-audio-seul');
+    }
     
-    appTitle.innerText = `Vidéo : ${file.name}`;
-    statusMessage.innerText = "Vidéo chargée. Glissez un .ZIP dessus ou lancez l'IA.";
+    // Activer les boutons
+    if (subtitlesFr.length > 0) {
+        downloadBtn.style.display = 'inline-block';
+        saveProjectBtn.style.display = 'inline-block';
+    }
+    
+    statusMessage.innerText = `Fichier chargé : ${file.name}`;
+    appTitle.innerText = file.name;
 }
 
 // --- ÉTAPE 2 - OPTION A : LANCEMENT DE L'IA ---
@@ -144,6 +139,7 @@ generateIaBtn.addEventListener('click', () => {
 
     const formData = new FormData();
     formData.append('video', currentVideoFile);
+	formData.append('audio_mode', audioModeSelect.value);
 
     fetch('http://localhost:5000/transcribe', {
         method: 'POST',
