@@ -22,59 +22,164 @@
 
         .btn-group { display: flex; gap: 10px; align-items: center; }
 
-        select {
-            background: #222; color: white; border: 1px solid #444;
-            padding: 8px; border-radius: 4px; font-size: 0.85em; cursor: pointer;
+        button, select {
+            background: #2a2a2a; color: #fff; border: 1px solid #444;
+            padding: 8px 14px; border-radius: 6px; cursor: pointer;
+            font-size: 0.9em; transition: all 0.2s;
+        }
+        button:hover { background: #3a3a3a; border-color: #666; }
+        #generate-ia-btn { background: #007bff; border-color: #0069d9; }
+        #generate-ia-btn:hover { background: #0062cc; }
+
+		/* Redonner des couleurs dynamiques aux boutons d'action */
+        #download-srt { background: #28a745; border-color: #1e7e34; }  /* Vert Succès */
+        #download-srt:hover { background: #218838; }
+
+        #save-project-btn { background: #ffc107; border-color: #e0a800; color: #000; } /* Jaune Alerte */
+        #save-project-btn:hover { background: #e0a800; }
+
+        /* Rendre le bouton "➕" plus visible par défaut au coin du lecteur */
+        #fullscreen-btn {
+            position: absolute !important;
+            top: 15px !important;
+            right: 15px !important;
+            background: rgba(0, 123, 255, 0.6) !important; /* On lui donne un fond bleu semi-transparent par défaut */
+            color: white !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            padding: 6px 12px !important;
+            font-size: 1.1em !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            z-index: 10 !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); /* Petite ombre pour le décoller de la vidéo */
+            transition: background 0.2s, transform 0.1s !important;
+        }
+        #fullscreen-btn:hover {
+            background: rgba(0, 123, 255, 0.9) !important; /* Devient bleu éclatant au survol */
+            transform: scale(1.1);
+        }
+
+        #drop-zone {
+            border: 2px dashed #444; width: 60%; height: 200px;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 12px; color: #888; cursor: pointer; transition: background 0.3s;
+        }
+        #drop-zone:hover { background: #1a1a1a; color: #bbb; }
+
+        #status-message { margin-top: 15px; font-size: 0.9em; color: #007bff; min-height: 20px; }
+
+        /* --- CONTENEUR LECTEUR (MODE NORMAL) --- */
+        #video-container {
+            position: relative;
+            width: 75vw;
+            height: 60vh;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Reste propre et proportionnel sur la page normale */
+        }
+
+        /* SOUS-TITRES STANDARD */
+        #subtitles-display {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            color: white;
+            font-size: 1.6em;
+            text-align: center;
+            width: 85%;
+            pointer-events: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,1), -2px -2px 4px rgba(0,0,0,1);
+        }
+
+        #exit-fullscreen-btn {
             display: none;
         }
 
-        button { 
-            color: white; border: none; padding: 8px 16px; border-radius: 4px;
-            cursor: pointer; font-size: 0.85em; font-weight: 500; transition: background 0.2s;
-        }
-        
-        /* Boutons d'action principaux (Cachés au début) */
-        #generate-ia-btn { background: #28a745; display: none; }
-        #generate-ia-btn:hover { background: #218838; }
-        
-        #load-zip-btn { background: #007bff; display: none; }
-        #load-zip-btn:hover { background: #0069d9; }
-
-        /* Bouton Télécharger (Vert) */
-        #download-srt { background: #28a745; display: none; }
-        #download-srt:hover { background: #218838; }
-        #download-srt:disabled { background: #444 !important; color: #777 !important; cursor: not-allowed; }
-
-        /* Bouton Sauvegarder (Jaune) */
-        #save-project-btn { background: #ffc107; color: #121212; display: none; }
-        #save-project-btn:hover { background: #e0a800; }
-        #save-project-btn:disabled { background: #444 !important; color: #777 !important; cursor: not-allowed; }
-
-        #change-video-btn { background: #555; display: none; }
-        #change-video-btn:hover { background: #444; }
-
-        #drop-zone { 
-            border: 2px dashed #007bff; border-radius: 8px; padding: 60px 40px; 
-            width: 50%; max-width: 500px; cursor: pointer; text-align: center;
-            background: #1a1a1a; transition: background 0.3s;
-        }
-        #drop-zone:hover { background: #222; }
-
-        #video-container { position: relative; display: none; width: 92vw; max-width: 1300px; max-height: 82vh; }
-        video { width: 100%; max-height: 82vh; display: block; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
-
-        #subtitles-display { 
-            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-            color: #ffffff; font-size: 1.6em; font-weight: bold; text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), -2px -2px 4px rgba(0, 0, 0, 0.9);
-            pointer-events: none; width: 85%; z-index: 5;
+        /* --- 🎬 LE MODE CINÉMA PROPRIÉTAIRE (FAUX PLEIN ÉCRAN FLUIDE) --- */
+        #video-container.mode-cinema-total {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
+            border-radius: 0 !important;
+            z-index: 999999 !important;
+            background-color: #000000 !important;
         }
 
-        #status-message { position: absolute; bottom: 20px; font-size: 0.9em; color: #007bff; z-index: 10; }
+        /* On force la vidéo à zoomer et remplir l'écran à 100% sans bandes noires */
+        #video-container.mode-cinema-total video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important; 
+        }
 
-        /* Configuration Plein Écran */
-        #video-container:fullscreen { background-color: #000; display: flex; justify-content: center; align-items: center; }
-        #video-container:fullscreen #subtitles-display { font-size: 2.3em; bottom: 60px; }
+        /* Ajustement des sous-titres en mode plein écran */
+        #video-container.mode-cinema-total #subtitles-display {
+            font-size: 2.8em !important;
+            bottom: 12% !important; /* Laisse de l'espace pour la barre d'avancement Windows/Chrome tout en bas */
+            z-index: 2147483647 !important;
+        }
+
+		/* Style du bouton Agrandir "➕" au coin du lecteur */
+        #fullscreen-btn {
+            position: absolute !important;
+            top: 15px !important;
+            right: 15px !important;
+            background: rgba(0, 0, 0, 0.5) !important;
+            color: white !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 6px 12px !important;
+            font-size: 1em !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            z-index: 10 !important;
+            transition: background 0.2s, transform 0.1s !important;
+        }
+        #fullscreen-btn:hover {
+            background: rgba(0, 123, 255, 0.8) !important; /* Devient bleu électrique au survol */
+            transform: scale(1.05);
+        }
+
+        /* En mode cinéma, on cache le bouton "➕" puisqu'on y est déjà ! */
+        #video-container.mode-cinema-total #fullscreen-btn {
+            display: none !important;
+        }
+
+        /* Le fameux bouton quitter en haut à droite */
+        #video-container.mode-cinema-total #exit-fullscreen-btn {
+            display: block !important;
+            position: absolute !important;
+            top: 25px !important;
+            right: 25px !important;
+            background: rgba(0, 0, 0, 0.6) !important;
+            color: white !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            padding: 10px 16px !important;
+            font-size: 1.1em !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            z-index: 2147483647 !important;
+            transition: background 0.2s !important;
+        }
+
+        #video-container.mode-cinema-total #exit-fullscreen-btn:hover {
+            background: rgba(217, 83, 79, 0.9) !important; /* Un joli rouge alerte au survol */
+        }
     </style>
 </head>
 <body>
@@ -88,9 +193,8 @@
             </select>
             <button id="generate-ia-btn">🚀 Lancer la génération IA</button>
             <button id="load-zip-btn">📂 Charger un pack (.ZIP)</button>
+            <button id="change-video-btn">📂 Charger une vidéo</button>
             <button id="open-folder-btn" style="background: #17a2b8; display: none;">📂 Ouvrir le dossier</button>
-            <button id="change-video-btn">Changer de vidéo</button>
-            
             <button id="download-srt" style="display: none;" disabled>📥 Télécharger</button>
             <button id="save-project-btn" style="display: none;" disabled>💾 Sauvegarder</button>
         </div>
@@ -101,9 +205,11 @@
     <input type="file" id="file-input" accept="video/*" style="display: none;">
     <input type="file" id="zip-input" accept=".zip" style="display: none;">
 
-    <div id="video-container">
-        <video id="video-player" controls></video>
+    <div id="video-container" style="display: none;">
+        <video id="video-player" controls controlsList="nofullscreen"></video>
         <div id="subtitles-display"></div>
+        <button id="fullscreen-btn" title="Passer en plein écran">➕</button>
+        <button id="exit-fullscreen-btn" title="Quitter le plein écran">❌</button>
     </div>
 
     <div id="status-message"></div>

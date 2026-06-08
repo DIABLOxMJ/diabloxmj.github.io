@@ -5,7 +5,7 @@ import os
 import tempfile
 import argostranslate.package
 import argostranslate.translate
-import subprocess  # À s'assurer qu'il est disponible (c'est natif en Python)
+import subprocess
 
 app = Flask(__name__)
 CORS(app)
@@ -28,9 +28,9 @@ try:
 except Exception as e:
     print(f"Note : Chargement du traducteur hors-ligne (ou déjà installé).")
 
-# ---- CONFIGURATION DE WHISPER ----
-print("Chargement de l'IA Whisper en mémoire...")
-model = WhisperModel("base", device="cpu", compute_type="int8", download_root=chemin_modele)
+# ---- CONFIGURATION DE WHISPER HAUTE PRÉCISION ----
+print("Chargement de l'IA Whisper Professionnelle en mémoire...")
+model = WhisperModel("medium", device="cpu", compute_type="int8", download_root=chemin_modele)
 print("Tout est prêt et opérationnel !")
 
 @app.route('/transcribe', methods=['POST'])
@@ -45,9 +45,15 @@ def transcribe_video():
         video_path = temp_video.name
 
     try:
-        print("Analyse de la vidéo (Génération de l'anglais parfait)...")
-        # On laisse l'IA détecter la langue d'origine (ou l'anglais) sans la forcer
-        segments, info = model.transcribe(video_path, beam_size=5)
+        print("Analyse de la vidéo avec filtres anti-bruit et détection de voix...")
+        
+        # Configuration VAD standard, robuste et compatible avec toutes les versions
+        segments, info = model.transcribe(
+            video_path, 
+            beam_size=5,
+            vad_filter=True,
+            vad_parameters=dict(min_speech_duration_ms=250)
+        )
         
         output_en = []
         output_fr = []
@@ -56,21 +62,17 @@ def transcribe_video():
         for segment in segments:
             texte_anglais = segment.text.strip()
             
-            # Si le segment est vide, on passe
-            if not texte_anglais:
+            if not texte_anglais or segment.avg_logprob < -1.0:
                 continue
                 
-            # Traduction locale du texte anglais vers le français
             texte_francais = argostranslate.translate.translate(texte_anglais, "en", "fr")
             
-            # On stocke la version anglaise
             output_en.append({
                 "start": segment.start,
                 "end": segment.end,
                 "text": texte_anglais
             })
             
-            # On stocke la version française TRADUITE proprement
             output_fr.append({
                 "start": segment.start,
                 "end": segment.end,
@@ -100,31 +102,20 @@ def save_zip():
         return jsonify({"error": "Aucun fichier ZIP reçu"}), 400
         
     zip_file = request.files['zip']
-    
-    # Crée un dossier "stock_srt" à la racine du projet s'il n'existe pas
     dossier_sauvegarde = os.path.join(BASE_DIR, "stock_srt")
     os.makedirs(dossier_sauvegarde, exist_ok=True)
-    
-    # Sécurise le chemin et sauvegarde le fichier dedans
     chemin_final = os.path.join(dossier_sauvegarde, zip_file.filename)
     zip_file.save(chemin_final)
-    
-    print(f"Nouveau pack sauvegardé localement : {zip_file.filename}")
     return jsonify({"status": "Sauvegardé avec succès dans 'stock_srt' ! 💾"})
 
 @app.route('/open_folder', methods=['POST'])
 def open_folder():
     dossier_sauvegarde = os.path.join(BASE_DIR, "stock_srt")
-    
-    # Crée le dossier s'il n'existe pas encore au clic
     os.makedirs(dossier_sauvegarde, exist_ok=True)
-    
     try:
-        # Commande Windows native pour ouvrir l'explorateur sur un dossier précis
         os.startfile(dossier_sauvegarde)
         return jsonify({"status": "Dossier ouvert !"})
     except AttributeError:
-        # Alternative si tu l'exécutes sur un autre système (Mac/Linux) à l'avenir
         try:
             if os.name == 'posix':
                 subprocess.Popen(['open', dossier_sauvegarde] if sys.platform == 'darwin' else ['xdg-open', dossier_sauvegarde])

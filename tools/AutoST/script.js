@@ -3,6 +3,7 @@ const fileInput = document.getElementById('file-input');
 const zipInput = document.getElementById('zip-input');
 const videoPlayer = document.getElementById('video-player');
 const videoContainer = document.getElementById('video-container');
+const fullscreenBtn = document.getElementById('fullscreen-btn');
 const subtitlesDisplay = document.getElementById('subtitles-display');
 const downloadBtn = document.getElementById('download-srt');
 const changeVideoBtn = document.getElementById('change-video-btn');
@@ -89,6 +90,7 @@ function traiterFichierZip(file) {
             generateIaBtn.style.display = 'none';
             loadZipBtn.style.display = 'none';
 			openFolderBtn.style.display = 'block';
+			fullscreenBtn.style.display = 'block';
             activationSousTitres("Pack de sous-titres importé avec succès !");
         }).catch(err => {
             statusMessage.innerText = "Fichier ZIP invalide ou corrompu.";
@@ -123,6 +125,7 @@ function handleVideo(file) {
     generateIaBtn.style.display = 'block';
     loadZipBtn.style.display = 'block';
 	openFolderBtn.style.display = 'block';
+	fullscreenBtn.style.display = 'block';
     downloadBtn.style.display = 'block';
     saveProjectBtn.style.display = 'block'; 
     
@@ -266,9 +269,54 @@ videoPlayer.addEventListener('timeupdate', () => {
     }
 });
 
-// --- PLEIN ÉCRAN INTELLIGENT ---
-videoPlayer.addEventListener('dblclick', () => {
-    if (!document.fullscreenElement) { videoContainer.requestFullscreen().catch(err => console.error(err)); } 
-    else { document.exitFullscreen(); }
+// --- CONFIGURATION DU MODE CINÉMA FLUIDE AVEC EFFET F11 ---
+function basculerPleinEcran() {
+    const exitFullscreenBtn = document.getElementById('exit-fullscreen-btn');
+    
+    if (!videoContainer.classList.contains('mode-cinema-total')) {
+        // 1. On applique notre superbe mode cinéma
+        videoContainer.classList.add('mode-cinema-total');
+        if (exitFullscreenBtn) exitFullscreenBtn.style.display = 'block';
+        
+        // 2. SIMULATION F11 : On demande au navigateur de passer en plein écran total
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(err => console.log("Lancement plein écran bloqué ou déjà actif"));
+        }
+    } else {
+        // 1. On retire le mode cinéma
+        videoContainer.classList.remove('mode-cinema-total');
+        if (exitFullscreenBtn) exitFullscreenBtn.style.display = 'none';
+        
+        // 2. SORTIE F11 : On demande au navigateur de quitter le plein écran total
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch(err => console.log("Erreur lors de la sortie"));
+        }
+    }
+}
+
+// Clic sur le bouton "➕" au coin du lecteur
+fullscreenBtn.addEventListener('click', basculerPleinEcran);
+
+// Double-clic direct sur la vidéo
+videoPlayer.addEventListener('dblclick', basculerPleinEcran);
+
+// Clic sur le bouton "❌" de sortie
+const exitFullscreenBtn = document.getElementById('exit-fullscreen-btn');
+if (exitFullscreenBtn) {
+    exitFullscreenBtn.addEventListener('click', basculerPleinEcran);
+}
+
+// Touche "Échap" ou "Escape" : On s'assure de nettoyer le style si l'utilisateur quitte
+document.addEventListener('keydown', (e) => {
+    if (e.key === "Escape" && videoContainer.classList.contains('mode-cinema-total')) {
+        basculerPleinEcran();
+    }
 });
-videoPlayer.controlsList = "nofullscreen";
+
+// Écouteur de sécurité : Si l'utilisateur quitte le mode F11 avec son clavier, on synchronise le lecteur
+document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && videoContainer.classList.contains('mode-cinema-total')) {
+        videoContainer.classList.remove('mode-cinema-total');
+        if (exitFullscreenBtn) exitFullscreenBtn.style.display = 'none';
+    }
+});
