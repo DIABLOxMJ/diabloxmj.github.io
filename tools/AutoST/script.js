@@ -167,6 +167,8 @@ function activationSousTitres(message) {
     // Les deux boutons s'allument (Fin du mode gris)
     downloadBtn.disabled = false;
     saveProjectBtn.disabled = false; 
+	downloadBtn.style.display = 'inline-block';
+    saveProjectBtn.style.display = 'inline-block';
     languageSelect.style.display = 'block';
 }
 
