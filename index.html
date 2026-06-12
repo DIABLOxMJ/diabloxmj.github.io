@@ -51,13 +51,13 @@
 
     <!-- En-tête (Header) -->
     <div id="global-header"></div>
-    <script src="page.js"></script>
+    <script src="sources/page.js"></script>
     <script>
         // On l'exécute. Comme index.html est à la racine, le chemin est juste './'
         injecterHeader('./');
     </script>
 
-    <!-- Texte d'introduction ajouté ici -->
+    <!-- Texte d'introduction -->
     <section class="text-center pt-10 pb-0 px-4">
         <h1 class="text-4xl font-bold text-white text-ombre mb-4">Bienvenue sur ma plateforme de resources packs pour Minecraft</h1>
         <p class="text-xl text-white text-ombre max-w-2xl mx-auto">Sélectionnez la version de votre choix parmi nos différentes gammes de packs.</p>
@@ -73,7 +73,6 @@
 
     <!-- Pied de page (Footer) -->
     <div id="global-footer"></div>
-    <script src="page.js"></script>
     <script>
         // On l'exécute. Comme index.html est à la racine, le chemin est juste './'
         injecterFooter('./');
@@ -84,7 +83,7 @@
         <p id="notification-message">Message ici</p>
     </div>
 
-    <script src="packs.js"></script>
+    <script src="sources/packlist.js"></script>
 
     <script>
         const container = document.getElementById('colonnes-container');
@@ -93,7 +92,6 @@
         let timeoutNotification;
 
         function afficherNotification(message) {
-            // SON : On joue le clic lors de l'apparition du bandeau noir
             if (typeof PlaySound === 'function') {
                 PlaySound('notification.mp3', ''); // racine, donc recul vide ''
             }
@@ -109,8 +107,7 @@
             }, 3500);
         }
 
-        // UNE SEULE LIGNE MAGIQUE POUR GÉNÉRER TOUTES LES COLONNES DE L'ACCUEIL
-        // Paramètres : (id du conteneur, aucun filtre pour tout mettre, pas de recul de dossier)
+        // Génère les 3 colonnes à l'accueil directement à partir de packs.json
         initialiserTelechargements('colonnes-container', null, '');
     </script>
 </body>

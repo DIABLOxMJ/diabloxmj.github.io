@@ -50,43 +50,28 @@
 
     <!-- En-tête (Header) -->
     <div id="global-header"></div>
-    <script src="../page.js"></script>
+    <script src="../sources/page.js"></script>
     <script>
-        // On l'exécute. Comme index.html est à la racine, le chemin est juste './'
-        injecterHeader('./');
+        injecterHeader('../');
     </script>
 
     <main class="flex-grow w-full max-w-6xl mx-auto px-6 py-6 flex flex-col lg:flex-row gap-12 items-start">
         
+        <!-- Contenu principal chargé dynamiquement par packs.js -->
         <div class="flex-grow w-full lg:w-2/3 space-y-10 text-white text-ombre">
             <section class="space-y-4">
-                <h1 class="text-4xl font-bold tracking-wide">Faithful Legacy</h1>
+                <h1 id="pack-title" class="text-4xl font-bold tracking-wide">Chargement du titre...</h1>
                 <div class="bg-black/60 p-3 rounded border border-black/40 max-w-3xl shadow-md backdrop-blur-sm">
-                    <p class="text-xl leading-relaxed text-justify">
-                        Le pack de textures a été créé à l'origine par <a href="https://faithfulpack.net/" target="_blank" rel="noopener noreferrer"
-                        class="text-cyan-400 underline decoration-2 underline-offset-4 hover:text-cyan-300 transition-colors font-medium">Vattic</a> en 2010.<br>
-                        <span class="text-red-400 font-medium">
-                            ⚠ Ce pack n'est pas affilié à l'équipe Faithful, ce pack a été créé pour mon confort personnel et n'est pas destiné à être rendu public.
-                        </span>
+                    <p id="pack-description" class="text-xl leading-relaxed text-justify">
+                        Chargement de la description...
                     </p>
                 </div>
             </section>
             
             <section class="space-y-3">
                 <h2 class="text-3xl font-bold tracking-wide">Galerie</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div class="bg-black/40 border-2 border-black aspect-video flex items-center justify-center rounded shadow-md hover:border-white transition-colors duration-200 group relative overflow-hidden cursor-zoom-in">
-                        <img src="sources/faithful_screen_1.png" alt="Illustration" class="w-full h-full object-cover gallery-trigger transition-transform duration-300 group-hover:scale-105">
-                    </div>
-                    <div class="bg-black/40 border-2 border-black aspect-video flex items-center justify-center rounded shadow-md hover:border-white transition-colors duration-200 group relative overflow-hidden cursor-zoom-in">
-                        <img src="sources/faithful_screen_2.png" alt="Illustration" class="w-full h-full object-cover gallery-trigger transition-transform duration-300 group-hover:scale-105">
-                    </div>
-                    <div class="bg-black/40 border-2 border-black aspect-video flex items-center justify-center rounded shadow-md hover:border-white transition-colors duration-200 group relative overflow-hidden cursor-zoom-in">
-                        <img src="sources/faithful_screen_3.png" alt="Illustration" class="w-full h-full object-cover gallery-trigger transition-transform duration-300 group-hover:scale-105">
-                    </div>
-                    <div class="bg-black/40 border-2 border-black aspect-video flex items-center justify-center rounded shadow-md hover:border-white transition-colors duration-200 group relative overflow-hidden cursor-zoom-in">
-                        <img src="sources/faithful_screen_4.png" alt="Illustration" class="w-full h-full object-cover gallery-trigger transition-transform duration-300 group-hover:scale-105">
-                    </div>
+                <div id="pack-gallery" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Généré dynamiquement par packs.js -->
                 </div>
             </section>
         </div>
@@ -99,21 +84,20 @@
 
     <!-- Pied de page (Footer) -->
     <div id="global-footer"></div>
-    <script src="../page.js"></script>
     <script>
-        // On l'exécute. Comme index.html est à la racine, le chemin est juste './'
-        injecterFooter('./');
+        injecterFooter('../');
     </script>
 
     <div id="notification-toast" class="fixed bottom-8 right-8 bg-gray-900 text-white font-semibold px-6 py-4 rounded shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none z-50">
         <p id="notification-message">Message ici</p>
     </div>
 
+    <!-- Div pour le zoom d'image (Lightbox) géré automatiquement par packs.js -->
     <div id="lightbox" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center cursor-zoom-out hidden opacity-0 transition-opacity duration-300">
         <img id="lightbox-img" src="" alt="Zoom" class="max-w-[90vw] max-h-[90vh] object-contain rounded border-2 border-white/10 shadow-2xl scale-95 transition-transform duration-300">
     </div>
 
-    <script src="../packs.js"></script>
+    <script src="../sources/packlist.js"></script>
 
     <script>
         const container = document.getElementById('colonnes-container');
@@ -121,13 +105,10 @@
         const notificationMessage = document.getElementById('notification-message');
         let timeoutNotification;
 
-        // --- 1. SYSTÈME DE NOTIFICATION ---
         function afficherNotification(message) {
-            // SON : Notification (on passe '../' car on est dans le sous-dossier pages)
             if (typeof PlaySound === 'function') {
                 PlaySound('notification.mp3', '../');
             }
-
             notificationMessage.textContent = message;
             notificationToast.classList.remove('opacity-0');
             notificationToast.classList.add('opacity-100');
@@ -139,42 +120,8 @@
             }, 3500);
         }
 
-        // --- 2. GÉNÉRATION DE LA COLONNE DE TÉLÉCHARGEMENT ---
-        // Paramètres : (id du conteneur, id unique du pack à filtrer, recul d'un dossier '../')
+        // On lance l'initialisation pour "faithful" à partir de packs.json
         initialiserTelechargements('colonnes-container', 'faithful', '../');
-
-
-        // --- 3. SYSTÈME DE ZOOM DES IMAGES (LIGHTBOX UNIQUE ET PROPRE) ---
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        const triggers = document.querySelectorAll('.gallery-trigger');
-
-        // Événement : Ouvrir le zoom au clic sur une image de la galerie
-        triggers.forEach(img => {
-            img.addEventListener('click', () => {
-                // SON : Clic à l'ouverture de l'image
-                if (typeof PlaySound === 'function') PlaySound('screen_in.mp3', '../');
-
-                lightboxImg.src = img.src;
-                lightbox.classList.remove('hidden');
-                setTimeout(() => {
-                    lightbox.classList.remove('opacity-0');
-                    lightboxImg.classList.remove('scale-95');
-                }, 10);
-            });
-        });
-
-        // Événement : Fermer le zoom au clic n'importe où sur l'écran noir
-        lightbox.addEventListener('click', () => {
-            // SON : Clic à la fermeture de l'image
-            if (typeof PlaySound === 'function') PlaySound('screen_out.mp3', '../');
-
-            lightbox.classList.add('opacity-0');
-            lightboxImg.classList.add('scale-95');
-            setTimeout(() => {
-                lightbox.classList.add('hidden');
-            }, 300);
-        });
     </script>
 </body>
 </html>

@@ -1,0 +1,88 @@
+[
+    {
+        "id": "faithful",
+        "title": "Faithful Legacy",
+        "description": "Le pack de textures a été créé à l'origine par $0 en 2010.",
+        "warning": "⚠ Ce pack n'est pas affilié à l'équipe Faithful, ce pack a été créé pour mon confort personnel et n'est pas destiné à être rendu public.",
+		"banner": "sources/banner_1.png",
+		"folder": "packs/Faithful_Legacy",
+        "screen": {
+            "1": "pages/sources/faithful_screen_1.png",
+            "2": "pages/sources/faithful_screen_2.png",
+            "3": "pages/sources/faithful_screen_3.png",
+            "4": "pages/sources/faithful_screen_4.png"
+        },
+        "list": {
+            "1": {
+                "version": "1.21.11",
+                "download": "packs/Faithful_Legacy/Faithful_Legacy_1.21.11.zip"
+            },
+            "2": {
+                "version": "1.21",
+                "download": "packs/Faithful_Legacy/Faithful_Legacy_1.21.zip"
+            },
+            "3": {
+                "version": "1.20.1",
+                "download": "packs/Faithful_Legacy/Faithful_Legacy_1.20.1.zip"
+            },
+            "4": {
+                "version": "1.18.2",
+                "download": "packs/Faithful_Legacy/Faithful_Legacy_1.18.2.zip"
+            }
+        }
+    },
+    {
+        "id": "beta",
+        "title": "Beta Legacy",
+        "description": "Le pack de textures a pour but de reproduire les textures et son de Minecraft Beta.",
+		"banner": "sources/banner_2.png",
+		"folder": "packs/Beta_Legacy",
+        "screen": {
+            "1": "pages/sources/beta_screen_1.png",
+            "2": "pages/sources/beta_screen_2.png",
+            "3": "pages/sources/beta_screen_3.png",
+            "4": "pages/sources/beta_screen_4.png"
+        },
+        "list": {
+            "1": {
+                "version": "1.21.11",
+                "download": "packs/Beta_Legacy/Beta_Legacy_1.21.11.zip"
+            },
+            "2": {
+                "version": "1.20.1",
+                "download": "packs/Beta_Legacy/Beta_Legacy_1.20.1.zip"
+            },
+            "3": {
+                "version": "1.18.2",
+                "download": "packs/Beta_Legacy/Beta_Legacy_1.18.2.zip"
+            }
+        }
+    },
+    {
+        "id": "alpha",
+        "title": "Alpha Legacy",
+        "description": "Le pack de textures a pour but de reproduire les textures et son de Minecraft Alpha.",
+		"banner": "sources/banner_3.png",
+		"folder": "packs/Alpha_Legacy",
+        "screen": {
+            "1": "pages/sources/alpha_screen_1.png",
+            "2": "pages/sources/alpha_screen_2.png",
+            "3": "pages/sources/alpha_screen_3.png",
+            "4": "pages/sources/alpha_screen_4.png"
+        },
+        "list": {
+            "1": {
+                "version": "1.21.11",
+                "download": "packs/Alpha_Legacy/Alpha_Legacy_1.21.11.zip"
+            },
+            "2": {
+                "version": "1.20.1",
+                "download": "packs/Alpha_Legacy/Alpha_Legacy_1.20.1.zip"
+            },
+            "3": {
+                "version": "1.18.2",
+                "download": "packs/Alpha_Legacy/Alpha_Legacy_1.18.2.zip"
+            }
+        }
+    }
+]

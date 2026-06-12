@@ -48,41 +48,44 @@
 </head>
 <body class="bg-[#f0f0f0] flex flex-col min-h-screen" style="background-image: url('../sources/background_dark.png'); background-size: 5%; background-repeat: repeat;">
 
-    <!-- En-tête (Header) -->
     <div id="global-header"></div>
     <script src="../sources/page.js"></script>
     <script>
+        // On l'exécute. Comme mods.html est dans le dossier pages, le recul est bien '../'
         injecterHeader('../');
     </script>
 
-    <main class="flex-grow w-full max-w-6xl mx-auto px-6 py-6 flex flex-col lg:flex-row gap-12 items-start">
-        
-        <!-- Contenu principal chargé dynamiquement par packs.js -->
-        <div class="flex-grow w-full lg:w-2/3 space-y-10 text-white text-ombre">
+    <main class="flex-grow w-full max-w-6xl mx-auto px-6 py-6 flex flex-col lg:flex-row gap-8 items-start">
+
+        <!-- Colonne de Gauche : Menu de Sélection des Versions -->
+        <div class="w-full lg:w-[260px] shrink-0 flex flex-col">
+            <h2 class="text-4xl font-bold text-center mb-4 w-full max-w-[260px] mx-auto lg:mx-0 text-white text-ombre">Version</h2>
+            <div id="colonnes-container" class="w-full max-w-[260px] mx-auto lg:mx-0"></div>
+        </div>
+
+        <!-- Colonne Centrale / Droite : Liste des Mods -->
+        <div class="flex-grow w-full lg:w-2/3 space-y-6 text-white text-ombre">
             <section class="space-y-4">
-                <h1 id="pack-title" class="text-4xl font-bold tracking-wide">Chargement du titre...</h1>
-                <div class="bg-black/60 p-3 rounded border border-black/40 max-w-3xl shadow-md backdrop-blur-sm">
-                    <p id="pack-description" class="text-xl leading-relaxed text-justify">
-                        Chargement de la description...
+                <h1 class="text-4xl font-bold tracking-wide">Liste de mods</h1>
+                <!-- Encadré descriptif avec le blur et le fond sombre transparent -->
+                <div class="bg-black/60 p-3 rounded border-2 border-neutral-700/60 max-w-4xl shadow-md backdrop-blur-sm">
+                    <p class="text-xl leading-relaxed text-justify">
+                        Voici la liste de mods utilisés dans la version <span id="variable-version" class="text-cyan-400 font-bold">...</span>.
+                        Cliquez sur les boutons "Télécharger" pour récupérer le fichier via la page officielle.<br>
                     </p>
                 </div>
             </section>
-            
-            <section class="space-y-3">
-                <h2 class="text-3xl font-bold tracking-wide">Galerie</h2>
-                <div id="pack-gallery" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <!-- Généré dynamiquement par packs.js -->
-                </div>
-            </section>
-        </div>
 
-        <div class="w-full lg:w-[260px] shrink-0 flex flex-col lg:justify-end">
-            <h2 class="text-3xl font-bold text-center mb-4 w-full max-w-[260px] mx-auto lg:mx-0 text-white text-ombre">Téléchargement</h2>
-            <div id="colonnes-container" class="w-full max-w-[260px] mx-auto lg:mx-0"></div>
+            <!-- CADRE PARENT UNIQUE : Regroupe toutes les fiches de mods pour éviter le scrolling global sur la page -->
+            <div class="bg-black/40 border-2 border-neutral-700/50 p-2 rounded backdrop-blur-md max-w-4xl shadow-xl">
+                <!-- Zone défilante interne réservée uniquement aux fiches de mods -->
+                <div id="mods-list-container" class="space-y-2 max-h-[53vh] overflow-y-auto pr-2 scroll-list">
+                    <!-- Généré dynamiquement par modlist.js -->
+                </div>
+            </div>
         </div>
     </main>
 
-    <!-- Pied de page (Footer) -->
     <div id="global-footer"></div>
     <script>
         injecterFooter('../');
@@ -92,15 +95,10 @@
         <p id="notification-message">Message ici</p>
     </div>
 
-    <!-- Div pour le zoom d'image (Lightbox) géré automatiquement par packs.js -->
-    <div id="lightbox" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center cursor-zoom-out hidden opacity-0 transition-opacity duration-300">
-        <img id="lightbox-img" src="" alt="Zoom" class="max-w-[90vw] max-h-[90vh] object-contain rounded border-2 border-white/10 shadow-2xl scale-95 transition-transform duration-300">
-    </div>
-
     <script src="../sources/packlist.js"></script>
+    <script src="../sources/modlist.js"></script>
 
     <script>
-        const container = document.getElementById('colonnes-container');
         const notificationToast = document.getElementById('notification-toast');
         const notificationMessage = document.getElementById('notification-message');
         let timeoutNotification;
@@ -120,8 +118,8 @@
             }, 3500);
         }
 
-        // On lance l'initialisation pour "alpha" à partir de packs.json
-        initialiserTelechargements('colonnes-container', 'alpha', '../');
+        // --- INITIALISATION DU SYSTÈME DYNAMIQUE DE MODS ---
+        initialiserPageMods('colonnes-container', 'mods-list-container', 'variable-version', '../');
     </script>
 </body>
 </html>

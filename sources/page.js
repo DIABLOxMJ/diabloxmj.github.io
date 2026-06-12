@@ -15,6 +15,8 @@ function injecterHeader(cheminRacine) {
                 <a href="../${cheminRacine}pages/beta.html" class="hover:text-gray-300 underline decoration-2 underline-offset-4">BETA</a>
                 <span class="px-2">|</span>
                 <a href="../${cheminRacine}pages/alpha.html" class="hover:text-gray-300 underline decoration-2 underline-offset-4">ALPHA</a>
+                <span class="px-2">|</span>
+                <a href="../${cheminRacine}pages/mods.html" class="hover:text-gray-300 underline decoration-2 underline-offset-4">MODS</a>
             </nav>
         </header>
     `;
