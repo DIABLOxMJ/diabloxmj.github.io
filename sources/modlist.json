@@ -283,6 +283,20 @@
                     }
                 }
             },
+            "collective": {
+                "img": "https://cdn.modrinth.com/data/e0M1UDsY/f5e4fe9ac298e2c14591920d6bda937c566accd0_96.webp",
+                "title": "Collective",
+                "description": "Collective est une bibliothèque partagée contenant du code commun à tous les mods de Serilum.",
+                "link": "https://modrinth.com/mod/collective",
+                "mod_version": "v8.22",
+                "download": "https://cdn.modrinth.com/data/e0M1UDsY/versions/6EPDFSpU/collective-1.21.11-8.22.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    }
+                }
+            },
             "fullbrightness": {
                 "img": "https://cdn.modrinth.com/data/aEK1KhsC/d1124e6ed9eb24a9e11649159cd7c7b26cf1a6be_96.webp",
                 "title": "Full Brightness Toggle",
@@ -294,6 +308,10 @@
                     "Dep_1": {
                         "Title": "Fabric API",
                         "link": "https://modrinth.com/mod/fabric-api"
+                    },
+                    "Dep_2": {
+                        "Title": "Collective",
+                        "link": "https://modrinth.com/mod/collective"
                     }
                 }
             },
@@ -727,13 +745,13 @@
                     }
                 }
             },
-            "xpgui": {
-                "img": "https://cdn.modrinth.com/data/VG8MXUCd/e05a52f8badf052b1c1d3571dae076a36a539ad3_96.webp",
-                "title": "XPGui",
-                "description": "Ce mod vous permet de stocker ces points d'expérience en toute sécurité dans une banque.",
-                "link": "https://modrinth.com/mod/xpgui",
-                "mod_version": "v1.0.1",
-                "download": "https://cdn.modrinth.com/data/VG8MXUCd/versions/Dt4GNqcV/xpgui-fabric-26.1-1.0.1.jar?mr_download_reason=standalone",
+            "expbook": {
+                "img": "https://media.forgecdn.net/avatars/thumbnails/1262/842/64/64/638822234144459968.png",
+                "title": "Experience Book",
+                "description": "Ce mod vous permet de stocker ces points d'expérience en toute sécurité dans un livre.",
+                "link": "https://www.curseforge.com/minecraft/mc-mods/experience-book",
+                "mod_version": "v1.3.0",
+                "download": "https://www.curseforge.com/minecraft/mc-mods/experience-book/download/6675046",
                 "Dependant": {
                     "Dep_1": {
                         "Title": "Fabric API",
