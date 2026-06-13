@@ -758,6 +758,38 @@
                         "link": "https://modrinth.com/mod/fabric-api"
                     }
                 }
+            },
+            "compactstorage": {
+                "img": "https://cdn.modrinth.com/data/CNYyGWn5/icon.png",
+                "title": "CompactStorage",
+                "description": "Ajout de coffres, de sacs à dos et de tonneaux améliorables !",
+                "link": "https://modrinth.com/mod/compact-storage",
+                "mod_version": "v21.11.106",
+                "download": "https://cdn.modrinth.com/data/CNYyGWn5/versions/VvvGk9gH/compactstorage-fabric-21.11.106.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    },
+                    "Dep_2": {
+                        "Title": "Balm",
+                        "link": "https://modrinth.com/mod/balm"
+                    }
+                }
+            },
+            "stackage": {
+                "img": "https://cdn.modrinth.com/data/Bc74RbD1/7ccd9e733526ea655e1c203599d3930a8ca29c24.png",
+                "title": "Stackable",
+                "description": "Un mod qui augmente toutes les limites d'empilement d'objets.",
+                "link": "https://modrinth.com/mod/stackable127",
+                "mod_version": "v2.0.5",
+                "download": "https://cdn.modrinth.com/data/Bc74RbD1/versions/gFCpw5gZ/stackable-fabric-1.21.11-2.0.5.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    }
+                }
             }
         }
     }
