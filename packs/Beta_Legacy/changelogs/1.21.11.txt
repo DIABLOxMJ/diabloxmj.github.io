@@ -11,3 +11,8 @@
 - Nouvelle texture pour la Deepslate et Ore
 - Changement de modèle pour les Redstone Torch
 - Correction de la couleur des herbes
+
+[13/06/2026]
+[Modification]
+- Correction des blocs de roche infecté avec de nouvelle texture
+- Remplacement de la texture du villageois passant du cochon à l'original
