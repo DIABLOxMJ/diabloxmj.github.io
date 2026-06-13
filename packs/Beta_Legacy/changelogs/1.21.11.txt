@@ -6,7 +6,7 @@
 [Correction]
 - Correction de la rotation des textures (Netherrack et Bedrock)
 
-[04/06/2026]
+[06/06/2026]
 [Modification]
 - Nouvelle texture pour la Deepslate et Ore
 - Changement de modèle pour les Redstone Torch
