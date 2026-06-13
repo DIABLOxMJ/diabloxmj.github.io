@@ -2,6 +2,15 @@
     {
         "version": "1.21.11",
         "list": {
+            "mybundle": {
+                "img": "../sources/mybundle.png",
+                "title": "Pack (All in One)",
+                "description": "Envie de tout avoir sans passer par chaque fichier, prenez le pack tout en un.",
+                "link": "https://diabloxmj.github.io/",
+                "mod_version": "v1.0",
+                "download": "../packs/Bundle_Mods/diabloxmj_bundle_1.21.11.zip",
+                "Dependant": {}
+            },
             "fabricapi": {
                 "img": "https://cdn.modrinth.com/data/P7dR8mSH/icon.png",
                 "title": "Fabric API",
@@ -280,6 +289,28 @@
                     "Dep_2": {
                         "Title": "TCDCommons API",
                         "link": "https://modrinth.com/mod/tcdcommons"
+                    }
+                }
+            },
+            "simpledatapacks": {
+                "img": "https://cdn.modrinth.com/data/Re6xQ62Z/a977d9e8274278d93fe8488eeaec36464240a662.png",
+                "title": "Simple Datapacks",
+                "description": "Simplifier l'utilisation des packs de données.",
+                "link": "https://modrinth.com/mod/simple-datapacks",
+                "mod_version": "v2.7",
+                "download": "https://cdn.modrinth.com/data/Re6xQ62Z/versions/Aj3ap0Bs/simple-datapacks-2.7-fabric%2B1.21.2.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    },
+                    "Dep_2": {
+                        "Title": "Cloth Config",
+                        "link": "https://modrinth.com/mod/cloth-config"
+                    },
+                    "Dep_3": {
+                        "Title": "Mod Menu",
+                        "link": "https://modrinth.com/mod/modmenu"
                     }
                 }
             },
@@ -745,13 +776,31 @@
                     }
                 }
             },
-            "expbook": {
-                "img": "https://media.forgecdn.net/avatars/thumbnails/1262/842/64/64/638822234144459968.png",
-                "title": "Experience Book",
-                "description": "Ce mod vous permet de stocker ces points d'expérience en toute sécurité dans un livre.",
-                "link": "https://www.curseforge.com/minecraft/mc-mods/experience-book",
-                "mod_version": "v1.3.0",
-                "download": "https://www.curseforge.com/minecraft/mc-mods/experience-book/download/6675046",
+            "drawers": {
+                "img": "https://cdn.modrinth.com/data/guitPqEi/58b4229c52876eff66c9f98a5d2a1e9b9f648501.png",
+                "title": "Storage Drawers",
+                "description": "Solution de stockage en vrac interactive.",
+                "link": "https://modrinth.com/mod/storagedrawers",
+                "mod_version": "v21.11.106",
+                "download": "https://cdn.modrinth.com/data/guitPqEi/versions/Q9r8LMQL/StorageDrawers-fabric-1.21.11-20.0.0.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    },
+                    "Dep_2": {
+                        "Title": "Forge Config API",
+                        "link": "https://modrinth.com/mod/forge-config-api-port"
+                    }
+                }
+            },
+            "stackage": {
+                "img": "https://cdn.modrinth.com/data/Bc74RbD1/7ccd9e733526ea655e1c203599d3930a8ca29c24.png",
+                "title": "Stackable",
+                "description": "Un mod qui augmente toutes les limites d'empilement d'objets.",
+                "link": "https://modrinth.com/mod/stackable127",
+                "mod_version": "v2.0.5",
+                "download": "https://cdn.modrinth.com/data/Bc74RbD1/versions/gFCpw5gZ/stackable-fabric-1.21.11-2.0.5.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
                 "Dependant": {
                     "Dep_1": {
                         "Title": "Fabric API",
@@ -759,13 +808,41 @@
                     }
                 }
             },
-            "compactstorage": {
-                "img": "https://cdn.modrinth.com/data/CNYyGWn5/icon.png",
-                "title": "CompactStorage",
-                "description": "Ajout de coffres, de sacs à dos et de tonneaux améliorables !",
-                "link": "https://modrinth.com/mod/compact-storage",
-                "mod_version": "v21.11.106",
-                "download": "https://cdn.modrinth.com/data/CNYyGWn5/versions/VvvGk9gH/compactstorage-fabric-21.11.106.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "harvest": {
+                "img": "https://cdn.modrinth.com/data/sUbuUC7R/ca34bdca3b406be71430091b86bec43b0f46f0e0_96.webp",
+                "title": "Actually Harvest",
+                "description": "Une récolte fonctionnelle par clic droit. Gain d'XP grâce à la récolte.",
+                "link": "https://modrinth.com/mod/actually-harvest",
+                "mod_version": "v1.1.7.0",
+                "download": "https://cdn.modrinth.com/data/sUbuUC7R/versions/dZkaUZRz/actuallyharvest-1.21.11-fabric-1.1.7.0-FABRIC.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    }
+                }
+            },
+            "silkspawner": {
+                "img": "https://cdn.modrinth.com/data/7VESbzyX/111e6c9a7fe76bd8fbf9b70cfccebb60783161af_96.webp",
+                "title": "Mine Spawners",
+                "description": "Récupérer les générateurs à créatures en utilisant une pioche avec l'enchantement Toucher de soie.",
+                "link": "https://modrinth.com/mod/mine-spawners",
+                "mod_version": "v1.6.6",
+                "download": "https://cdn.modrinth.com/data/7VESbzyX/versions/Wle6zwiu/mine-spawners-1.6.6.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    }
+                }
+            },
+            "waystone": {
+                "img": "https://cdn.modrinth.com/data/LOpKHB2A/6c81041b60d525d63c0b9da497db66cfda215e16_96.webp",
+                "title": "Waystones",
+                "description": "Téléportez-vous aux pierres de téléportation activées.",
+                "link": "https://modrinth.com/mod/waystones",
+                "mod_version": "v21.11.9",
+                "download": "https://cdn.modrinth.com/data/LOpKHB2A/versions/MydMW2TT/waystones-fabric-1.21.11-21.11.9.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
                 "Dependant": {
                     "Dep_1": {
                         "Title": "Fabric API",
@@ -777,13 +854,13 @@
                     }
                 }
             },
-            "stackage": {
-                "img": "https://cdn.modrinth.com/data/Bc74RbD1/7ccd9e733526ea655e1c203599d3930a8ca29c24.png",
-                "title": "Stackable",
-                "description": "Un mod qui augmente toutes les limites d'empilement d'objets.",
-                "link": "https://modrinth.com/mod/stackable127",
-                "mod_version": "v2.0.5",
-                "download": "https://cdn.modrinth.com/data/Bc74RbD1/versions/gFCpw5gZ/stackable-fabric-1.21.11-2.0.5.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "xpbank": {
+                "img": "https://cdn.modrinth.com/data/IArSjGyE/0e9b1c12391f0d618dfc3d1130b19a244a43ea7b.png",
+                "title": "Essentia - The XP Bank",
+                "description": "Un mod qui introduit un système clair et intuitif pour stocker et gérer l'expérience des joueurs.",
+                "link": "https://modrinth.com/mod/essentia-the-xp-bank",
+                "mod_version": "v1.3.1",
+                "download": "https://cdn.modrinth.com/data/IArSjGyE/versions/2DlPA485/essentia-1.3.1-mc1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11",
                 "Dependant": {
                     "Dep_1": {
                         "Title": "Fabric API",
