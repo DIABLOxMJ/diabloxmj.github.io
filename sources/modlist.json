@@ -238,7 +238,7 @@
                     }
                 }
             },
-            "fetterf3": {
+            "betterf3": {
                 "img": "https://cdn.modrinth.com//data/8shC1gFX/icon.png",
                 "title": "BetterF3",
                 "description": "BetterF3 est un mod qui remplace l'interface de base par une interface hautement personnalisable et lisible.",
@@ -520,13 +520,13 @@
                     }
                 }
             },
-            "unlim": {
-                "img": "https://unlim.cc/unlimicon-560.webp",
-                "title": "Unlim",
-                "description": "Il permet de faire des parties multijoueurs via le peer-to-peer (Sans passer par un hébergeur).",
-                "link": "https://unlim.cc/",
-                "mod_version": "v1.1.0",
-                "download": "https://unlim.cc/dl.php?file=Mods%2FFabric%2Funlim-1.1.0-fabric-1.21.11.jar&url=https%3A%2F%2Fget.unlim.cc%2Fmc%2FMods%2FFabric%2Funlim-1.1.0-fabric-1.21.11.jar",
+            "clearview": {
+                "img": "https://cdn.modrinth.com/data/UFRJve4V/facde2c2a2fdf6e518e83fa04ef09779e7b2bdfa_96.webp",
+                "title": "Clear Water/Lava/PowderSnow",
+                "description": "Permet de voir clairement dans n'importe quel liquide (eau, lave, neige poudreuse, etc.).",
+                "link": "https://modrinth.com/mod/clear-waterlavapowdersnow",
+                "mod_version": "v1",
+                "download": "https://cdn.modrinth.com/data/UFRJve4V/versions/6WjDpmpO/ClearWaterLava-Fabric-1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
                 "Dependant": {
                     "Dep_1": {
                         "Title": "Fabric API",
@@ -604,24 +604,6 @@
                     }
                 }
             },
-            "forgeconfigapi": {
-                "img": "https://cdn.modrinth.com/data/ohNO6lps/cb3b942cc18a66a0f35f802e004713f134e46cc2_96.webp",
-                "title": "Forge Config API Port",
-                "description": "Les systèmes de configuration de NeoForge et Forge sont fournis à d'autres écosystèmes de modding. Ils sont conçus pour une architecture multiloader.",
-                "link": "https://modrinth.com/mod/forge-config-api-port",
-                "mod_version": "v21.11.1",
-                "download": "https://cdn.modrinth.com/data/ohNO6lps/versions/uXrWPsCu/ForgeConfigAPIPort-v21.11.1-mc1.21.11-Fabric.jar?mr_download_reason=dependency&mr_game_version=1.21.11&mr_loader=fabric",
-                "Dependant": {
-                    "Dep_1": {
-                        "Title": "Fabric API",
-                        "link": "https://modrinth.com/mod/fabric-api"
-                    },
-                    "Dep_2": {
-                        "Title": "Mod Menu",
-                        "link": "https://modrinth.com/mod/modmenu"
-                    }
-                }
-            },
             "removereloadingscreen": {
                 "img": "https://cdn.modrinth.com/data/ZP7xHXtw/7a416b09817a79adfa6a3ef9368990135e276821_96.webp",
                 "title": "Remove Reloading Screen",
@@ -664,113 +646,19 @@
                     }
                 }
             },
-            "skyislava": {
-                "img": "https://cdn.modrinth.com/data/jJpyTD8z/b89564cc27c6da1d866f357cf6b24c37437308f7.png",
-                "title": "Sky Is Lava",
-                "description": "Un mod qui ajoute de la lave dans le ciel.",
-                "link": "https://modrinth.com/mod/skyislava",
-                "mod_version": "v1.0.0",
-                "download": "https://cdn.modrinth.com/data/jJpyTD8z/versions/oqKFQiNr/lava-sky-mc1.21.11-1.0.0.jar?mr_download_reason=standalone",
+            "forgeconfigapi": {
+                "img": "https://cdn.modrinth.com/data/ohNO6lps/cb3b942cc18a66a0f35f802e004713f134e46cc2_96.webp",
+                "title": "Forge Config API Port",
+                "description": "Les systèmes de configuration de NeoForge et Forge sont fournis à d'autres écosystèmes de modding. Ils sont conçus pour une architecture multiloader.",
+                "link": "https://modrinth.com/mod/forge-config-api-port",
+                "mod_version": "v21.11.1",
+                "download": "https://cdn.modrinth.com/data/ohNO6lps/versions/uXrWPsCu/ForgeConfigAPIPort-v21.11.1-mc1.21.11-Fabric.jar?mr_download_reason=dependency&mr_game_version=1.21.11&mr_loader=fabric",
                 "Dependant": {
                     "Dep_1": {
                         "Title": "Fabric API",
                         "link": "https://modrinth.com/mod/fabric-api"
                     },
                     "Dep_2": {
-                        "Title": "Cloth Config",
-                        "link": "https://modrinth.com/mod/cloth-config"
-                    },
-                    "Dep_3": {
-                        "Title": "Mod Menu",
-                        "link": "https://modrinth.com/mod/modmenu"
-                    }
-                }
-            },
-            "architecturyapi": {
-                "img": "https://cdn.modrinth.com/data/lhGA9TYQ/05fe3a61c28faaccaec3533b92e1b321edde7bf6_96.webp",
-                "title": "Architectury API",
-                "description": "Une API intermédiaire destinée à faciliter le développement de mods multiplateformes.",
-                "link": "https://modrinth.com/mod/architectury-api",
-                "mod_version": "v19.0.1",
-                "download": "https://cdn.modrinth.com/data/lhGA9TYQ/versions/uNdfrcQ8/architectury-19.0.1-fabric.jar?mr_download_reason=dependency&mr_game_version=1.21.11&mr_loader=fabric",
-                "Dependant": {
-                    "Dep_1": {
-                        "Title": "Fabric API",
-                        "link": "https://modrinth.com/mod/fabric-api"
-                    }
-                }
-            },
-            "mcpitanlib": {
-                "img": "https://cdn.modrinth.com/data/uNRoUnGT/873b2768ff89ebacfa81c1b06a07a25f2e156bb0_96.webp",
-                "title": "MCPitanLib",
-                "description": "Bibliothèque de mods Minecraft de Pitan.",
-                "link": "https://modrinth.com/mod/mcpitanlibarch",
-                "mod_version": "v3.6.8",
-                "download": "https://cdn.modrinth.com/data/uNRoUnGT/versions/7STa0LMu/mcpitanlib-3.6.8-1.21.11-fabric.jar?mr_download_reason=dependency&mr_game_version=1.21.11&mr_loader=fabric",
-                "Dependant": {
-                    "Dep_1": {
-                        "Title": "Fabric API",
-                        "link": "https://modrinth.com/mod/fabric-api"
-                    },
-                    "Dep_2": {
-                        "Title": "Architectury API",
-                        "link": "https://modrinth.com/mod/architectury-api"
-                    }
-                }
-            },
-            "uncraftingtable": {
-                "img": "https://cdn.modrinth.com/data/d0f1a75r/194df8f21c829b4264123aa90a145364deb452b0_96.webp",
-                "title": "Simple Uncrafting Table",
-                "description": "Ajouter une table de défabrication.",
-                "link": "https://modrinth.com/mod/simple-uncrafting-table",
-                "mod_version": "v1.5.6",
-                "download": "https://cdn.modrinth.com/data/d0f1a75r/versions/Tv5AwjFD/UncraftingTable-fabric-1.5.6.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
-                "Dependant": {
-                    "Dep_1": {
-                        "Title": "Fabric API",
-                        "link": "https://modrinth.com/mod/fabric-api"
-                    },
-                    "Dep_2": {
-                        "Title": "MCPitanLib",
-                        "link": "https://modrinth.com/mod/mcpitanlibarch"
-                    }
-                }
-            },
-            "traverlerbackpack": {
-                "img": "https://cdn.modrinth.com/data/rlloIFEV/271b2133a315ee3d864ea5a429472f0e71591fe3_96.webp",
-                "title": "Traveler's Backpack",
-                "description": "Sacs à dos uniques et évolutifs avec personnalisation, intégration de l'API Curios/Trinkets et bien plus encore !",
-                "link": "https://modrinth.com/mod/travelersbackpack",
-                "mod_version": "v10.11.9",
-                "download": "https://cdn.modrinth.com/data/rlloIFEV/versions/XbEGJQSG/travelersbackpack-fabric-1.21.11-10.11.9.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
-                "Dependant": {
-                    "Dep_1": {
-                        "Title": "Fabric API",
-                        "link": "https://modrinth.com/mod/fabric-api"
-                    },
-                    "Dep_2": {
-                        "Title": "Cloth Config",
-                        "link": "https://modrinth.com/mod/cloth-config"
-                    }
-                }
-            },
-            "inventorysorting": {
-                "img": "https://cdn.modrinth.com/data/5ibSyLAz/cb998de47289a6b0f4022106088870be27d3d5e2.png",
-                "title": "Inventory Sorting",
-                "description": "Tri d'inventaire rapide, simple et léger.",
-                "link": "https://modrinth.com/mod/inventory-sorting",
-                "mod_version": "v1.1.0",
-                "download": "https://cdn.modrinth.com/data/5ibSyLAz/versions/Dq4h9aTH/inventorysorter-fabric-2.1.4%2Bmc1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11",
-                "Dependant": {
-                    "Dep_1": {
-                        "Title": "Fabric API",
-                        "link": "https://modrinth.com/mod/fabric-api"
-                    },
-                    "Dep_2": {
-                        "Title": "Cloth Config",
-                        "link": "https://modrinth.com/mod/cloth-config"
-                    },
-                    "Dep_3": {
                         "Title": "Mod Menu",
                         "link": "https://modrinth.com/mod/modmenu"
                     }
@@ -791,20 +679,6 @@
                     "Dep_2": {
                         "Title": "Forge Config API",
                         "link": "https://modrinth.com/mod/forge-config-api-port"
-                    }
-                }
-            },
-            "stackage": {
-                "img": "https://cdn.modrinth.com/data/Bc74RbD1/7ccd9e733526ea655e1c203599d3930a8ca29c24.png",
-                "title": "Stackable",
-                "description": "Un mod qui augmente toutes les limites d'empilement d'objets.",
-                "link": "https://modrinth.com/mod/stackable127",
-                "mod_version": "v2.0.5",
-                "download": "https://cdn.modrinth.com/data/Bc74RbD1/versions/gFCpw5gZ/stackable-fabric-1.21.11-2.0.5.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
-                "Dependant": {
-                    "Dep_1": {
-                        "Title": "Fabric API",
-                        "link": "https://modrinth.com/mod/fabric-api"
                     }
                 }
             },
@@ -854,13 +728,41 @@
                     }
                 }
             },
-            "xpbank": {
-                "img": "https://cdn.modrinth.com/data/IArSjGyE/0e9b1c12391f0d618dfc3d1130b19a244a43ea7b.png",
-                "title": "Essentia - The XP Bank",
-                "description": "Un mod qui introduit un système clair et intuitif pour stocker et gérer l'expérience des joueurs.",
-                "link": "https://modrinth.com/mod/essentia-the-xp-bank",
+            "buildnotes": {
+                "img": "https://cdn.modrinth.com/data/1v2FSkam/d55cb5cb2d1042b665f5fb1573a1ada08d4b1c78.png",
+                "title": "BuildNotes",
+                "description": "Un mod léger permettant de prendre des notes et de suivre les constructions en jeu.",
+                "link": "https://modrinth.com/mod/buildnotes",
                 "mod_version": "v1.3.1",
-                "download": "https://cdn.modrinth.com/data/IArSjGyE/versions/2DlPA485/essentia-1.3.1-mc1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11",
+                "download": "https://cdn.modrinth.com/data/1v2FSkam/versions/7v4qsB4P/buildnotes-1.3.1-1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    }
+                }
+            },
+            "cloningbook": {
+                "img": "https://cdn.modrinth.com/data/QaOMtKxW/877c34bc4a383f154ffd9981e4a6ba904a7a81b6.png",
+                "title": "enchanted book cloning",
+                "description": "Ajoute une nouvelle recette pour dupliquer les livres enchantés !",
+                "link": "https://modrinth.com/datapack/enchanted-book-cloning",
+                "mod_version": "v1.21.11",
+                "download": "https://cdn.modrinth.com/data/QaOMtKxW/versions/Y4LJS29j/enchanted-book-cloning-1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    }
+                }
+            },
+            "grindenchant": {
+                "img": "https://cdn.modrinth.com/data/WC4UgDcZ/7cde0e287f7eb17517d645fdc5904acb708779b8_96.webp",
+                "title": "Grind enchantments",
+                "description": "Désenchanter et transférer les enchantements à l'aide d'une meule.",
+                "link": "https://modrinth.com/mod/grind-enchantments",
+                "mod_version": "v4.1.0",
+                "download": "https://cdn.modrinth.com/data/WC4UgDcZ/versions/XX0LqtxX/grind-enchantments-4.1.0%2B1.21.11-pre2.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
                 "Dependant": {
                     "Dep_1": {
                         "Title": "Fabric API",
