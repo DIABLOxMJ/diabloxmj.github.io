@@ -4,11 +4,18 @@
         "list": {
             "mybundle": {
                 "img": "../sources/mybundle.png",
-                "title": "Pack (All in One)",
+                "title": "Simple Pack (All in One)",
                 "description": "Envie de tout avoir sans passer par chaque fichier, prenez le pack tout en un.",
-                "link": "https://diabloxmj.github.io/",
                 "mod_version": "v1.0",
                 "download": "../packs/Bundle_Mods/diabloxmj_bundle_1.21.11.zip",
+                "Dependant": {}
+            },
+            "mybundlemodpack": {
+                "img": "../sources/mybundle.png",
+                "title": "ModPack Custom (All in One)",
+                "description": "Ce Modpack contient les mods utilisés (Ce qui ne sont pas mentionner en dessous).",
+                "mod_version": "v1.0",
+                "download": "../packs/Bundle_Mods/custom_bundle_1.21.11.zip",
                 "Dependant": {}
             },
             "fabricapi": {
@@ -88,6 +95,38 @@
                     }
                 }
             },
+            "worldedit": {
+                "img": "https://cdn.modrinth.com/data/1u6JkXh5/30698991048ced77e60c4e8284007d3782f2e6a3_96.webp",
+                "title": "WorldEdit",
+                "description": "Un éditeur de cartes Minecraft… qui fonctionne directement en jeu ! Avec sélections, schémas, copier-coller, pinceaux et scripts.",
+                "link": "https://modrinth.com/plugin/worldedit",
+                "mod_version": "v7.4.2",
+                "download": "https://cdn.modrinth.com/data/1u6JkXh5/versions/oY3E2pzA/worldedit-mod-7.4.2.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    }
+                }
+            },
+            "worldeditcui": {
+                "img": "https://cdn.modrinth.com/data/NSLJJooQ/ed6eaf24fa5a8d1ed4431f57c27fe5cde9f348f2_96.webp",
+                "title": "WorldEdit CUI",
+                "description": "Un mod qui ajoute une interface utilisateur graphique pour WorldEdit, conçue pour faciliter l'utilisation et prévenir les erreurs accidentelles.",
+                "link": "https://modrinth.com/mod/worldedit-cui",
+                "mod_version": "v1.21.11+01",
+                "download": "https://cdn.modrinth.com/data/NSLJJooQ/versions/SD1ZtHLA/WorldEditCUI-1.21.11%2B01.jar?mr_download_reason=standalone&mr_game_version=1.21.11",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    },
+                    "Dep_2": {
+                        "Title": "WorldEdit",
+                        "link": "https://modrinth.com/plugin/worldedit"
+                    }
+                }
+            },
             "ferritecore": {
                 "img": "https://cdn.modrinth.com/data/uXXizFIs/222a126f26f8f9ae1eb339f3b767677f18bff31f_96.webp",
                 "title": "FerriteCore",
@@ -145,6 +184,38 @@
                 "link": "https://modrinth.com/mod/shulkerboxtooltip",
                 "mod_version": "v5.2.16",
                 "download": "https://cdn.modrinth.com/data/2M01OLQq/versions/rZovgkWT/shulkerboxtooltip-fabric-5.2.16%2B1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    },
+                    "Dep_2": {
+                        "Title": "Mod Menu",
+                        "link": "https://modrinth.com/mod/modmenu"
+                    }
+                }
+            },
+            "malilib": {
+                "img": "https://cdn.modrinth.com/data/GcWjdA9I/a530ae55df5e0c405f5cf1b3e4fd6163a398bdc3.png",
+                "title": "MaLiLib",
+                "description": "Une bibliothèque pour les mods clients de Masa.",
+                "link": "https://modrinth.com/mod/malilib",
+                "mod_version": "v0.27.12",
+                "download": "https://cdn.modrinth.com/data/GcWjdA9I/versions/m5frsnWf/malilib-fabric-1.21.11-0.27.12.jar?mr_download_reason=standalone",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    }
+                }
+            },
+            "litematica": {
+                "img": "https://cdn.modrinth.com/data/bEpr0Arc/25b5529d7a3b030ac136a6ce879d8ed2a1aa4a8d.png",
+                "title": "Litematica",
+                "description": "Un module schématique côté client avec des fonctionnalités supplémentaires pour le travail en mode créatif.",
+                "link": "https://modrinth.com/mod/litematica",
+                "mod_version": "v0.26.8",
+                "download": "https://cdn.modrinth.com/data/bEpr0Arc/versions/kSNW8FbJ/litematica-fabric-1.21.11-0.26.8.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
                 "Dependant": {
                     "Dep_1": {
                         "Title": "Fabric API",
