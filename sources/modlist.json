@@ -31,8 +31,8 @@
                 "img": "../sources/mj_mods_lavasky.png",
                 "title": "LavaSky",
                 "description": "Un mod qui transforme le ciel en un gigantesque ciel de lave dans le monde normal.",
-                "mod_version": "v1.0.0",
-                "download": "../packs/Mods/lavasky-1.0.0.jar",
+                "mod_version": "v1.0.1",
+                "download": "../packs/Mods/lavasky-1.0.1.jar",
                 "Dependant": {
                     "Dep_1": {
                         "Title": "Fabric API",
