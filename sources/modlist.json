@@ -27,6 +27,19 @@
                 "download": "https://cdn.modrinth.com/data/P7dR8mSH/versions/5zJNhXV2/fabric-api-0.141.4%2B1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11",
                 "Dependant": {}
             },
+            "lavasky": {
+                "img": "../sources/mj_mods_lavasky.png",
+                "title": "LavaSky",
+                "description": "Un mod qui transforme le ciel en un gigantesque ciel de lave dans le monde normal.",
+                "mod_version": "v1.0.0",
+                "download": "../packs/Mods/lavasky-1.0.0.jar",
+                "Dependant": {
+                    "Dep_1": {
+                        "Title": "Fabric API",
+                        "link": "https://modrinth.com/mod/fabric-api"
+                    }
+                }
+            },
             "sodium": {
                 "img": "https://cdn.modrinth.com/data/AANobbMI/295862f4724dc3f78df3447ad6072b2dcd3ef0c9_96.webp",
                 "title": "Sodium",
