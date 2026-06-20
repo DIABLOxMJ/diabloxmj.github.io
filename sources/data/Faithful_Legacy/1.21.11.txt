@@ -8,3 +8,6 @@
 [06/06/2026]
 - Changement de texture pour le Basalt, Stripped Wood, Purpur block, Nether bricks et End Stone Brick
 - Ajout de nouvelle texture pour le côté des dalles (Bloc double dalle personnalisé)
+
+[20/06/2026]
+- Ajout de plusieurs nouvelles textures liés à des mods...
