@@ -1,10 +1,11 @@
 [
     {
         "id": "faithful",
+		"name": "Faithful_Legacy",
         "title": "Faithful Legacy",
         "description": "Le pack de textures a été créé à l'origine par $0 en 2010.",
         "warning": "⚠ Ce pack n'est pas affilié à l'équipe Faithful, ce pack a été créé pour mon confort personnel et n'est pas destiné à être rendu public.",
-		"banner": "sources/banner_1.png",
+		"banner": "sources/img/banner_1.png",
 		"folder": "packs/Faithful_Legacy",
         "screen": {
             "1": "pages/sources/faithful_screen_1.png",
@@ -33,9 +34,10 @@
     },
     {
         "id": "beta",
+		"name": "Beta_Legacy",
         "title": "Beta Legacy",
         "description": "Le pack de textures a pour but de reproduire les textures et son de Minecraft Beta.",
-		"banner": "sources/banner_2.png",
+		"banner": "sources/img/banner_2.png",
 		"folder": "packs/Beta_Legacy",
         "screen": {
             "1": "pages/sources/beta_screen_1.png",
@@ -60,9 +62,10 @@
     },
     {
         "id": "alpha",
+		"name": "Alpha_Legacy",
         "title": "Alpha Legacy",
         "description": "Le pack de textures a pour but de reproduire les textures et son de Minecraft Alpha.",
-		"banner": "sources/banner_3.png",
+		"banner": "sources/img/banner_3.png",
 		"folder": "packs/Alpha_Legacy",
         "screen": {
             "1": "pages/sources/alpha_screen_1.png",

@@ -1,0 +1,34 @@
+@font-face {
+	font-family: 'customfonts';
+	src: url('../sources/fonts/Mojangles.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	font-family: 'customfonts', sans-serif;
+}
+
+.text-ombre {
+	text-shadow: 2px 2px rgba(0, 0, 0, 0.8);
+}
+
+.scroll-list::-webkit-scrollbar {
+	width: 14px;
+}
+.scroll-list::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-left: 1px solid #a3a3a3;
+}
+.scroll-list::-webkit-scrollbar-thumb {
+	background: #d4d4d4;
+	border: 1px solid #a3a3a3;
+}
+.scroll-list::-webkit-scrollbar-thumb:hover {
+	background: #a3a3a3;
+}
+
+.item-selection {
+	background-color: #d1d5db;
+	color: #000;
+}

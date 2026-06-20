@@ -1,12 +1,10 @@
-// FONCTION COMMUNE POUR JOUER UN SON SANS LATENCE
 function PlaySound(nomFichier, basePath = '') {
-    const audio = new Audio(`${basePath}sources/${nomFichier}`);
-    audio.volume = 0.25; // Volume à 25% pour rester discret et agréable
+    const audio = new Audio(`${basePath}sources/sound/${nomFichier}`);
+    audio.volume = 0.25;
     audio.play().catch(err => console.log("Audio bloqué par le navigateur avant interaction."));
 }
 
 function initialiserTelechargements(containerId, packIdFilter = null, basePath = '') {
-    // 1. Initialisation unique de la boîte modale de Changelog si absente
     if (!document.getElementById('changelog-modal')) {
         const modal = document.createElement('div');
         modal.id = 'changelog-modal';
@@ -38,7 +36,7 @@ function initialiserTelechargements(containerId, packIdFilter = null, basePath =
     container.innerHTML = ''; 
 
     // Récupération dynamique du fichier packs.json
-    fetch(`${basePath}sources/packlist.json`)
+    fetch(`${basePath}sources/data/packlist.json`)
         .then(response => {
             if (!response.ok) throw new Error("Impossible de charger packlist.json");
             return response.json();
@@ -90,7 +88,7 @@ function initialiserTelechargements(containerId, packIdFilter = null, basePath =
                 const DownloadButton = document.createElement('button');
                 DownloadButton.className = 'bg-[#00ff00] border-2 border-black w-full py-2.5 mb-1.5 font-bold text-white text-ombre hover:brightness-125 hover:border-white cursor-pointer transition-all duration-200 shadow-sm texte-ombre';
                 DownloadButton.textContent = 'Télécharger';
-                DownloadButton.style.backgroundImage = `url('${basePath}sources/download.png')`;
+                DownloadButton.style.backgroundImage = `url('${basePath}sources/img/download.png')`;
                 DownloadButton.style.backgroundRepeat = "repeat-x";
                 DownloadButton.style.backgroundSize = "auto 100%";
                 
@@ -110,7 +108,7 @@ function initialiserTelechargements(containerId, packIdFilter = null, basePath =
                 const ChangelogButton = document.createElement('button');
                 ChangelogButton.className = 'bg-[#00ffff] border-2 border-black w-full py-2.5 font-bold text-white text-ombre hover:brightness-125 hover:border-white cursor-pointer transition-all duration-200 shadow-sm texte-ombre';
                 ChangelogButton.textContent = 'Changelog';
-                ChangelogButton.style.backgroundImage = `url('${basePath}sources/changelog.png')`;
+                ChangelogButton.style.backgroundImage = `url('${basePath}sources/img/changelog.png')`;
                 ChangelogButton.style.backgroundRepeat = "repeat-x";
                 ChangelogButton.style.backgroundSize = "auto 100%";
                 
@@ -121,7 +119,7 @@ function initialiserTelechargements(containerId, packIdFilter = null, basePath =
                     const titleZone = document.getElementById('changelog-title');
                     const contentZone = document.getElementById('changelog-content');
 
-                    const cheminTxt = `${basePath}${col.folder}/changelogs/${selectedVersionObj.version}.txt`;
+                    const cheminTxt = `${basePath}/sources/data/${col.name}/${selectedVersionObj.version}.txt`;
 
                     fetch(cheminTxt)
                         .then(response => {

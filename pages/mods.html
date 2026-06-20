@@ -3,71 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="../sources/icon.ico">
+    <link rel="icon" type="image/x-icon" href="../sources/img/icon.ico">
     <title>DIABLOxMJ | Mod List</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Déclaration de ta police personnalisée locale */
-        @font-face {
-            font-family: 'customfonts';
-            src: url('../sources/Mojangles.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        body {
-            font-family: 'customfonts', sans-serif;
-        }
-
-        .text-ombre {
-            text-shadow: 2px 2px rgba(0, 0, 0, 0.8);
-        }
-
-        /* Personnalisation de la barre de défilement pour coller à la maquette */
-        .scroll-list::-webkit-scrollbar {
-            width: 14px;
-        }
-        .scroll-list::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-left: 1px solid #a3a3a3;
-        }
-        .scroll-list::-webkit-scrollbar-thumb {
-            background: #d4d4d4;
-            border: 1px solid #a3a3a3;
-        }
-        .scroll-list::-webkit-scrollbar-thumb:hover {
-            background: #a3a3a3;
-        }
-        
-        /* Style pour l'élément sélectionné dans la liste */
-        .item-selection {
-            background-color: #d1d5db; /* Gris clair */
-            color: #000;
-        }
-    </style>
+    <link rel="stylesheet" href="../sources/styles.css">
 </head>
-<body class="bg-[#f0f0f0] flex flex-col min-h-screen" style="background-image: url('../sources/background_dark.png'); background-size: 5%; background-repeat: repeat;">
+<body class="bg-[#f0f0f0] flex flex-col min-h-screen" style="background-image: url('../sources/img/background_dark.png'); background-size: 5%; background-repeat: repeat;">
 
     <div id="global-header"></div>
-    <script src="../sources/page.js"></script>
+    <script src="../sources/scripts/page.js"></script>
     <script>
-        // On l'exécute. Comme mods.html est dans le dossier pages, le recul est bien '../'
         injecterHeader('../');
     </script>
 
     <main class="flex-grow w-full max-w-6xl mx-auto px-6 py-6 flex flex-col lg:flex-row gap-8 items-start">
 
-        <!-- Colonne de Gauche : Menu de Sélection des Versions -->
         <div class="w-full lg:w-[260px] shrink-0 flex flex-col">
             <h2 class="text-4xl font-bold text-center mb-4 w-full max-w-[260px] mx-auto lg:mx-0 text-white text-ombre">Version</h2>
             <div id="colonnes-container" class="w-full max-w-[260px] mx-auto lg:mx-0"></div>
         </div>
 
-        <!-- Colonne Centrale / Droite : Liste des Mods -->
         <div class="flex-grow w-full lg:w-2/3 space-y-6 text-white text-ombre">
             <section class="space-y-4">
                 <h1 class="text-4xl font-bold tracking-wide">Liste de mods</h1>
-                <!-- Encadré descriptif avec le blur et le fond sombre transparent -->
                 <div class="bg-black/60 p-3 rounded border-2 border-neutral-700/60 max-w-4xl shadow-md backdrop-blur-sm">
                     <p class="text-xl leading-relaxed text-justify">
                         Voici la liste de mods utilisés dans la version <span id="variable-version" class="text-cyan-400 font-bold">...</span>.
@@ -76,11 +34,8 @@
                 </div>
             </section>
 
-            <!-- CADRE PARENT UNIQUE : Regroupe toutes les fiches de mods pour éviter le scrolling global sur la page -->
             <div class="bg-black/40 border-2 border-neutral-700/50 p-2 rounded backdrop-blur-md max-w-4xl shadow-xl">
-                <!-- Zone défilante interne réservée uniquement aux fiches de mods -->
                 <div id="mods-list-container" class="space-y-2 max-h-[53vh] overflow-y-auto pr-2 scroll-list">
-                    <!-- Généré dynamiquement par modlist.js -->
                 </div>
             </div>
         </div>
@@ -95,8 +50,8 @@
         <p id="notification-message">Message ici</p>
     </div>
 
-    <script src="../sources/packlist.js"></script>
-    <script src="../sources/modlist.js"></script>
+    <script src="../sources/scripts/packlist.js"></script>
+    <script src="../sources/scripts/modlist.js"></script>
 
     <script>
         const notificationToast = document.getElementById('notification-toast');
@@ -118,7 +73,6 @@
             }, 3500);
         }
 
-        // --- INITIALISATION DU SYSTÈME DYNAMIQUE DE MODS ---
         initialiserPageMods('colonnes-container', 'mods-list-container', 'variable-version', '../');
     </script>
 </body>

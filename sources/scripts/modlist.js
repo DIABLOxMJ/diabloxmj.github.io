@@ -1,6 +1,6 @@
 if (typeof PlaySound !== 'function') {
     function PlaySound(nomFichier, basePath = '') {
-        const audio = new Audio(`${basePath}sources/${nomFichier}`);
+        const audio = new Audio(`${basePath}sources/sound/${nomFichier}`);
         audio.volume = 0.25;
         audio.play().catch(() => {});
     }
@@ -13,7 +13,7 @@ function initialiserPageMods(containerMenuId, containerMainId, versionTextId, ba
 
     if (!menuContainer || !mainContainer) return;
 
-    fetch(`${basePath}sources/modlist.json`)
+    fetch(`${basePath}sources/data/modlist.json`)
         .then(response => {
             if (!response.ok) throw new Error("Impossible de charger modlist.json");
             return response.json();
@@ -67,7 +67,6 @@ function afficherLesMods(modsObject, versionNom, mainContainer, versionTextZone,
 
     listeMods.forEach(mod => {
         const card = document.createElement('div');
-        // Fond sombre transparent avec flou et bordure subtile (selon result 2.png)
         card.className = 'bg-[#151515]/50 border-2 border-neutral-700/60 p-4 flex flex-col sm:flex-row items-center sm:items-start gap-4 shadow-md text-white text-ombre';
 
         const img = document.createElement('img');
@@ -92,7 +91,6 @@ function afficherLesMods(modsObject, versionNom, mainContainer, versionTextZone,
     
         title.appendChild(titleLink);
         } else {
-            // Si aucun lien n'est renseigné, on remet le comportement par défaut
             title.textContent = mod.title;
         }
 
@@ -137,7 +135,7 @@ function afficherLesMods(modsObject, versionNom, mainContainer, versionTextZone,
         downloadBtn.className = 'bg-[#00ff00] border-2 border-black w-full sm:w-auto px-6 py-2 font-bold text-white text-center text-ombre hover:brightness-125 hover:border-white cursor-pointer transition-all duration-200 shadow-sm block text-xl';
         downloadBtn.textContent = 'Télécharger';
         
-        downloadBtn.style.backgroundImage = `url('${basePath}sources/download.png')`;
+        downloadBtn.style.backgroundImage = `url('${basePath}sources/img/download.png')`;
         downloadBtn.style.backgroundRepeat = "repeat-x";
         downloadBtn.style.backgroundSize = "auto 100%";
         

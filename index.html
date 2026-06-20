@@ -3,87 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="sources/icon.ico">
+    <link rel="icon" type="image/x-icon" href="../sources/img/icon.ico">
     <title>DIABLOxMJ | Resources packs</title>
-    <!-- Utilisation de Tailwind CSS pour un style rapide et responsive -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Déclaration de ta police personnalisée locale */
-        @font-face {
-            font-family: 'customfonts';
-            src: url('sources/Mojangles.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        body {
-            font-family: 'customfonts', sans-serif;
-        }
-
-        .text-ombre {
-            text-shadow: 2px 2px rgba(0, 0, 0, 0.8);
-        }
-
-        /* Personnalisation de la barre de défilement pour coller à la maquette */
-        .scroll-list::-webkit-scrollbar {
-            width: 14px;
-        }
-        .scroll-list::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-left: 1px solid #a3a3a3;
-        }
-        .scroll-list::-webkit-scrollbar-thumb {
-            background: #d4d4d4;
-            border: 1px solid #a3a3a3;
-        }
-        .scroll-list::-webkit-scrollbar-thumb:hover {
-            background: #a3a3a3;
-        }
-        
-        /* Style pour l'élément sélectionné dans la liste */
-        .item-selection {
-            background-color: #d1d5db; /* Gris clair */
-            color: #000;
-        }
-    </style>
+    <link rel="stylesheet" href="../sources/styles.css">
 </head>
-<body class="bg-[#f0f0f0] flex flex-col min-h-screen" style="background-image: url('sources/background_dark.png'); background-size: 5%; background-repeat: repeat;">
+<body class="bg-[#f0f0f0] flex flex-col min-h-screen" style="background-image: url('sources/img/background_dark.png'); background-size: 5%; background-repeat: repeat;">
 
-    <!-- En-tête (Header) -->
     <div id="global-header"></div>
-    <script src="sources/page.js"></script>
+    <script src="../sources/scripts/page.js"></script>
     <script>
-        // On l'exécute. Comme index.html est à la racine, le chemin est juste './'
         injecterHeader('./');
     </script>
 
-    <!-- Texte d'introduction -->
     <section class="text-center pt-10 pb-0 px-4">
         <h1 class="text-4xl font-bold text-white text-ombre mb-4">Bienvenue sur ma plateforme de resources packs pour Minecraft</h1>
         <p class="text-xl text-white text-ombre max-w-2xl mx-auto">Sélectionnez la version de votre choix parmi nos différentes gammes de packs.</p>
     </section>
 
-    <!-- Contenu Principal -->
     <main class="flex-grow flex items-center justify-center pt-0 pb-12 px-4">
-        <!-- Grille pour les 3 colonnes -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl" id="colonnes-container">
-            <!-- Les 3 colonnes seront générées par JavaScript ici -->
         </div>
     </main>
 
-    <!-- Pied de page (Footer) -->
     <div id="global-footer"></div>
     <script>
-        // On l'exécute. Comme index.html est à la racine, le chemin est juste './'
         injecterFooter('./');
     </script>
 
-    <!-- Boîte de notification personnalisée (remplace le alert) -->
     <div id="notification-toast" class="fixed bottom-8 right-8 bg-gray-900 text-white font-semibold px-6 py-4 rounded shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none z-50">
         <p id="notification-message">Message ici</p>
     </div>
 
-    <script src="sources/packlist.js"></script>
+    <script src="../sources/scripts/packlist.js"></script>
 
     <script>
         const container = document.getElementById('colonnes-container');
@@ -93,7 +45,7 @@
 
         function afficherNotification(message) {
             if (typeof PlaySound === 'function') {
-                PlaySound('notification.mp3', ''); // racine, donc recul vide ''
+                PlaySound('notification.mp3', '');
             }
 
             notificationMessage.textContent = message;
@@ -107,7 +59,6 @@
             }, 3500);
         }
 
-        // Génère les 3 colonnes à l'accueil directement à partir de packs.json
         initialiserTelechargements('colonnes-container', null, '');
     </script>
 </body>

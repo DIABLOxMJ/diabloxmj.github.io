@@ -3,7 +3,7 @@
         "version": "1.21.11",
         "list": {
             "mybundle": {
-                "img": "../sources/mybundle.png",
+                "img": "../sources/img/mybundle.png",
                 "title": "Simple Pack (All in One)",
                 "description": "Envie de tout avoir sans passer par chaque fichier, prenez le pack tout en un.",
                 "mod_version": "v1.0",
@@ -11,7 +11,7 @@
                 "Dependant": {}
             },
             "mybundlemodpack": {
-                "img": "../sources/mybundle.png",
+                "img": "../sources/img/mybundle.png",
                 "title": "ModPack Custom (All in One)",
                 "description": "Ce Modpack contient les mods utilisés (Ce qui ne sont pas mentionner en dessous).",
                 "mod_version": "v1.0",
@@ -28,7 +28,7 @@
                 "Dependant": {}
             },
             "lavasky": {
-                "img": "../sources/mj_mods_lavasky.png",
+                "img": "../sources/img/mj_mods_lavasky.png",
                 "title": "LavaSky",
                 "description": "Un mod qui transforme le ciel en un gigantesque ciel de lave dans le monde normal.",
                 "mod_version": "v1.0.1",
@@ -41,7 +41,7 @@
                 }
             },
             "xpbank": {
-                "img": "../sources/mj_mods_xpbank.png",
+                "img": "../sources/img/mj_mods_xpbank.png",
                 "title": "XPBank",
                 "description": "Un mod qui ajoute les fioles de stockage d'expérience.",
                 "mod_version": "v1.0.0",
