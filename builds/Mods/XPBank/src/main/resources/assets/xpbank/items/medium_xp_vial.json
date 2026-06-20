@@ -1,0 +1,41 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "entries": [
+      {
+        "threshold": 0.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "xpbank:item/medium_xp_vial_empty"
+        }
+      },
+      {
+        "threshold": 1.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "xpbank:item/medium_xp_vial_quarter"
+        }
+      },
+      {
+        "threshold": 2.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "xpbank:item/medium_xp_vial_half"
+        }
+      },
+      {
+        "threshold": 3.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "xpbank:item/medium_xp_vial"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "xpbank:item/medium_xp_vial_empty"
+    }
+  }
+}

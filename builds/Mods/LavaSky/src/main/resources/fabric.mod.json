@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "lavasky",
+	"version": "1.0.1",
+	"name": "LavaSky",
+	"description": "A mod that transforms the sky into a gigantic lava sky in overworld.",
+	"authors": [
+		"DIABLOxMJ"
+	],
+	"contact": {
+		"homepage": "https://diabloxmj.github.io/"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/lavasky/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["com.diabloxmj.lavasky.Lavasky"],
+		"client": ["com.diabloxmj.lavasky.client.LavaskyClient"]
+	},
+	"mixins": [
+		"lavasky.mixins.json",
+		{
+			"config": "lavasky.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

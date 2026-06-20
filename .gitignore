@@ -1,5 +1,4 @@
 /backup
-/builds
 /tools/MCPackIndexer/finish
 /tools/MCPackIndexer/Pack
 /tools/MCSoundExtractor
@@ -7,3 +6,6 @@
 /tools/AutoST/stock_srt
 tools/python-manager-26.2.msix
 /tools/MCWiki
+/builds/Faithful_Legacy
+/builds/Mods/LavaSky/YarnDoc
+/builds/troll

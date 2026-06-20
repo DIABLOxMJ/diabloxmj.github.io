@@ -1,0 +1,17 @@
+{
+    "group": "mj_expbottle",
+	"result": {
+		"id": "minecraft:experience_bottle",
+		"count": 16
+	},
+	"type": "crafting_shaped",
+	"pattern": [
+		"GGG",
+		"G#G",
+		"GGG"
+	],
+	"key": {
+		"G": "minecraft:emerald",
+		"#": "minecraft:glass_bottle"
+	}
+}

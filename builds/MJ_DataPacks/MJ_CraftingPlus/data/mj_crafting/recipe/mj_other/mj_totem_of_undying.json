@@ -1,0 +1,17 @@
+{
+	"result": {
+		"id": "minecraft:totem_of_undying",
+		"count": 1
+	},
+	"type": "crafting_shaped",
+	"pattern": [
+		"GNG",
+		"N#N",
+		" N "
+	],
+	"key": {
+		"G": "minecraft:emerald",
+		"N": "minecraft:gold_ingot",
+		"#": "minecraft:nether_star"
+	}
+}

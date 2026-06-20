@@ -1,0 +1,17 @@
+{
+    "group": "mj_color_wool",
+	"result": {
+		"id": "minecraft:cyan_wool",
+		"count": 8
+	},
+	"type": "crafting_shaped",
+	"pattern": [
+		"GGG",
+		"G#G",
+		"GGG"
+	],
+	"key": {
+		"G": "minecraft:white_wool",
+		"#": "minecraft:cyan_dye"
+	}
+}

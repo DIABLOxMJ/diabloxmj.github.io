@@ -1,0 +1,1 @@
+execute as @a[nbt={Dimension:"minecraft:overworld"}] at @s run function game:lava_spawn

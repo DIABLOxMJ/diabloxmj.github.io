@@ -1,0 +1,17 @@
+{
+    "group": "mj_expbottle",
+	"result": {
+		"id": "minecraft:experience_bottle",
+		"count": 2
+	},
+	"type": "crafting_shaped",
+	"pattern": [
+		"GGG",
+		"G#G",
+		"GGG"
+	],
+	"key": {
+		"G": "minecraft:copper_ingot",
+		"#": "minecraft:glass_bottle"
+	}
+}

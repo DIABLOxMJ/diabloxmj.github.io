@@ -1,0 +1,1 @@
+fill ~-12 300 ~-12 ~12 300 ~12 lava replace air

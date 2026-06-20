@@ -1,0 +1,17 @@
+{
+  "item.xpbank.small_xp_vial": "Fiole d'expérience (Petit)",
+  "item.xpbank.medium_xp_vial": "Fiole d'expérience (Moyen)",
+  "item.xpbank.large_xp_vial": "Fiole d'expérience (Grande)",
+  "item.xpbank.small_super_xp_vial": "Super Fiole d'expérience (Petit)",
+  "item.xpbank.medium_super_xp_vial": "Super Fiole d'expérience (Moyen)",
+  "item.xpbank.large_super_xp_vial": "Super Fiole d'expérience (Grande)",
+
+  "chat.xpbank.player_empty": "Vous n'avez aucune expérience à déposer !",
+  "chat.xpbank.vial_full": "La fiole est déjà plein !",
+  "chat.xpbank.vial_empty": "La fiole est vide !",
+  "chat.xpbank.deposit_success": "Expérience enregistrée avec succès.",
+  "chat.xpbank.withdraw_success": "Expérience récupérée avec succès.",
+
+  "chat.xpbank.not_enough_xp_sacrifice": "Il vous faut au moins 8 points d'expérience pour accomplir la transformation !",
+  "chat.xpbank.sacrifice_success": "Une fiole d'expérience a été synthétisée."
+}

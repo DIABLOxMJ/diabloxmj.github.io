@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:diorite",
+    "minecraft:diorite"
+  ],
+  "result": {
+    "id": "minecraft:quartz_block",
+	"count": 2
+  }
+}
