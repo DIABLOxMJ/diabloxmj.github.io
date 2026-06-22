@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "xpbank:item/medium_xp_vial_quarter"
-  }
-}

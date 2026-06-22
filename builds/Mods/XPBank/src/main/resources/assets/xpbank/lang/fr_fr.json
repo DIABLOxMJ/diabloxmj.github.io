@@ -1,17 +1,17 @@
 {
-  "item.xpbank.small_xp_vial": "Fiole d'expérience (Petit)",
-  "item.xpbank.medium_xp_vial": "Fiole d'expérience (Moyen)",
-  "item.xpbank.large_xp_vial": "Fiole d'expérience (Grande)",
-  "item.xpbank.small_super_xp_vial": "Super Fiole d'expérience (Petit)",
-  "item.xpbank.medium_super_xp_vial": "Super Fiole d'expérience (Moyen)",
-  "item.xpbank.large_super_xp_vial": "Super Fiole d'expérience (Grande)",
+  "item.xpbank.mj_xpbottle_lvl1": "Fiole d'expérience (Niv 1)",
+  "item.xpbank.mj_xpbottle_lvl2": "Fiole d'expérience (Niv 2)",
+  "item.xpbank.mj_xpbottle_lvl3": "Fiole d'expérience (Niv 3)",
+  "item.xpbank.mj_xpbottle_lvl4": "Fiole d'expérience (Niv 4)",
+  "item.xpbank.mj_xpbottle_lvl5": "Fiole d'expérience (Niv 5)",
+  "item.xpbank.mj_xpbottle_lvl6": "Fiole d'expérience (Niv 6)",
 
   "chat.xpbank.player_empty": "Vous n'avez aucune expérience à déposer !",
-  "chat.xpbank.vial_full": "La fiole est déjà plein !",
-  "chat.xpbank.vial_empty": "La fiole est vide !",
+  "chat.xpbank.bottle_full": "La fiole est déjà plein !",
+  "chat.xpbank.bottle_empty": "La fiole est vide !",
   "chat.xpbank.deposit_success": "Expérience enregistrée avec succès.",
   "chat.xpbank.withdraw_success": "Expérience récupérée avec succès.",
 
-  "chat.xpbank.not_enough_xp_sacrifice": "Il vous faut au moins 8 points d'expérience pour accomplir la transformation !",
-  "chat.xpbank.sacrifice_success": "Une fiole d'expérience a été synthétisée."
+  "chat.xpbank.not_enough_xp_converter": "Il vous faut au moins 8 points d'expérience pour accomplir la transformation !",
+  "chat.xpbank.converter_success": "Une fiole d'expérience a été synthétisée."
 }

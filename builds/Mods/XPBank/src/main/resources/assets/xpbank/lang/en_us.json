@@ -1,17 +1,17 @@
 {
-  "item.xpbank.small_xp_vial": "Small Experience Vial",
-  "item.xpbank.medium_xp_vial": "Medium Experience Vial",
-  "item.xpbank.large_xp_vial": "Large Experience Vial",
-  "item.xpbank.small_super_xp_vial": "Super Small Experience Vial",
-  "item.xpbank.medium_super_xp_vial": "Super Medium Experience Vial",
-  "item.xpbank.large_super_xp_vial": "Super Large Experience Vial",
+  "item.xpbank.mj_xpbottle_lvl1": "Experience Bottle (Lvl 1)",
+  "item.xpbank.mj_xpbottle_lvl2": "Experience Bottle (Lvl 2)",
+  "item.xpbank.mj_xpbottle_lvl3": "Experience Bottle (Lvl 3)",
+  "item.xpbank.mj_xpbottle_lvl4": "Experience Bottle (Lvl 4)",
+  "item.xpbank.mj_xpbottle_lvl5": "Experience Bottle (Lvl 5)",
+  "item.xpbank.mj_xpbottle_lvl6": "Experience Bottle (Lvl 6)",
 
   "chat.xpbank.player_empty": "You do not have any experience to deposit!",
-  "chat.xpbank.vial_full": "This vial is already full!",
-  "chat.xpbank.vial_empty": "This vial is empty!",
+  "chat.xpbank.bottle_full": "This bottle is already full!",
+  "chat.xpbank.bottle_empty": "This bottle is empty!",
   "chat.xpbank.deposit_success": "Experience stored successfully.",
   "chat.xpbank.withdraw_success": "Experience retrieved successfully.",
 
-  "chat.xpbank.not_enough_xp_sacrifice": "You need at least 8 points of experience to perform the transformation!",
-  "chat.xpbank.sacrifice_success": "An experience bottle has been synthesized."
+  "chat.xpbank.not_enough_xp_converter": "You need at least 8 points of experience to perform the transformation!",
+  "chat.xpbank.converter_success": "An experience bottle has been synthesized."
 }

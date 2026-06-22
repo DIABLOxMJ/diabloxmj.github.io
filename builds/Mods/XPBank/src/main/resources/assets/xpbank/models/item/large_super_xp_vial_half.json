@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "xpbank:item/large_super_xp_vial_half"
-  }
-}

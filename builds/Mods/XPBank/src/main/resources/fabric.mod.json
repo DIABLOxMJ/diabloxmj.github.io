@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "xpbank",
-	"version": "1.0.2",
+	"version": "${version}",
 	"name": "XPBank",
 	"description": "A mod that adds a robust experience storage system in 3 variants and also allows you to generate experience vials against your own exp.",
 	"authors": [

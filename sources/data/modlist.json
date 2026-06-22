@@ -44,8 +44,8 @@
                 "img": "../sources/img/mj_mods_xpbank.png",
                 "title": "XPBank",
                 "description": "Un mod qui ajoute les fioles de stockage d'expérience.",
-                "mod_version": "v1.0.1",
-                "download": "../packs/Mods/xpbank-1.0.1.jar",
+                "mod_version": "v1.1.0",
+                "download": "../packs/Mods/xpbank-1.1.0.jar",
                 "Dependant": {
                     "Dep_1": {
                         "Title": "Fabric API",

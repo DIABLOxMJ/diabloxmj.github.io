@@ -1,4 +1,4 @@
-package com.diabloxmj.lavasky.client.mixin;
+package com.diabloxmj.xpbank.client.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;
