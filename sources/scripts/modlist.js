@@ -13,6 +13,7 @@ function initialiserPageMods(containerMenuId, containerMainId, versionTextId, ba
 
     if (!menuContainer || !mainContainer) return;
 
+    // Étape 1 : Charger l'index central contenant les versions et les chemins de fichiers associés
     fetch(`${basePath}sources/data/modlist.json`)
         .then(response => {
             if (!response.ok) throw new Error("Impossible de charger modlist.json");
@@ -30,7 +31,7 @@ function initialiserPageMods(containerMenuId, containerMainId, versionTextId, ba
             data.forEach((item, index) => {
                 const versionBtn = document.createElement('div');
                 versionBtn.className = `py-2 text-center text-[2.5rem] leading-none font-bold underline decoration-[3px] underline-offset-[6px] cursor-pointer hover:bg-gray-100 transition-colors ${index === 0 ? 'item-selection' : ''}`;
-                versionBtn.textContent = item.version;
+                versionBtn.textContent = item.id; // "id" contient la version à afficher (ex: "1.21.11")
 
                 versionBtn.addEventListener('click', () => {
                     PlaySound('click.mp3', basePath);
@@ -38,16 +39,53 @@ function initialiserPageMods(containerMenuId, containerMainId, versionTextId, ba
                     Array.from(listContainer.children).forEach(child => child.classList.remove('item-selection'));
                     versionBtn.classList.add('item-selection');
 
-                    afficherLesMods(item.list, item.version, mainContainer, versionTextZone, basePath);
+                    // Étape 2 : Charger dynamiquement le fichier JSON spécifique à cette version au clic
+                    chargerEtAfficherLesMods(item.file, item.id, mainContainer, versionTextZone, basePath);
                 });
 
                 listContainer.appendChild(versionBtn);
             });
 
-            afficherLesMods(data[0].list, data[0].version, mainContainer, versionTextZone, basePath);
+            // Charger dynamiquement la première version par défaut au chargement initial
+            chargerEtAfficherLesMods(data[0].file, data[0].id, mainContainer, versionTextZone, basePath);
         })
         .catch(error => {
-            console.error("Erreur lors de l'initialisation des mods :", error);
+            console.error("Erreur lors de l'initialisation des versions :", error);
+        });
+}
+
+// Nouvelle fonction intermédiaire asynchrone pour récupérer les données du fichier externe avant de l'afficher
+function chargerEtAfficherLesMods(cheminFichier, versionNom, mainContainer, versionTextZone, basePath) {
+    // Nettoyer le conteneur principal et afficher un message de chargement temporaire
+    mainContainer.innerHTML = `<p class="text-xl italic text-gray-300 text-ombre p-4 text-center">Chargement des mods...</p>`;
+
+    // On retire le premier slash éventuel du chemin pour construire correctement l'URL relative locale
+    const cheminFormate = cheminFichier.startsWith('/') ? cheminFichier.substring(1) : cheminFichier;
+    const urlReelle = `${basePath}sources/data/${cheminFormate}`;
+
+    fetch(urlReelle)
+        .then(response => {
+            if (!response.ok) throw new Error(`Impossible de charger le fichier de liste : ${cheminFormate}`);
+            return response.json();
+        })
+        .then(modsData => {
+            // Le fichier de version peut contenir soit un objet associatif {}, soit un tableau [{}] selon ta structure
+            // On extrait les éléments pour construire notre liste finale
+            let modsObject = {};
+            if (Array.isArray(modsData)) {
+                // Si le fichier est un tableau d'objets (comme ton exemple), on les fusionne
+                modsData.forEach(element => {
+                    modsObject = { ...modsObject, ...element };
+                });
+            } else {
+                modsObject = modsData;
+            }
+
+            afficherLesMods(modsObject, versionNom, mainContainer, versionTextZone, basePath);
+        })
+        .catch(error => {
+            console.error("Erreur lors du chargement de la liste de mods :", error);
+            mainContainer.innerHTML = `<p class="text-xl italic text-red-400 text-ombre p-4 text-center">⚠ Impossible de charger la liste de mods pour cette version.</p>`;
         });
 }
 
@@ -80,16 +118,14 @@ function afficherLesMods(modsObject, versionNom, mainContainer, versionTextZone,
         const title = document.createElement('h3');
         title.className = 'text-2xl font-bold leading-tight';
 
-        // Si un lien est présent dans le JSON pour ce mod
+        // Si un lien ou un site officiel est présent dans le JSON pour ce mod
         if (mod.link) {
-        const titleLink = document.createElement('a');
-        titleLink.href = mod.link;
-        titleLink.target = '_blank'; // Ouvre dans un nouvel onglet
-        // Ajout d'un effet au survol (souligné et changement de couleur en cyan pour correspondre au reste)
-        titleLink.className = 'hover:underline hover:text-cyan-400 transition-colors cursor-pointer';
-        titleLink.textContent = mod.title;
-    
-        title.appendChild(titleLink);
+            const titleLink = document.createElement('a');
+            titleLink.href = mod.link;
+            titleLink.target = '_blank';
+            titleLink.className = 'hover:underline hover:text-cyan-400 transition-colors cursor-pointer';
+            titleLink.textContent = mod.title;
+            title.appendChild(titleLink);
         } else {
             title.textContent = mod.title;
         }

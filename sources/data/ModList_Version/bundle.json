@@ -1,0 +1,20 @@
+[
+    {
+        "mybundle": {
+            "img": "../sources/img/mybundle.png",
+            "title": "Simple Pack (All in One)",
+            "description": "Envie de tout avoir sans passer par chaque fichier, prenez le pack tout en un.",
+            "mod_version": "v1.0",
+            "download": "../packs/Bundle_Mods/diabloxmj_bundle_1.21.11.zip",
+            "Dependant": {}
+        },
+        "mybundlemodpack": {
+            "img": "../sources/img/mybundle.png",
+            "title": "ModPack Custom (All in One)",
+            "description": "Ce Modpack contient les mods utilisés (Ce qui ne sont pas mentionner en dessous).",
+            "mod_version": "v1.1",
+            "download": "../packs/Bundle_Mods/custom_bundle_1.21.11.zip",
+            "Dependant": {}
+        }
+    }
+]

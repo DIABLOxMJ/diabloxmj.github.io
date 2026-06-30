@@ -2,11 +2,14 @@ package com.diabloxmj.client.mj_excavator;
 
 import com.diabloxmj.mj_excavator.MJ_Excavator_Item;
 import com.diabloxmj.mj_excavator.MJ_Mining_Helper;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexRendering;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -14,12 +17,13 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import org.joml.Matrix4f;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 
 public class MJ_Excavator_Renderer {
 
     public static void register() {
-        WorldRenderEvents.END.register(MJ_Excavator_Renderer::renderOverlay);
+        WorldRenderEvents.END_MAIN.register(MJ_Excavator_Renderer::renderOverlay);
     }
 
     private static void renderOverlay(WorldRenderContext context) {
@@ -30,9 +34,11 @@ public class MJ_Excavator_Renderer {
         ItemStack handStack = player.getMainHandStack();
 
         if (!(handStack.getItem() instanceof MJ_Excavator_Item)) return;
-        if (client.crosshairTarget == null || client.crosshairTarget.getType() != HitResult.Type.BLOCK) return;
+        // Utilisation du raycast temps réel mis à jour à chaque frame pour éviter la latence
+        HitResult hit = client.crosshairTarget;
+        if (hit == null || hit.getType() != HitResult.Type.BLOCK) return;
 
-        BlockHitResult blockHit = (BlockHitResult) client.crosshairTarget;
+        BlockHitResult blockHit = (BlockHitResult) hit;
         BlockPos origin = blockHit.getBlockPos();
 
         int minX = origin.getX(), minY = origin.getY(), minZ = origin.getZ();
@@ -52,59 +58,29 @@ public class MJ_Excavator_Renderer {
             }
         }
 
-        Vec3d cameraPos = context.camera().getPos();
-        MatrixStack matrices = context.matrixStack();
+        if (client.gameRenderer == null || client.gameRenderer.getCamera() == null) return;
 
-        matrices.push();
-        // Légère surélévation globale pour éviter les clignotements avec le bloc (z-fighting)
-        matrices.translate(
-                (float)(minX - cameraPos.x) - 0.005f,
-                (float)(minY - cameraPos.y) - 0.005f,
-                (float)(minZ - cameraPos.z) - 0.005f
-        );
+        // Position de la caméra (yeux du joueur)
+        Vec3d cameraPos = client.gameRenderer.getCamera().getCameraPos();
 
-        VertexConsumer buffer = context.consumers().getBuffer(net.minecraft.client.render.RenderLayer.getLines());
-        Matrix4f matrix = matrices.peek().getPositionMatrix();
+        MatrixStack matrices = new MatrixStack();
+        VertexConsumer buffer = context.consumers().getBuffer(RenderLayers.lines());
 
-        float dx = (maxX - minX) + 0.01f;
-        float dy = (maxY - minY) + 0.01f;
-        float dz = (maxZ - minZ) + 0.01f;
+        // 1. On crée une forme cubique brute (VoxelShape) aux dimensions de notre min/max
+        VoxelShape boxShape = VoxelShapes.cuboid(minX, minY, minZ, maxX, maxY, maxZ);
 
-        // --- DESSIN DU CADRAGE EN LIGNES PURES (Version 1.21.11 Yarn) ---
+        // 2. On calcule le décalage (offsetX, offsetY, offsetZ) par rapport à la caméra
+        // On rajoute un infime recul (-0.005 / +0.005) pour éviter le z-fighting avec les blocs
+        double offsetX = -cameraPos.x;
+        double offsetY = -cameraPos.y;
+        double offsetZ = -cameraPos.z;
 
-        // Base basse
-        drawBoxLine(buffer, matrix, 0, 0, 0, dx, 0, 0);
-        drawBoxLine(buffer, matrix, dx, 0, 0, dx, 0, dz);
-        drawBoxLine(buffer, matrix, dx, 0, dz, 0, 0, dz);
-        drawBoxLine(buffer, matrix, 0, 0, dz, 0, 0, 0);
+        // 3. Couleur ARGB au format entier (Int Hexadécimal) attendu par le shader :
+        // Blanc avec une opacité d'environ 100% (0xFFFFFFFF)
+        int colorARGB = 0xFFFFFFFF;
 
-        // Base haute
-        drawBoxLine(buffer, matrix, 0, dy, 0, dx, dy, 0);
-        drawBoxLine(buffer, matrix, dx, dy, 0, dx, dy, dz);
-        drawBoxLine(buffer, matrix, dx, dy, dz, 0, dy, dz);
-        drawBoxLine(buffer, matrix, 0, dy, dz, 0, dy, 0);
-
-        // Piliers verticaux
-        drawBoxLine(buffer, matrix, 0, 0, 0, 0, dy, 0);
-        drawBoxLine(buffer, matrix, dx, 0, 0, dx, dy, 0);
-        drawBoxLine(buffer, matrix, dx, 0, dz, dx, dy, dz);
-        drawBoxLine(buffer, matrix, 0, 0, dz, 0, dy, dz);
-
-        matrices.pop();
-    }
-
-    // Méthode utilitaire corrigée pour la version 1.21.11
-    private static void drawBoxLine(VertexConsumer buffer, Matrix4f matrix, float x1, float y1, float z1, float x2, float y2, float z2) {
-        // Premier point de la ligne : on applique la matrice directement sur les coordonnées
-        buffer.vertex(matrix, x1, y1, z1)
-                .color(1.0f, 0.0f, 0.0f, 0.4f)
-                .normal(0.0f, 1.0f, 0.0f)
-                .endVertex();
-
-        // Deuxième point de la ligne
-        buffer.vertex(matrix, x2, y2, z2)
-                .color(1.0f, 0.0f, 0.0f, 0.4f)
-                .normal(0.0f, 1.0f, 0.0f)
-                .endVertex();
+        // LA SOLUTION FINALE : On appelle la méthode exacte de ton fichier !
+        // Arguments : matrices, vertexConsumers, shape, offsetX, offsetY, offsetZ, color, lineWidth
+        VertexRendering.drawOutline(matrices, buffer, boxShape, offsetX, offsetY, offsetZ, colorARGB, 4.0F);
     }
 }
