@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {},
+  "base": "minecraft:golden_pickaxe",
+  "addition": "minecraft:dragon_breath",
+  "result": {
+    "id": "excavator:pickavator_gold"
+  }
+}

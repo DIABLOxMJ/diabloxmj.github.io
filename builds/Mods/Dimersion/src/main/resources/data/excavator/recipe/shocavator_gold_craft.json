@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {},
+  "base": "minecraft:golden_shovel",
+  "addition": "minecraft:dragon_breath",
+  "result": {
+    "id": "excavator:shocavator_gold"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {},
+  "base": "minecraft:stone_pickaxe",
+  "addition": "minecraft:dragon_breath",
+  "result": {
+    "id": "excavator:pickavator_stone"
+  }
+}

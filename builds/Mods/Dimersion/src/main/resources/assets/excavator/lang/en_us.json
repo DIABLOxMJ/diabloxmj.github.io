@@ -1,0 +1,27 @@
+{
+  "itemGroup.excavator.item_group": "Excavator",
+
+  "item.excavator.pickavator_wood": "Wooden Pickavator",
+  "item.excavator.pickavator_stone": "Stone Pickavator",
+  "item.excavator.pickavator_iron": "Iron Pickavator",
+  "item.excavator.pickavator_copper": "Copper Pickavator",
+  "item.excavator.pickavator_gold": "Golden Pickavator",
+  "item.excavator.pickavator_diamond": "Diamond Pickavator",
+  "item.excavator.pickavator_netherite": "Netherite Pickavator",
+
+  "item.excavator.shocavator_wood": "Wooden Shocavator",
+  "item.excavator.shocavator_stone": "Stone Shocavator",
+  "item.excavator.shocavator_iron": "Iron Shocavator",
+  "item.excavator.shocavator_copper": "Copper Shocavator",
+  "item.excavator.shocavator_gold": "Golden Shocavator",
+  "item.excavator.shocavator_diamond": "Diamond Shocavator",
+  "item.excavator.shocavator_netherite": "Netherite Shocavator",
+
+  "item.excavator.axecavator_wood": "Wooden Axecavator",
+  "item.excavator.axecavator_stone": "Stone Axecavator",
+  "item.excavator.axecavator_iron": "Iron Axecavator",
+  "item.excavator.axecavator_copper": "Copper Axecavator",
+  "item.excavator.axecavator_gold": "Golden Axecavator",
+  "item.excavator.axecavator_diamond": "Diamond Axecavator",
+  "item.excavator.axecavator_netherite": "Netherite Axecavator"
+}

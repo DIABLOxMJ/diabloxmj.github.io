@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCPackIndex - Catalogue de Ressources</title>
+    <title>MCPackIndex - Catalogue & Comparateur de Ressources</title>
     <style>
         :root {
             --bg-principal: #1e1e24;
@@ -12,6 +12,8 @@
             --bg-bouton-hover: #57576c;
             --texte: #f5f5f5;
             --accent: #4caf50;
+            --rouge-manquant: #ef5350;
+            --fond-manquant: #3d2323;
         }
 
         * {
@@ -38,8 +40,8 @@
         }
 
         #cadre-outils { width: 20%; background-color: #22222b; }
-        #cadre-liste { width: 30%; background-color: var(--bg-cadre); }
-        #cadre-aperçu { width: 50%; background-color: #2d2d38; border-right: none; overflow-y: auto; }
+        #cadre-liste { width: 35%; background-color: var(--bg-cadre); }
+        #cadre-aperçu { width: 45%; background-color: #2d2d38; border-right: none; overflow-y: auto; }
 
         h2 {
             font-size: 1.2rem;
@@ -50,9 +52,39 @@
             letter-spacing: 1px;
         }
 
+        .btn-outil {
+            padding: 8px 12px;
+            background-color: var(--bg-bouton);
+            color: var(--texte);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+
+            /* Sécurité anti-débordement Flexbox */
+            box-sizing: border-box !important;
+            display: flex !important;          /* Utilise flex pour aligner icône + texte verticalement */
+            align-items: center;               /* Centre le texte verticalement */
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        /* On s'assure que le texte interne respecte aussi les points de suspension (...) */
+        .btn-outil {
+            display: block !important; /* Requis pour que le text-overflow: ellipsis fonctionne sur un bouton */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .btn-outil, .btn-catalogue {
             display: block;
             width: 100%;
+            box-sizing: border-box;
             padding: 10px 15px;
             margin-bottom: 8px;
             background-color: var(--bg-bouton);
@@ -67,18 +99,55 @@
 
         .btn-outil:hover, .btn-catalogue:hover { background-color: var(--bg-bouton-hover); }
         .btn-outil:active, .btn-catalogue:active { transform: scale(0.98); }
-        .btn-run-script { background-color: var(--accent); font-weight: bold; margin-bottom: 20px; }
+        .btn-run-script { background-color: var(--accent); font-weight: bold; margin-bottom: 10px; }
         .btn-run-script:hover { background-color: #45a049; }
 
+        /* Styles pour l'arborescence des sous-dossiers */
+        .btn-dossier-racine {
+            border-left: 4px solid #9c27b0 !important;
+            font-weight: bold;
+        }
+
+        .btn-sous-dossier {
+            border-left: 4px solid #00bcd4 !important;
+            font-size: 0.85rem !important;
+            opacity: 0.9;
+        }
+        
         .liste-scroll { flex: 1; overflow-y: auto; padding-right: 5px; }
+        #liste-categories-scroll {
+            flex: 1;
+            overflow-y: auto;   /* Autorise le scroll vertical */
+            overflow-x: hidden;  /* Interdit STRICTEMENT le scroll horizontal */
+            padding-right: 5px;
+        }
+        .search-container { display: flex; gap: 5px; margin-bottom: 15px; }
         .search-bar {
-            width: 100%;
+            flex: 1;
             padding: 8px 12px;
-            margin-bottom: 15px;
             background-color: var(--bg-principal);
             border: 1px solid var(--bg-bouton);
             border-radius: 4px;
             color: var(--texte);
+        }
+
+        .btn-filter-toggle {
+            background-color: var(--bg-bouton);
+            color: var(--texte);
+            border: 1px solid var(--bg-bouton-hover);
+            padding: 0 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-filter-toggle.active {
+            background-color: #ff9800;
+            color: #121214;
+            font-weight: bold;
+            border-color: #ff9800;
         }
 
         .onglets { display: flex; margin-bottom: 10px; gap: 5px; }
@@ -90,10 +159,11 @@
             color: var(--texte);
             cursor: pointer;
             border-radius: 4px;
+            font-size: 0.85rem;
         }
         .onglet-btn.actif { background-color: var(--accent); border-color: var(--accent); }
+        #tab-comparison.actif { background-color: #ff9800; border-color: #ff9800; }
 
-        /* Liens cliquables pour les fichiers JSON */
         .clickable-path {
             color: #64b5f6;
             text-decoration: underline;
@@ -103,7 +173,6 @@
         }
         .clickable-path:hover { color: #90caf9; }
 
-        /* --- DESIGN SECTION TEXTURES --- */
         .section-title-container {
             display: flex;
             justify-content: space-between;
@@ -123,8 +192,20 @@
 
         .preview-header { margin-bottom: 20px; }
         .preview-section { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 6px; margin-bottom: 15px; }
-        .grid-textures { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 10px; }
-        
+        .grid-textures { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 10px; }
+
+        /* Quand le conteneur de textures passe en mode texte ou comparateur, on désactive la grille */
+        .grid-textures.mode-texte {
+            display: block !important; /* Annule le mode grid et passe en affichage bloc normal */
+        }
+
+        .grid-textures.mode-texte p {
+            width: 100% !important;
+            white-space: normal !important; /* Permet au texte de revenir à la ligne naturellement */
+            margin: 0;
+            padding: 5px 0;
+        }
+
         .card-texture {
             background: var(--bg-principal);
             padding: 10px;
@@ -152,12 +233,19 @@
         .card-texture.has-error { display: block; }
         body.hide-errors .card-texture.has-error { display: none !important; }
 
-        /* Style pour l'élément validé dans le catalogue */
         .btn-catalogue.valide {
             border-left: 5px solid #4caf50 !important;
             background-color: #243425 !important;
         }
-        /* Bouton check dans l'aperçu */
+        .btn-catalogue.comp-missing {
+            border-left: 5px solid var(--rouge-manquant) !important;
+            background-color: var(--fond-manquant) !important;
+        }
+        .btn-catalogue.comp-present {
+            border-left: 5px solid var(--accent) !important;
+            background-color: #1e2d20 !important;
+        }
+
         .btn-check-task {
             background-color: #2e7d32;
             color: white;
@@ -172,16 +260,32 @@
         .btn-check-task:hover { background-color: #388e3c; }
         .btn-check-task.is-done { background-color: #c62828; }
         .btn-check-task.is-done:hover { background-color: #d32f2f; }
+
+        .code-viewer {
+            width: 100%;
+            max-height: 445px;
+            background-color: #121214;
+            color: #a5d6a7;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.8rem;
+            overflow: auto;
+            white-space: pre-wrap;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body class="hide-errors">
 
     <div id="cadre-outils" class="cadre">
-        <h2>Outils</h2>
+        <h2>Outils Index</h2>
         <button class="btn-outil btn-run-script" onclick="runIndexer('blocks')">⚡ Indexer les Blocs</button>
         <button class="btn-outil btn-run-script" onclick="runIndexer('items')">⚡ Indexer les Items</button>
         <button class="btn-outil btn-run-script" style="background-color: #0288d1;" onclick="runIndexer('categories')">⚡ Indexer les Catégories</button>
-        <button class="btn-outil btn-run-script" onclick="runIndexer('sounds')">🎵 Extraire les Sons</button>
+        <button class="btn-outil btn-run-script" style="background-color: #7b1fa2;" onclick="runIndexer('sounds')">🎵 Extraire les Sons</button>
+        <button class="btn-outil btn-run-script" style="background-color: #ff9800;" onclick="runIndexer('comparison')">🔍 Lancer la Comparaison</button>
         
         <h2>Catégories</h2>
         <div id="liste-categories-scroll" class="liste-scroll"></div>
@@ -192,8 +296,12 @@
         <div class="onglets">
             <button id="tab-blocks" class="onglet-btn actif" onclick="switchTab('blocks')">Blocs</button>
             <button id="tab-items" class="onglet-btn" onclick="switchTab('items')">Items</button>
+            <button id="tab-comparison" class="onglet-btn" onclick="switchTab('comparison')">⚠️ Comparateur</button>
         </div>
-        <input type="text" id="search" class="search-bar" placeholder="Rechercher un élément..." oninput="filtrerElements()">
+        <div class="search-container">
+            <input type="text" id="search" class="search-bar" placeholder="Rechercher un élément..." oninput="filtrerElements()">
+            <button id="btn-filter-missing" class="btn-filter-toggle" onclick="toggleFilterMissing()" title="Masquer les éléments terminés / présents">👁️ Manquants</button>
+        </div>
         <div id="liste-elements" class="liste-scroll">
             <p style="color: #888; text-align: center; margin-top: 20px;">Chargement du catalogue...</p>
         </div>
@@ -202,7 +310,7 @@
     <div id="cadre-aperçu" class="cadre">
         <h2>Aperçu des fichiers liés</h2>
         <div id="zone-aperçu-vide" style="color: #888; text-align: center; margin: auto;">
-            Cliquez sur un élément de la liste pour inspecter ses fichiers.
+            Cliquez sur un élément de la liste pour inspecter ses détails.
         </div>
         <div id="zone-aperçu-contenu" style="display: none;">
             <div class="preview-header" style="display: flex; justify-content: space-between; align-items: center;">
@@ -213,18 +321,29 @@
                 <button id="task-btn" class="btn-check-task" onclick="toggleTaskStatus()">✔️ Marquer comme fait</button>
             </div>
             
-            <div class="preview-section">
+            <div class="preview-section" id="section-json-fichiers">
                 <h3>Fichiers de Structure (.json)</h3>
                 <p style="margin-top: 8px;"><strong>Blockstate :</strong> <span id="path-blockstate" class="clickable-path">-</span></p>
                 <p style="margin-top: 4px;"><strong>Modèle :</strong> <span id="path-model" class="clickable-path">-</span></p>
             </div>
 
+            <div class="preview-section" id="section-comparaison-details" style="display: none;">
+                <h3>Informations de Comparaison</h3>
+                <p style="margin-top: 8px;"><strong>Statut dans MyPack :</strong> <span id="comp-status-badge" style="font-weight: bold;">-</span></p>
+                <p style="margin-top: 4px;"><strong>Chemin relatif Vanilla :</strong> <span id="comp-vanilla-path" style="font-family: monospace; color: #aaa;">-</span></p>
+            </div>
+
             <div class="preview-section">
                 <div class="section-title-container">
-                    <h3>Textures Détectées</h3>
+                    <h3>Textures / Contenu</h3>
                     <button id="toggle-err-btn" class="btn-toggle-errors" onclick="toggleErrorsVisibility()">Afficher les erreurs</button>
                 </div>
                 <div id="preview-textures-grid" class="grid-textures"></div>
+            </div>
+
+            <div class="preview-section" id="section-code-viewer" style="display: none;">
+                <h3>Visualiseur de Données (.json / .mcmeta)</h3>
+                <div id="code-box" class="code-viewer">Sélectionnez un fichier compatible pour lire son contenu...</div>
             </div>
         </div>
     </div>
@@ -232,26 +351,40 @@
     <script>
         let currentTab = localStorage.getItem('mcp_currentTab') || 'blocks'; 
         let currentSelectedId = localStorage.getItem('mcp_currentSelectedId') || null;
+        let filterOnlyMissing = JSON.parse(localStorage.getItem('mcp_filterOnlyMissing')) || false;
+        
         let dbBlocks = [];
         let dbItems = [];
         let dbCategories = {};
+        let dbComparison = [];
 
-        // Charger la liste des tâches terminées depuis le disque
         let completedTasks = JSON.parse(localStorage.getItem('mcp_completedTasks')) || [];
 
+        // Liste fixe des grands dossiers racines de Minecraft pour le filtre du comparateur
+        const dossiersRacinesMinecraft = [
+            "blockstates", "font", "lang", "models", "particles", "sounds", "texts", "textures"
+        ];
+        
+        let filtreDossierComparateur = null; // Stocke le sous-dossier sélectionné pour le comparateur
+
         window.onload = function() {
+            const btnFilter = document.getElementById('btn-filter-missing');
+            if(filterOnlyMissing) btnFilter.classList.add('active');
+
             Promise.all([
                 fetch(`http://localhost:5000/get-index/blocks`).then(r => r.ok ? r.json() : []),
                 fetch(`http://localhost:5000/get-index/items`).then(r => r.ok ? r.json() : []),
-                fetch(`http://localhost:5000/get-categories`).then(r => r.ok ? r.json() : {})
-            ]).then(([blocks, items, categories]) => {
+                fetch(`http://localhost:5000/get-categories`).then(r => r.ok ? r.json() : {}),
+                fetch(`http://localhost:5000/get-comparison`).then(r => r.ok ? r.json() : [])
+            ]).then(([blocks, items, categories, comparison]) => {
                 dbBlocks = blocks;
                 dbItems = items;
                 dbCategories = categories;
+                dbComparison = comparison;
 
                 genererBoutonsCategories();
 
-                if (currentTab === 'blocks' || currentTab === 'items') {
+                if (currentTab === 'blocks' || currentTab === 'items' || currentTab === 'comparison') {
                     switchTab(currentTab, false);
                 } else {
                     switchToCategory(currentTab, false);
@@ -263,44 +396,150 @@
             });
         };
 
+        function toggleFilterMissing() {
+            filterOnlyMissing = !filterOnlyMissing;
+            localStorage.setItem('mcp_filterOnlyMissing', filterOnlyMissing);
+            
+            const btnFilter = document.getElementById('btn-filter-missing');
+            btnFilter.classList.toggle('active', filterOnlyMissing);
+            
+            filtrerElements();
+        }
+
         function genererBoutonsCategories() {
             const conteneur = document.getElementById('liste-categories-scroll');
             if (!conteneur) return;
             conteneur.innerHTML = '';
 
-            Object.keys(dbCategories).forEach(catName => {
-                const btn = document.createElement('button');
-                btn.className = 'btn-outil btn-cat-dynamique';
-                btn.style.borderLeft = '4px solid #64b5f6';
-                btn.style.marginBottom = '6px';
-                btn.innerText = `📂 ${catName.toUpperCase()}`;
-                btn.onclick = () => switchToCategory(catName);
-                conteneur.appendChild(btn);
-            });
+            // CAS 1 : Si on est sur le comparateur, on construit l'arborescence dynamique
+            if (currentTab === 'comparison') {
+                // Bouton TOUT AFFICHER
+                const btnTous = document.createElement('button');
+                btnTous.className = 'btn-outil';
+                btnTous.style.borderLeft = filtreDossierComparateur === null ? '4px solid #ff9800' : '4px solid #555';
+                btnTous.style.marginBottom = '6px';
+                btnTous.style.width = '100%';
+                btnTous.innerText = `📂 TOUT AFFICHER`;
+                btnTous.onclick = () => {
+                    filtreDossierComparateur = null;
+                    genererBoutonsCategories();
+                    filtrerElements();
+                };
+                conteneur.appendChild(btnTous);
+
+                // Extraction dynamique de tous les chemins de dossiers uniques
+                let dossiersTrouves = new Set();
+                dbComparison.forEach(e => {
+                    if (e.path) {
+                        const parts = e.path.split('/');
+                        if (parts.length > 1) {
+                            let cheminAccumule = "";
+                            for (let i = 0; i < parts.length - 1; i++) {
+                                cheminAccumule += (cheminAccumule ? "/" : "") + parts[i];
+                                dossiersTrouves.add(cheminAccumule);
+                            }
+                        }
+                    }
+                });
+
+                const listeDossiersTries = Array.from(dossiersTrouves).sort();
+
+                listeDossiersTries.forEach(cheminDossier => {
+                    const niveau = cheminDossier.split('/').length - 1; 
+                    const nomDossier = cheminDossier.split('/').pop();   
+                    
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-outil';
+                    btn.style.width = '100%'; // Reste toujours calé à 100% du bord droit
+                    
+                    if (niveau === 0) {
+                        btn.classList.add('btn-dossier-racine');
+                        btn.innerText = `📁 ${nomDossier}`;
+                        btn.style.paddingLeft = '12px';
+                    } else {
+                        btn.classList.add('btn-sous-dossier');
+                        // Décalage propre du texte vers la droite à l'intérieur du bouton
+                        btn.style.paddingLeft = `${(niveau * 24) + 12}px`;
+                        btn.innerText = `└ 📂 ${nomDossier}`;
+                    }
+
+                    // Surligner le dossier actuellement sélectionné
+                    if (filtreDossierComparateur === cheminDossier) {
+                        btn.style.backgroundColor = 'var(--bg-bouton-hover)';
+                        btn.style.fontWeight = 'bold';
+                    }
+
+                    btn.onclick = () => {
+                        filtreDossierComparateur = cheminDossier;
+                        genererBoutonsCategories(); 
+                        filtrerElements();          
+                    };
+                    conteneur.appendChild(btn);
+                });
+            } 
+            // CAS 2 : Sinon, on affiche les catégories de textures normales
+            else {
+                Object.keys(dbCategories).forEach(catName => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-outil btn-cat-dynamique';
+                    btn.style.borderLeft = '4px solid #64b5f6';
+                    btn.style.width = '100%';
+                    btn.innerText = `📂 ${catName.toUpperCase()}`;
+                    btn.onclick = () => switchToCategory(catName);
+                    conteneur.appendChild(btn);
+                });
+            }
         }
 
         function genererListe(elements) {
             const conteneur = document.getElementById('liste-elements');
             conteneur.innerHTML = '';
-            if(!elements || elements.length === 0) {
-                conteneur.innerHTML = `<p style="color: #888; text-align: center; margin-top: 20px;">Aucun élément.</p>`;
+            
+            let filteredElements = elements;
+
+            // Application du filtre "Manquants uniquement" (Sécurisé contre la casse)
+            if (filterOnlyMissing) {
+                if (currentTab === 'comparison') {
+                    filteredElements = filteredElements.filter(e => e.status && e.status.toLowerCase() === 'missing');
+                } else {
+                    filteredElements = filteredElements.filter(e => !completedTasks.includes(e.id));
+                }
+            }
+
+            if(!filteredElements || filteredElements.length === 0) {
+                conteneur.innerHTML = `<p style="color: #888; text-align: center; margin-top: 20px;">Aucun élément (ou tout est filtré/complété ! 🎉)</p>`;
                 return;
             }
-            elements.forEach(elem => {
+
+            filteredElements.forEach(elem => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-catalogue';
-                btn.innerText = elem.buttonName;
                 
-                if (completedTasks.includes(elem.id)) {
-                    btn.classList.add('valide');
+                if (currentTab === 'comparison') {
+                    btn.innerText = elem.path;
+                    btn.style.fontSize = "0.8rem";
+                    btn.style.wordBreak = "break-all";
+                    
+                    if (elem.status && elem.status.toLowerCase() === 'missing') {
+                        btn.classList.add('comp-missing');
+                    } else {
+                        btn.classList.add('comp-present');
+                    }
+                } else {
+                    btn.innerText = elem.buttonName;
+                    if (completedTasks.includes(elem.id)) {
+                        btn.classList.add('valide');
+                    }
                 }
 
                 btn.onclick = () => {
-                    currentSelectedId = elem.id;
-                    localStorage.setItem('mcp_currentSelectedId', elem.id);
+                    currentSelectedId = currentTab === 'comparison' ? elem.path : elem.id;
+                    localStorage.setItem('mcp_currentSelectedId', currentSelectedId);
                     
                     if (currentTab === 'blocks' || currentTab === 'items') {
                         afficherDetails(elem);
+                    } else if (currentTab === 'comparison') {
+                        afficherDetailsComparaison(elem);
                     } else {
                         afficherDetailsCategorie(elem);
                     }
@@ -315,20 +554,29 @@
             localStorage.setItem('mcp_currentTab', type);
             if(resetSelection) resetSelectedElement();
 
+            if (type !== 'comparison') filtreDossierComparateur = null;
+
             document.getElementById('tab-blocks').classList.toggle('actif', type === 'blocks');
             document.getElementById('tab-items').classList.toggle('actif', type === 'items');
+            document.getElementById('tab-comparison').classList.toggle('actif', type === 'comparison');
             document.getElementById('search').value = '';
-            genererListe(type === 'blocks' ? dbBlocks : dbItems);
+            
+            genererBoutonsCategories();
+            filtrerElements(); // Utilise le filtre centralisé pour charger les éléments au changement d'onglet
         }
 
         function switchToCategory(catName, resetSelection = true) {
             currentTab = catName;
             localStorage.setItem('mcp_currentTab', catName);
             if(resetSelection) resetSelectedElement();
+            filtreDossierComparateur = null;
 
             document.getElementById('tab-blocks').classList.remove('actif');
             document.getElementById('tab-items').classList.remove('actif');
+            document.getElementById('tab-comparison').classList.remove('actif');
             document.getElementById('search').value = '';
+            
+            genererBoutonsCategories();
             genererListe(dbCategories[catName]);
         }
 
@@ -343,35 +591,89 @@
             let listToSearch = [];
             if (currentTab === 'blocks') listToSearch = dbBlocks;
             else if (currentTab === 'items') listToSearch = dbItems;
+            else if (currentTab === 'comparison') listToSearch = dbComparison;
             else listToSearch = dbCategories[currentTab] || [];
 
-            const target = listToSearch.find(e => e.id === currentSelectedId);
+            const target = listToSearch.find(e => (currentTab === 'comparison' ? e.path : e.id) === currentSelectedId);
             if (target) {
                 if (currentTab === 'blocks' || currentTab === 'items') afficherDetails(target);
+                else if (currentTab === 'comparison') afficherDetailsComparaison(target);
                 else afficherDetailsCategorie(target);
                 updateTaskButtonVisual();
             }
         }
 
+        // LE FILTRE CENTRALISÉ ET SÉCURISÉ
         function filtrerElements() {
             const query = document.getElementById('search').value.toLowerCase();
             let baseData = [];
             if(currentTab === 'blocks') baseData = dbBlocks;
             else if(currentTab === 'items') baseData = dbItems;
+            else if(currentTab === 'comparison') baseData = dbComparison;
             else baseData = dbCategories[currentTab] || [];
 
-            const filtres = baseData.filter(elem => elem.buttonName.toLowerCase().includes(query) || elem.id.toLowerCase().includes(query));
+            // 1. Filtrage intelligent par dossier racine et sous-dossier (Onglet Comparateur)
+            if (currentTab === 'comparison' && filtreDossierComparateur) {
+                baseData = baseData.filter(e => {
+                    if (!e.path) return false;
+                    const pathLoweCase = e.path.toLowerCase();
+                    const filtreLowerCase = filtreDossierComparateur.toLowerCase();
+                    // Le fichier doit commencer par le chemin du dossier sélectionné
+                    return pathLoweCase.startsWith(filtreLowerCase + '/');
+                });
+            }
+
+            // 2. Application de la barre de recherche textuelle
+            const filtres = baseData.filter(elem => {
+                if (currentTab === 'comparison') {
+                    return elem.path && elem.path.toLowerCase().includes(query);
+                }
+                return elem.buttonName.toLowerCase().includes(query) || elem.id.toLowerCase().includes(query);
+            });
+            
             genererListe(filtres);
+        }
+
+        function chargerFichierDansVisualiseur(path) {
+            const codeBox = document.getElementById('code-box');
+            const sectionCode = document.getElementById('section-code-viewer');
+            
+            sectionCode.style.display = 'block';
+            codeBox.innerText = "⏳ Lecture du contenu par le serveur...";
+
+            fetch(`http://localhost:5000/read-file`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: path })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    try {
+                        const parsed = JSON.parse(data.content);
+                        codeBox.innerText = JSON.stringify(parsed, null, 4);
+                    } catch(e) {
+                        codeBox.innerText = data.content;
+                    }
+                } else {
+                    codeBox.innerText = `Erreur : Impossible de lire le fichier.\nChemin : ${path}`;
+                }
+            })
+            .catch(err => {
+                codeBox.innerText = `Erreur de connexion au serveur local.\nChemin cible : ${path}`;
+            });
         }
 
         function afficherDetails(elem) {
             document.getElementById('zone-aperçu-vide').style.display = 'none';
             document.getElementById('zone-aperçu-contenu').style.display = 'block';
+            document.getElementById('section-json-fichiers').style.display = 'block';
+            document.getElementById('section-comparaison-details').style.display = 'none';
+            document.getElementById('task-btn').style.display = 'block';
+            document.getElementById('section-code-viewer').style.display = 'none';
+
             document.getElementById('preview-title').innerText = elem.buttonName;
             document.getElementById('preview-id').innerText = elem.id;
-            
-            const jsonSection = document.getElementById('path-blockstate').closest('.preview-section');
-            jsonSection.style.display = 'block';
 
             const blockstateRow = document.getElementById('path-blockstate').parentElement;
             const bStateSpan = document.getElementById('path-blockstate');
@@ -380,7 +682,10 @@
                 blockstateRow.style.display = 'block';
                 bStateSpan.innerText = elem.blockstate;
                 bStateSpan.className = "clickable-path";
-                bStateSpan.onclick = () => systemOpen(elem.blockstate, 'file');
+                bStateSpan.onclick = () => {
+                    systemOpen(elem.blockstate, 'file');
+                    chargerFichierDansVisualiseur(elem.blockstate);
+                };
             } else {
                 blockstateRow.style.display = 'none';
                 bStateSpan.onclick = null;
@@ -390,7 +695,10 @@
             if (elem.model && elem.model !== "Pack/assets/minecraft/models/None.json") {
                 modelSpan.innerText = elem.model;
                 modelSpan.className = "clickable-path";
-                modelSpan.onclick = () => systemOpen(elem.model, 'file');
+                modelSpan.onclick = () => {
+                    systemOpen(elem.model, 'file');
+                    chargerFichierDansVisualiseur(elem.model);
+                };
             } else {
                 modelSpan.innerText = "Non défini (Généré par le code du jeu)";
                 modelSpan.className = "";
@@ -399,9 +707,13 @@
 
             const grid = document.getElementById('preview-textures-grid');
             grid.innerHTML = '';
-            
+
+            const gridTextures = document.getElementById('preview-textures-grid');
+            gridTextures.classList.remove('mode-texte'); // On restaure la grille pour les images !
+            gridTextures.innerHTML = ''; // ... suite de ton code qui crée les éléments de texture
+
             if(!elem.textures || Object.keys(elem.textures).length === 0) {
-                grid.innerHTML = '<p style="color: #aaa; font-style: italic;">Aucune texture détectée pour cet élément.</p>';
+                grid.innerHTML = '<p style="color: #aaa; font-style: italic;">Aucune texture détectée.</p>';
                 return;
             }
 
@@ -412,7 +724,6 @@
                 card.onclick = () => systemOpen(cheminTexture, 'folder');
                 
                 const resId = `res-${key}-${elem.id}`.replace(/:/g, '-').replace(/\//g, '-');
-                
                 card.innerHTML = `
                     <img src="${cheminTexture}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
                     <strong>${key}</strong><br>
@@ -426,28 +737,23 @@
         function afficherDetailsCategorie(elem) {
             document.getElementById('zone-aperçu-vide').style.display = 'none';
             document.getElementById('zone-aperçu-contenu').style.display = 'block';
+            document.getElementById('section-json-fichiers').style.display = 'none';
+            document.getElementById('section-comparaison-details').style.display = 'none';
+            document.getElementById('task-btn').style.display = 'block';
+            document.getElementById('section-code-viewer').style.display = 'none';
             
             document.getElementById('preview-title').innerText = elem.buttonName;
             document.getElementById('preview-id').innerText = `Dossier : ${elem.folder_path}`;
-            
-            const jsonSection = document.getElementById('path-blockstate').closest('.preview-section');
-            jsonSection.style.display = 'none';
 
             const grid = document.getElementById('preview-textures-grid');
             grid.innerHTML = '';
             
-            if(!elem.textures || elem.textures.length === 0) {
-                grid.innerHTML = '<p style="color: #aaa; font-style: italic;">Aucune image dans ce dossier.</p>';
-                return;
-            }
-
             elem.textures.forEach(tex => {
                 const card = document.createElement('div');
                 card.className = 'card-texture';
                 card.onclick = () => systemOpen(tex.path, 'folder');
                 
                 const resId = `res-cat-${elem.id}-${tex.name}`.replace(/[^a-zA-Z0-9]/g, '-');
-                
                 card.innerHTML = `
                     <img src="${tex.path}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
                     <strong>${tex.name.replace(/_/g, ' ')}</strong><br>
@@ -458,11 +764,59 @@
             });
         }
 
+        function afficherDetailsComparaison(elem) {
+            document.getElementById('zone-aperçu-vide').style.display = 'none';
+            document.getElementById('zone-aperçu-contenu').style.display = 'block';
+            document.getElementById('section-json-fichiers').style.display = 'none';
+            document.getElementById('section-comparaison-details').style.display = 'block';
+            document.getElementById('task-btn').style.display = 'none';
+            document.getElementById('section-code-viewer').style.display = 'none';
+
+            document.getElementById('preview-title').innerText = elem.filename;
+            document.getElementById('preview-id').innerText = `Catégorie : ${elem.category.toUpperCase()}`;
+
+            const badge = document.getElementById('comp-status-badge');
+            if (elem.status === 'missing') {
+                badge.innerText = "❌ ABSENT (Manquant dans ton pack)";
+                badge.style.color = "var(--rouge-manquant)";
+            } else {
+                badge.innerText = "✔️ PRÉSENT (Déjà personnalisé !)";
+                badge.style.color = "var(--accent)";
+            }
+
+            const vPath = `Vanilla/assets/${elem.path}`;
+            document.getElementById('comp-vanilla-path').innerText = vPath;
+
+            const grid = document.getElementById('preview-textures-grid');
+            grid.innerHTML = '';
+
+            const gridTextures = document.getElementById('preview-textures-grid');
+            // On ajoute la classe pour casser la grille
+            gridTextures.classList.add('mode-texte'); 
+            gridTextures.innerHTML = `<p style="color: #aaa; font-style: italic;">Cet élément est un fichier de structure (.json, .mcmeta). Affichage du texte ci-dessous :</p>`;
+
+            if (elem.filename.endsWith('.png')) {
+                const card = document.createElement('div');
+                card.className = 'card-texture';
+                card.onclick = () => systemOpen(vPath, 'folder');
+                
+                const resId = `res-comp-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
+                card.innerHTML = `
+                    <img src="${vPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
+                    <strong>Visuel Vanilla</strong><br>
+                    <span>${elem.filename}</span><br>
+                    <span id="${resId}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
+                `;
+                grid.appendChild(card);
+            } else {
+                grid.innerHTML = '<p style="color: #aaa; font-style: italic;">Cet élément est un fichier de structure (.json, .mcmeta). Affichage du texte ci-dessous :</p>';
+                chargerFichierDansVisualiseur(vPath);
+            }
+        }
+
         function afficherResolution(img, spanId) {
             const span = document.getElementById(spanId);
-            if (span) {
-                span.innerText = `${img.naturalWidth}x${img.naturalHeight}`;
-            }
+            if (span) { span.innerText = `${img.naturalWidth}x${img.naturalHeight}`; }
         }
 
         function handleImgError(img) {
@@ -509,9 +863,16 @@
                                 .then(categories => {
                                     dbCategories = categories;
                                     genererBoutonsCategories();
-                                    if (currentTab !== 'blocks' && currentTab !== 'items') {
+                                    if (currentTab !== 'blocks' && currentTab !== 'items' && currentTab !== 'comparison') {
                                         genererListe(dbCategories[currentTab]);
                                     }
+                                });
+                        } else if (scriptType === 'comparison') {
+                            fetch(`http://localhost:5000/get-comparison`)
+                                .then(r => r.ok ? r.json() : [])
+                                .then(compData => {
+                                    dbComparison = compData;
+                                    if(currentTab === 'comparison') filtrerElements();
                                 });
                         } else {
                             fetch(`http://localhost:5000/get-index/${scriptType}`)
@@ -531,7 +892,7 @@
         }
 
         function toggleTaskStatus() {
-            if (!currentSelectedId) return;
+            if (!currentSelectedId || currentTab === 'comparison') return;
 
             const index = completedTasks.indexOf(currentSelectedId);
             if (index > -1) {
@@ -552,6 +913,10 @@
 
         function updateTaskButtonVisual() {
             const btn = document.getElementById('task-btn');
+            if (currentTab === 'comparison') {
+                btn.style.display = 'none';
+                return;
+            }
             if (completedTasks.includes(currentSelectedId)) {
                 btn.innerText = "❌ Annuler la validation";
                 btn.className = "btn-check-task is-done";

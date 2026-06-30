@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {},
+  "base": "minecraft:diamond_axe",
+  "addition": "minecraft:dragon_breath",
+  "result": {
+    "id": "excavator:axecavator_diamond"
+  }
+}

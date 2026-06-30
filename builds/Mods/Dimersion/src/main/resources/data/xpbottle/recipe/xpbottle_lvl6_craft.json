@@ -1,0 +1,18 @@
+{
+  "group": "xpbottle",
+  "category": "misc",
+  "result": {
+    "id": "xpbottle:mj_xpbottle_lvl6",
+    "count": 1
+  },
+  "type": "crafting_shaped",
+  "pattern": [
+    " G ",
+    "G#G",
+    " G "
+  ],
+  "key": {
+    "G": "minecraft:diamond_block",
+    "#": "minecraft:glass_bottle"
+  }
+}

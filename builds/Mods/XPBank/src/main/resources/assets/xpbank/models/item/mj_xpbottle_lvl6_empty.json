@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "xpbank:item/mj_xpbottle_lvl6_empty"
-  }
-}
