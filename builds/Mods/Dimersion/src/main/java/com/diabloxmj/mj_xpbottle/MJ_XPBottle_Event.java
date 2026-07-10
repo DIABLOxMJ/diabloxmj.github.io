@@ -31,7 +31,7 @@ public class MJ_XPBottle_Event {
                     // Étape 2 : Vérifie si le joueur possède au moins les 8 points d'XP nécessaires à la transformation
                     if (playerTotalXp < 8) {
                         // Si le joueur est trop pauvre en XP, envoie un message d'erreur dans son actionbar
-                        serverPlayer.sendMessage(Text.translatable("chat.xpbottle.not_enough_xp_converter"), true);
+                        serverPlayer.sendMessage(Text.translatable("chat.dimersion.not_enough_xp_converter"), true);
                         return ActionResult.FAIL; // Bloque l'action et empêche de lever le bras
                     }
 
@@ -55,7 +55,7 @@ public class MJ_XPBottle_Event {
                             SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
                     // Étape 8 : Notifie le joueur de la réussite du processus de sacrifice d'XP
-                    serverPlayer.sendMessage(Text.translatable("chat.xpbottle.converter_success"), true);
+                    serverPlayer.sendMessage(Text.translatable("chat.dimersion.converter_success"), true);
                 }
                 // Indique à Minecraft que l'action a été consommée avec succès (évite les comportements étranges en simultané)
                 return ActionResult.SUCCESS;

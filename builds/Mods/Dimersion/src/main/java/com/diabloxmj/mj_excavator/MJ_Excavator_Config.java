@@ -2,13 +2,13 @@ package com.diabloxmj.mj_excavator;
 
 import net.fabricmc.loader.api.FabricLoader;
 import java.io.*;
-        import java.nio.file.Files;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MJ_Excavator_Config {
-    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("mj_excavator.properties");
+    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("diabloxmj_excavator.properties");
 
     // On utilise une Map ordonnée pour stocker nos configurations et leurs commentaires
     private static final Map<String, Integer> DURABILITIES = new LinkedHashMap<>();

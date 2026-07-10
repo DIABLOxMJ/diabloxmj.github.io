@@ -1,5 +1,6 @@
 package com.diabloxmj.mj_xpbottle;
 
+import com.diabloxmj.mj_dimersion.MJ_Dimersion_Enter;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents; // Importe l'outil Fabric permettant d'injecter des objets dans l'inventaire créatif
 import net.minecraft.item.Item; // Importe la classe de base représentant un objet brut dans Minecraft
 import net.minecraft.item.ItemGroups; // Importe la liste des onglets d'inventaire créatif natifs (Combats, Outils, etc.)
@@ -20,7 +21,7 @@ public class MJ_XPBottle_Item_Mod {
 
     // Méthode publique appelée par la classe principale pour rendre nos items accessibles et les trier en mode Créatif
     public static void registerModItems() {
-        MJ_XPBottle_Enter.LOGGER.info("Secure item registration for " + MJ_XPBottle_Enter.MOD_ID); // Envoie un message de suivi de sécurité dans la console
+        MJ_Dimersion_Enter.LOGGER.info("Secure item registration for " + MJ_Dimersion_Enter.MOD_ID); // Envoie un message de suivi de sécurité dans la console
 
         // Événement permettant de modifier les entrées de l'onglet créatif "Ingrédients" de Minecraft
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(content -> {
@@ -47,4 +48,5 @@ public class MJ_XPBottle_Item_Mod {
         // Étape 4 : Grave l'item dans le marbre du registre officiel des items de Minecraft et le retourne
         return Registry.register(Registries.ITEM, key, item);
     }
+
 }

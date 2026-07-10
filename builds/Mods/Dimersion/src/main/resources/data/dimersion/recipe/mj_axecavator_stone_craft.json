@@ -1,0 +1,19 @@
+{
+  "group": "axecavator",
+  "category": "equipment",
+  "result": {
+    "id": "dimersion:mj_axecavator_stone",
+    "count": 1
+  },
+  "type": "crafting_shaped",
+  "pattern": [
+    "GH",
+    "G#",
+    " #"
+  ],
+  "key": {
+    "G": "#minecraft:stone_tool_materials",
+    "H": "minecraft:nether_star",
+    "#": "minecraft:stick"
+  }
+}

@@ -1,5 +1,6 @@
 package com.diabloxmj.mj_xpbottle; // Définit l'adresse logique (package) du fichier dans l'arborescence
 
+import com.diabloxmj.mj_dimersion.MJ_Dimersion_Enter;
 import net.fabricmc.api.ModInitializer; // Importe l'interface obligatoire de Fabric pour initialiser un mod
 
 import com.diabloxmj.mj_xpbottle.network.MJ_XPBottle_Sync_Payload; // Importe la structure de notre paquet réseau personnalisé
@@ -7,21 +8,12 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry; // Importe le 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents; // Importe les déclencheurs (events) de connexion réseau
 import net.minecraft.util.Identifier; // Importe l'outil de création d'ID de Minecraft (namespace:path)
 
-import org.slf4j.Logger; // Importe l'outil de gestion des logs standard de Java
-import org.slf4j.LoggerFactory; // Importe la fabrique pour générer le gestionnaire de logs
-
 // Classe principale qui implémente ModInitializer : elle contient le commutateur de démarrage
 public class MJ_XPBottle_Enter implements ModInitializer {
-    // Identifiant textuel unique de ton mod (utilisé pour les textures, les paquets, le JSON...)
-    public static final String MOD_ID = "xpbottle";
-
-    // Crée une instance de Logger liée au MOD_ID pour afficher de beaux messages propres dans la console de Minecraft
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     // Méthode s'exécutant automatiquement au démarrage du serveur de jeu (Solo ou Dédié)
     @Override
     public void onInitialize() {
-        LOGGER.info("Mod initialization XPBottle!"); // Envoie un message informatif dans la console de log
         MJ_XPBottle_Config.load(); // Déclenche la lecture et le chargement du fichier de configuration JSON
         MJ_XPBottle_Item_Mod.registerModItems(); // Déclenche l'enregistrement de l'intégralité de nos fioles d'XP
         MJ_XPBottle_Event.registerEvents(); // Déclenche l'écoute de nos événements personnalisés
@@ -45,8 +37,8 @@ public class MJ_XPBottle_Enter implements ModInitializer {
         });
     }
 
-    // Méthode utilitaire permettant de générer rapidement un identifiant au format standardisé "xpbottle:nom_de_l_element"
+    // Méthode utilitaire permettant de générer rapidement un identifiant au format standardisé "dimersion:nom_de_l_element"
     public static Identifier id(String path) {
-        return Identifier.of(MOD_ID, path); // Construit l'identifiant avec le namespace de ton mod
+        return Identifier.of(MJ_Dimersion_Enter.MOD_ID, path); // Construit l'identifiant avec le namespace de ton mod
     }
 }

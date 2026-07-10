@@ -1,0 +1,46 @@
+{
+  "itemGroup.dimersion.item_group": "Dimersion",
+
+  "container.dimersion.mj_autobreaker": "Auto Casseur",
+  "item.dimersion.mj_autobreaker": "Auto Casseur",
+
+  "item.dimersion.mj_pickavator_wood": "Pickavator en Bois",
+  "item.dimersion.mj_pickavator_stone": "Pickavator en Pierre",
+  "item.dimersion.mj_pickavator_iron": "Pickavator en Fer",
+  "item.dimersion.mj_pickavator_copper": "Pickavator en Cuivre",
+  "item.dimersion.mj_pickavator_gold": "Pickavator en Or",
+  "item.dimersion.mj_pickavator_diamond": "Pickavator en Diamant",
+  "item.dimersion.mj_pickavator_netherite": "Pickavator en Netherite",
+
+  "item.dimersion.mj_shocavator_wood": "Shocavator en Bois",
+  "item.dimersion.mj_shocavator_stone": "Shocavator en Pierre",
+  "item.dimersion.mj_shocavator_iron": "Shocavator en Fer",
+  "item.dimersion.mj_shocavator_copper": "Shocavator en Cuivre",
+  "item.dimersion.mj_shocavator_gold": "Shocavator en Or",
+  "item.dimersion.mj_shocavator_diamond": "Shocavator en Diamant",
+  "item.dimersion.mj_shocavator_netherite": "Shocavator en Netherite",
+
+  "item.dimersion.mj_axecavator_wood": "Axecavator en Bois",
+  "item.dimersion.mj_axecavator_stone": "Axecavator en Pierre",
+  "item.dimersion.mj_axecavator_iron": "Axecavator en Fer",
+  "item.dimersion.mj_axecavator_copper": "Axecavator en Cuivre",
+  "item.dimersion.mj_axecavator_gold": "Axecavator en Or",
+  "item.dimersion.mj_axecavator_diamond": "Axecavator en Diamant",
+  "item.dimersion.mj_axecavator_netherite": "Axecavator en Netherite",
+
+  "item.dimersion.mj_xpbottle_lvl1": "Fiole d'expérience (Niv 1)",
+  "item.dimersion.mj_xpbottle_lvl2": "Fiole d'expérience (Niv 2)",
+  "item.dimersion.mj_xpbottle_lvl3": "Fiole d'expérience (Niv 3)",
+  "item.dimersion.mj_xpbottle_lvl4": "Fiole d'expérience (Niv 4)",
+  "item.dimersion.mj_xpbottle_lvl5": "Fiole d'expérience (Niv 5)",
+  "item.dimersion.mj_xpbottle_lvl6": "Fiole d'expérience (Niv 6)",
+
+  "chat.dimersion.player_empty": "Vous n'avez aucune expérience à déposer !",
+  "chat.dimersion.bottle_full": "La fiole est déjà plein !",
+  "chat.dimersion.bottle_empty": "La fiole est vide !",
+  "chat.dimersion.deposit_success": "Expérience enregistrée avec succès.",
+  "chat.dimersion.withdraw_success": "Expérience récupérée avec succès.",
+
+  "chat.dimersion.not_enough_xp_converter": "Il vous faut au moins 8 points d'expérience pour accomplir la transformation !",
+  "chat.dimersion.converter_success": "Une fiole d'expérience a été synthétisée."
+}

@@ -1,0 +1,6 @@
+{
+    "model": {
+        "type": "minecraft:model",
+        "model": "dimersion:block/mj_autobreaker/mj_autobreaker"
+    }
+}

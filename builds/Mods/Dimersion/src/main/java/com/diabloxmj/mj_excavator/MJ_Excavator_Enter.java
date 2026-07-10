@@ -10,9 +10,7 @@ public class MJ_Excavator_Enter implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Initialisation du mod Excavator !");
         MJ_Excavator_Config.load();
         MJ_Excavator_Items.registerModItems();
-        MJ_Excavator_Group.registerItemGroup();
     }
 }

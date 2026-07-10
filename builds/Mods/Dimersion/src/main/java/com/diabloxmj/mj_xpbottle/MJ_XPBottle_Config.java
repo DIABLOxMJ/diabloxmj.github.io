@@ -1,5 +1,6 @@
 package com.diabloxmj.mj_xpbottle; // Intégré au package principal
 
+import com.diabloxmj.mj_dimersion.MJ_Dimersion_Enter;
 import com.google.gson.Gson; // Importe l'outil Google GSON chargé de transcrire du texte JSON en objet Java et inversement
 import com.google.gson.GsonBuilder; // Importe le configurateur de format pour le moteur GSON
 import net.fabricmc.loader.api.FabricLoader; // Importe l'API Fabric permettant d'extraire les chemins d'accès système du jeu
@@ -49,7 +50,7 @@ public class MJ_XPBottle_Config {
                 }
             } catch (IOException e) {
                 // Enregistre l'erreur dans la console si le disque est inaccessible ou verrouillé
-                MJ_XPBottle_Enter.LOGGER.error("Unable to read XPBottle config file, using default values.", e);
+                MJ_Dimersion_Enter.LOGGER.error("Unable to read XPBottle config file, using default values.", e);
             }
         } else {
             // Si le fichier est absent (premier lancement du mod), appelle la méthode d'écriture pour le générer
@@ -65,7 +66,7 @@ public class MJ_XPBottle_Config {
             GSON.toJson(INSTANCE, writer);
         } catch (IOException e) {
             // Enregistre l'erreur en console en cas d'impossibilité d'écriture
-            MJ_XPBottle_Enter.LOGGER.error("Unable to save the XPBottle configuration file.", e);
+            MJ_Dimersion_Enter.LOGGER.error("Unable to save the XPBottle configuration file.", e);
         }
     }
 }

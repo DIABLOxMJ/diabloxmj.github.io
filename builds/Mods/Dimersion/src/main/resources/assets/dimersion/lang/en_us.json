@@ -1,0 +1,46 @@
+{
+  "itemGroup.dimersion.item_group": "Dimersion",
+
+  "container.dimersion.mj_autobreaker": "Auto Breaker",
+  "item.dimersion.mj_autobreaker": "Auto Breaker",
+
+  "item.dimersion.mj_pickavator_wood": "Wooden Pickavator",
+  "item.dimersion.mj_pickavator_stone": "Stone Pickavator",
+  "item.dimersion.mj_pickavator_iron": "Iron Pickavator",
+  "item.dimersion.mj_pickavator_copper": "Copper Pickavator",
+  "item.dimersion.mj_pickavator_gold": "Golden Pickavator",
+  "item.dimersion.mj_pickavator_diamond": "Diamond Pickavator",
+  "item.dimersion.mj_pickavator_netherite": "Netherite Pickavator",
+
+  "item.dimersion.mj_shocavator_wood": "Wooden Shocavator",
+  "item.dimersion.mj_shocavator_stone": "Stone Shocavator",
+  "item.dimersion.mj_shocavator_iron": "Iron Shocavator",
+  "item.dimersion.mj_shocavator_copper": "Copper Shocavator",
+  "item.dimersion.mj_shocavator_gold": "Golden Shocavator",
+  "item.dimersion.mj_shocavator_diamond": "Diamond Shocavator",
+  "item.dimersion.mj_shocavator_netherite": "Netherite Shocavator",
+
+  "item.dimersion.mj_axecavator_wood": "Wooden Axecavator",
+  "item.dimersion.mj_axecavator_stone": "Stone Axecavator",
+  "item.dimersion.mj_axecavator_iron": "Iron Axecavator",
+  "item.dimersion.mj_axecavator_copper": "Copper Axecavator",
+  "item.dimersion.mj_axecavator_gold": "Golden Axecavator",
+  "item.dimersion.mj_axecavator_diamond": "Diamond Axecavator",
+  "item.dimersion.mj_axecavator_netherite": "Netherite Axecavator",
+
+  "item.dimersion.mj_xpbottle_lvl1": "Experience Bottle (Lvl 1)",
+  "item.dimersion.mj_xpbottle_lvl2": "Experience Bottle (Lvl 2)",
+  "item.dimersion.mj_xpbottle_lvl3": "Experience Bottle (Lvl 3)",
+  "item.dimersion.mj_xpbottle_lvl4": "Experience Bottle (Lvl 4)",
+  "item.dimersion.mj_xpbottle_lvl5": "Experience Bottle (Lvl 5)",
+  "item.dimersion.mj_xpbottle_lvl6": "Experience Bottle (Lvl 6)",
+
+  "chat.dimersion.player_empty": "You do not have any experience to deposit!",
+  "chat.dimersion.bottle_full": "This bottle is already full!",
+  "chat.dimersion.bottle_empty": "This bottle is empty!",
+  "chat.dimersion.deposit_success": "Experience stored successfully.",
+  "chat.dimersion.withdraw_success": "Experience retrieved successfully.",
+
+  "chat.dimersion.not_enough_xp_converter": "You need at least 8 points of experience to perform the transformation!",
+  "chat.dimersion.converter_success": "An experience bottle has been synthesized."
+}

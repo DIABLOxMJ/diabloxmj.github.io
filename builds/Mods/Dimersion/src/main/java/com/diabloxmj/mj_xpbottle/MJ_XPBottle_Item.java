@@ -65,12 +65,12 @@ public class MJ_XPBottle_Item extends Item {
             if (serverPlayer.isSneaking()) {
                 // Si la réserve d'XP du joueur est vide, on annule l'action
                 if (playerCurrentPool <= 0) {
-                    serverPlayer.sendMessage(Text.translatable("chat.xpbottle.player_empty"), true); // Message d'erreur discret dans l'actionbar
+                    serverPlayer.sendMessage(Text.translatable("chat.dimersion.player_empty"), true); // Message d'erreur discret dans l'actionbar
                     return ActionResult.FAIL; // Retourne un échec de l'action
                 }
                 // Si la fiole a déjà atteint ou dépassé sa capacité maximale actuelle, on annule l'action
                 if (currentStoredXp >= currentMaxCapacity) {
-                    serverPlayer.sendMessage(Text.translatable("chat.xpbottle.bottle_full"), true); // Message d'erreur indiquant que la fiole est pleine
+                    serverPlayer.sendMessage(Text.translatable("chat.dimersion.bottle_full"), true); // Message d'erreur indiquant que la fiole est pleine
                     return ActionResult.FAIL; // Retourne un échec de l'action
                 }
 
@@ -95,13 +95,13 @@ public class MJ_XPBottle_Item extends Item {
                 serverPlayer.currentScreenHandler.syncState();
 
                 // Envoie un message de confirmation au joueur dans l'actionbar
-                serverPlayer.sendMessage(Text.translatable("chat.xpbottle.deposit_success"), true);
+                serverPlayer.sendMessage(Text.translatable("chat.dimersion.deposit_success"), true);
             }
             // CAS 2 : Le joueur fait un Clic Droit simple -> Il RÉCUPÈRE l'XP de la fiole
             else {
                 // Si la fiole ne contient aucune expérience, on stoppe l'action
                 if (currentStoredXp <= 0) {
-                    serverPlayer.sendMessage(Text.translatable("chat.xpbottle.bottle_empty"), true); // Message indiquant que la fiole est vide
+                    serverPlayer.sendMessage(Text.translatable("chat.dimersion.bottle_empty"), true); // Message indiquant que la fiole est vide
                     return ActionResult.FAIL; // Retourne un échec de l'action
                 }
 
@@ -121,7 +121,7 @@ public class MJ_XPBottle_Item extends Item {
                 serverPlayer.currentScreenHandler.syncState();
 
                 // Envoie un message de confirmation de retrait au joueur
-                serverPlayer.sendMessage(Text.translatable("chat.xpbottle.withdraw_success"), true);
+                serverPlayer.sendMessage(Text.translatable("chat.dimersion.withdraw_success"), true);
             }
 
             // GESTION ET REMPLACEMENT DE L'ITEM DANS LA MAIN DU JOUEUR

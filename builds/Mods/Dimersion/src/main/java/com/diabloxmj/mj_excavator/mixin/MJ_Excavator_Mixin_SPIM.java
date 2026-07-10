@@ -12,10 +12,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Shadow; // Note: Remets l'import @Shadow standard de ton projet
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,6 @@ public class MJ_Excavator_Mixin_SPIM {
     @Shadow @Final protected ServerPlayerEntity player;
     @Shadow protected ServerWorld world;
 
-    // Utilisation d'un flag statique pour bloquer la récursion
     private static final ThreadLocal<Boolean> IS_MINING = ThreadLocal.withInitial(() -> false);
 
     @Inject(method = "tryBreakBlock", at = @At("HEAD"), cancellable = true)
@@ -35,21 +35,32 @@ public class MJ_Excavator_Mixin_SPIM {
         if (handStack.getItem() instanceof MJ_Excavator_Item) {
             IS_MINING.set(true);
             try {
-                // Pour obtenir la face exacte sans Raycast foireux :
-                // On récupère le mouvement du joueur ou on utilise la face "évidente"
-                // Mais pour faire simple et efficace, on récupère la face visée par le joueur
-                // via la logique interne de Minecraft si disponible, ou on utilise le bloc lui-même.
+                // Raycast pour la face visée
+                HitResult hitResult = player.raycast(5.0D, 1.0F, false);
+                Direction side = HitResult.Type.BLOCK == hitResult.getType() ? ((BlockHitResult) hitResult).getSide() : Direction.UP;
 
-                Direction side = getFacingDirection();
+                // On récupère la liste des 9 blocs (centre inclus) alignés sur la vraie face visée
+                List<BlockPos> targetBlocks = get3x3PositionsFromSide(pos, side);
+                boolean brokenAny = false;
 
-                for (BlockPos extraPos : get3x3PositionsFromSide(pos, side)) {
+                for (BlockPos extraPos : targetBlocks) {
                     if (player.canModifyAt(world, extraPos)) {
                         BlockState state = world.getBlockState(extraPos);
-                        if (handStack.isSuitableFor(state) && !state.isAir()) {
-                            // On casse manuellement sans relancer tryBreakBlock pour éviter la boucle
+
+                        // CONDITION AJUSTÉE :
+                        // Cas 1 : C'est le bloc du milieu (extraPos est égal à pos) -> On le casse d'office !
+                        // Cas 2 : C'est un bloc autour -> On le casse UNIQUEMENT si l'outil est adapté.
+                        if (extraPos.equals(pos) || (handStack.isSuitableFor(state) && !state.isAir())) {
                             world.breakBlock(extraPos, true, player);
+                            brokenAny = true;
                         }
                     }
+                }
+
+                // Si on a cassé au moins un bloc dans la zone (ou si le centre était le bon),
+                // on valide l'événement pour de bon
+                if (brokenAny) {
+                    cir.setReturnValue(true);
                 }
             } finally {
                 IS_MINING.set(false);
@@ -57,8 +68,36 @@ public class MJ_Excavator_Mixin_SPIM {
         }
     }
 
-    private Direction getFacingDirection() {
-        // La méthode la plus fiable : on regarde la direction du regard du joueur
-        return player.getHorizontalFacing().getOpposite();
+    private List<BlockPos> get3x3PositionsFromSide(BlockPos center, Direction side) {
+        List<BlockPos> positions = new ArrayList<>();
+        int x = center.getX();
+        int y = center.getY();
+        int z = center.getZ();
+
+        // Si on mine un sol ou un plafond -> Grille horizontale (X et Z)
+        if (side == Direction.UP || side == Direction.DOWN) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    positions.add(new BlockPos(x + dx, y, z + dz));
+                }
+            }
+        }
+        // Si on mine un mur face Nord ou Sud -> Grille verticale (X et Y)
+        else if (side == Direction.NORTH || side == Direction.SOUTH) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    positions.add(new BlockPos(x + dx, y + dy, z));
+                }
+            }
+        }
+        // Si on mine un mur face Est ou Ouest -> Grille verticale (Z et Y)
+        else if (side == Direction.EAST || side == Direction.WEST) {
+            for (int dz = -1; dz <= 1; dz++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    positions.add(new BlockPos(x, y + dy, z + dz));
+                }
+            }
+        }
+        return positions;
     }
 }

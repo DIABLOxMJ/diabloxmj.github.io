@@ -15,14 +15,17 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.diabloxmj.mj_xpbottle.MJ_XPBottle_Enter",
+			"com.diabloxmj.mj_dimersion.MJ_Dimersion_Enter",
+			"com.diabloxmj.mj_autobreaker.MJ_AutoBreaker_Enter",
+			"com.diabloxmj.mj_excavator.MJ_Excavator_Enter",
 			"com.diabloxmj.mj_skyislava.MJ_LavaSky_Enter",
-			"com.diabloxmj.mj_excavator.MJ_Excavator_Enter"
+			"com.diabloxmj.mj_xpbottle.MJ_XPBottle_Enter"
 		],
 		"client": [
-			"com.diabloxmj.client.mj_xpbottle.MJ_XPBottle_Client",
+			"com.diabloxmj.client.mj_autobreaker.MJ_AutoBreaker_Client",
+			"com.diabloxmj.client.mj_excavator.MJ_Excavator_Client",
 			"com.diabloxmj.client.mj_skyislava.MJ_LavaSky_Client",
-			"com.diabloxmj.client.mj_excavator.MJ_Excavator_Client"
+			"com.diabloxmj.client.mj_xpbottle.MJ_XPBottle_Client"
 		]
 	},
 	"mixins": [

@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -38,23 +39,27 @@ public class MJ_Excavator_Renderer {
         HitResult hit = client.crosshairTarget;
         if (hit == null || hit.getType() != HitResult.Type.BLOCK) return;
 
-        BlockHitResult blockHit = (BlockHitResult) hit;
+        BlockHitResult blockHit = (BlockHitResult) client.crosshairTarget;
         BlockPos origin = blockHit.getBlockPos();
 
+        // On récupère la face visée côté client de la même manière
+        Direction side = blockHit.getSide();
+
+        // On initialise les coordonnées sur le bloc central
         int minX = origin.getX(), minY = origin.getY(), minZ = origin.getZ();
         int maxX = origin.getX() + 1, maxY = origin.getY() + 1, maxZ = origin.getZ() + 1;
 
         if (!player.isSneaking()) {
-            for (BlockPos pos : MJ_Mining_Helper.get3x3Blocks(origin, player)) {
-                BlockState state = client.world.getBlockState(pos);
-                if (handStack.isSuitableFor(state)) {
-                    minX = Math.min(minX, pos.getX());
-                    minY = Math.min(minY, pos.getY());
-                    minZ = Math.min(minZ, pos.getZ());
-                    maxX = Math.max(maxX, pos.getX() + 1);
-                    maxY = Math.max(maxY, pos.getY() + 1);
-                    maxZ = Math.max(maxZ, pos.getZ() + 1);
-                }
+            // On force l'extension à un 3x3 parfait selon la face, sans vérifier le contenu des blocs
+            if (side == Direction.UP || side == Direction.DOWN) {
+                minX -= 1; maxX += 1;
+                minZ -= 1; maxZ += 1;
+            } else if (side == Direction.NORTH || side == Direction.SOUTH) {
+                minX -= 1; maxX += 1;
+                minY -= 1; maxY += 1;
+            } else if (side == Direction.EAST || side == Direction.WEST) {
+                minZ -= 1; maxZ += 1;
+                minY -= 1; maxY += 1;
             }
         }
 

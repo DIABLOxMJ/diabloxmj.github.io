@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smithing_transform",
-  "template": {},
-  "base": "minecraft:netherite_axe",
-  "addition": "minecraft:dragon_breath",
-  "result": {
-    "id": "excavator:axecavator_netherite"
-  }
-}
