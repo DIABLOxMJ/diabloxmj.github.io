@@ -1,24 +1,11 @@
 [
     {
-        "lavasky": {
-            "img": "../sources/img/mj_mods_lavasky.png",
-            "title": "LavaSky",
-            "description": "Un mod qui transforme le ciel en un gigantesque ciel de lave dans le monde normal.",
-            "mod_version": "v1.0.1",
-            "download": "../packs/Mods/lavasky-1.0.1.jar",
-            "Dependant": {
-                "Dep_1": {
-                    "Title": "Fabric API",
-                    "link": "https://modrinth.com/mod/fabric-api"
-                }
-            }
-        },
-        "xpbank": {
-            "img": "../sources/img/mj_mods_xpbank.png",
-            "title": "XPBank",
-            "description": "Un mod qui ajoute les fioles de stockage d'expérience.",
-            "mod_version": "v1.1.0",
-            "download": "../packs/Mods/xpbank-1.1.0.jar",
+        "dimersion": {
+            "img": "../sources/img/mj_mods_dimersion.png",
+            "title": "Dimersion Mods",
+            "description": "Un grand modpack, Ciel de lave, Vision Nettoyer sous liquide, Bouteille d'expérience, Auto Casseur, Bottes Anti-Gravity, Super Outils 3x3",
+            "mod_version": "v1.0.0",
+            "download": "../packs/Mods/dimersion-1.0.0.jar",
             "Dependant": {
                 "Dep_1": {
                     "Title": "Fabric API",

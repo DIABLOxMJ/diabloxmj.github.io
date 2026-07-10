@@ -1,5 +1,6 @@
 package com.diabloxmj.mj_excavator;
 
+import com.diabloxmj.mj_dimersion.MJ_Dimersion_Enter;
 import net.fabricmc.loader.api.FabricLoader;
 import java.io.*;
 import java.nio.file.Files;
@@ -51,13 +52,13 @@ public class MJ_Excavator_Config {
                         try {
                             DURABILITIES.put(key, Integer.parseInt(parts[1].trim()));
                         } catch (NumberFormatException e) {
-                            MJ_Excavator_Enter.LOGGER.error("Valeur invalide dans la config pour la clé: " + key);
+                            MJ_Dimersion_Enter.LOGGER.error("Valeur invalide dans la config pour la clé: " + key);
                         }
                     }
                 }
             }
         } catch (IOException e) {
-            MJ_Excavator_Enter.LOGGER.error("Impossible de lire le fichier de config de l'Excavator", e);
+            MJ_Dimersion_Enter.LOGGER.error("Impossible de lire le fichier de config de l'Excavator", e);
         }
     }
 
@@ -73,7 +74,7 @@ public class MJ_Excavator_Config {
                 writer.write(key + "=" + DURABILITIES.get(key) + "\n\n");
             }
         } catch (IOException e) {
-            MJ_Excavator_Enter.LOGGER.error("Impossible de sauvegarder le fichier de config de l'Excavator", e);
+            MJ_Dimersion_Enter.LOGGER.error("Impossible de sauvegarder le fichier de config de l'Excavator", e);
         }
     }
 

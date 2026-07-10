@@ -8,7 +8,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class MJ_AutoBreaker_Screen extends HandledScreen<MJ_AutoBreaker_ScreenHandler> {
-    private static final Identifier TEXTURE = Identifier.of("dimersion", "textures/gui/container/autobreaker.png");
+    private static final Identifier TEXTURE = Identifier.of("dimersion", "textures/gui/container/mj_autobreaker.png");
 
     public MJ_AutoBreaker_Screen(MJ_AutoBreaker_ScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);

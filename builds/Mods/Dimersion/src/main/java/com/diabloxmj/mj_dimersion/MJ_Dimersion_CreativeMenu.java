@@ -3,6 +3,7 @@ package com.diabloxmj.mj_dimersion;
 import com.diabloxmj.mj_autobreaker.MJ_AutoBreaker_Blocks;
 import com.diabloxmj.mj_autobreaker.MJ_AutoBreaker_CreativeItem;
 import com.diabloxmj.mj_excavator.MJ_Excavator_CreativeItem;
+import com.diabloxmj.mj_gravityboots.MJ_GravityBoots_CreativeItem;
 import com.diabloxmj.mj_xpbottle.MJ_XPBottle_CreativeItem;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
@@ -30,6 +31,7 @@ public class MJ_Dimersion_CreativeMenu {
                 // Appels modulaires
                 MJ_AutoBreaker_CreativeItem.addEntries(entries);
                 MJ_Excavator_CreativeItem.addEntries(entries);
+                MJ_GravityBoots_CreativeItem.addEntries(entries);
                 MJ_XPBottle_CreativeItem.addEntries(entries);
             })
             .build();
