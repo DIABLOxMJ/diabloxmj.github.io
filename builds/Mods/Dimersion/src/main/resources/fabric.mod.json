@@ -19,20 +19,20 @@
 			"com.diabloxmj.mj_autobreaker.MJ_AutoBreaker_Enter",
 			"com.diabloxmj.mj_excavator.MJ_Excavator_Enter",
 			"com.diabloxmj.mj_gravityboots.MJ_GravityBoots_Enter",
-			"com.diabloxmj.mj_skyislava.MJ_LavaSky_Enter",
+			"com.diabloxmj.mj_fogvision.MJ_FogVision_Enter",
 			"com.diabloxmj.mj_xpbottle.MJ_XPBottle_Enter"
 		],
 		"client": [
 			"com.diabloxmj.client.mj_autobreaker.MJ_AutoBreaker_Client",
 			"com.diabloxmj.client.mj_excavator.MJ_Excavator_Client",
-			"com.diabloxmj.client.mj_skyislava.MJ_LavaSky_Client",
+			"com.diabloxmj.client.mj_fogvision.MJ_FogVision_Client",
 			"com.diabloxmj.client.mj_xpbottle.MJ_XPBottle_Client"
 		]
 	},
 	"mixins": [
-		"mj_skyislava.mixins.json",
+		"mj_fogvision.mixins.json",
 		{
-			"config": "mj_skyislava.client.mixins.json",
+			"config": "mj_fogvision.client.mixins.json",
 			"environment": "client"
 		},
 		"mj_excavator.mixins.json",

@@ -33,6 +33,7 @@ public class MJ_Excavator_Mixin_SPIM {
 
         ItemStack handStack = player.getMainHandStack();
         if (handStack.getItem() instanceof MJ_Excavator_Item) {
+            ItemStack mainHandStack = this.player.getMainHandStack();
             IS_MINING.set(true);
             try {
                 // Raycast pour la face visée
@@ -42,6 +43,11 @@ public class MJ_Excavator_Mixin_SPIM {
                 // On récupère la liste des 9 blocs (centre inclus) alignés sur la vraie face visée
                 List<BlockPos> targetBlocks = get3x3PositionsFromSide(pos, side);
                 boolean brokenAny = false;
+
+                // 2. Si le bloc principal est cassé avec succès, on applique DIRECTEMENT 1 point de dégât.
+                // Le "item -> {}" est un callback vide ultra-sécurisé qui évite les bugs réseau au milieu du mixin.
+                // Cette méthode prend nativement en compte l'enchantement Solidité (Unbreaking) !
+                mainHandStack.damage(1, this.world, this.player, item -> {});
 
                 for (BlockPos extraPos : targetBlocks) {
                     if (player.canModifyAt(world, extraPos)) {

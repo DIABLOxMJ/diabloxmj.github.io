@@ -77,16 +77,29 @@ public class MJ_AutoBreaker_Block extends BlockWithEntity { // Déclare notre bl
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) { // S'exécute automatiquement lorsque le délai planifié par "scheduleBlockTick" est écoulé
-        BlockEntity blockEntity = world.getBlockEntity(pos); // Récupère l'inventaire/les données liés à ce bloc précis
-        if (blockEntity instanceof MJ_AutoBreaker_BlockEntity autoBreaker) { // S'assure que cet inventaire est bien notre AutoBreaker
-            BlockPos targetPos = pos.offset(state.get(FACING)); // Calcule les coordonnées du bloc situé juste devant la face de la machine
-            if (!world.getBlockState(targetPos).isAir()) { // Si le bloc ciblé devant n'est pas de l'air
-                autoBreaker.tryBreakBlock(world, pos, state.get(FACING)); // Appelle la grande méthode de cassage de bloc !
+    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        if (!world.isClient()) {
+            // SÉCURITÉ : On vérifie si la Redstone alimente TOUJOURS le bloc à cet instant précis
+            if (world.isReceivingRedstonePower(pos)) {
+
+                BlockEntity blockEntity = world.getBlockEntity(pos);
+                if (blockEntity instanceof MJ_AutoBreaker_BlockEntity autoBreaker) {
+                    // On vérifie s'il y a un bloc à casser devant
+                    if (!world.getBlockState(pos.offset(state.get(FACING))).isAir()) {
+                        autoBreaker.tryBreakBlock(world, pos, state.get(FACING));
+                    }
+                }
+
+                // Le courant est toujours là, on planifie la prochaine action dans 1 seconde (20 ticks)
+                world.scheduleBlockTick(pos, this, 20);
+
+            } else {
+                // Si le courant a été coupé entre-temps, on force le bloc à repasser en mode éteint
+                if (state.get(TRIGGERED)) {
+                    world.setBlockState(pos, state.with(TRIGGERED, false), Block.NOTIFY_LISTENERS);
+                }
             }
         }
-        // Reprogramme un tick de bloc automatique toutes les 20 pulsations de jeu (1 seconde) pour continuer à miner si le signal reste actif
-        world.scheduleBlockTick(pos, this, 20);
     }
 
     @Override
