@@ -2,24 +2,26 @@ import os
 import json
 import subprocess
 import platform
+import time
 from flask import Flask, jsonify, request
+from flask import send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR = os.path.join(BASE_DIR, "finish")
+OUTPUT_DIR = os.path.join(BASE_DIR, "IndexData")
 
 @app.route('/run/<script_type>', methods=['POST'])
 def run_script(script_type):
     scripts = {
-        'blocks': 'blockindexer.py',
-        'items': 'itemindexer.py',
-        'sounds': 'soundextractor.py',
-        'categories': 'categoryindexer.py',
-        'comparison': 'Full_Index_Folder.py',
-        'extract': 'extract.py'
+        'blocks': 'Script_Block_Indexer.py',
+        'items': 'Script_Item_Indexer.py',
+        'sounds': 'Script_Sound_Extractor.py',
+        'categories': 'Script_Category_Indexer.py',
+        'comparaison': 'Script_Full_Indexer.py',
+        'extract': 'Script_Extractor.py'
     }
     
     if script_type not in scripts:
@@ -30,6 +32,14 @@ def run_script(script_type):
     
     if not os.path.exists(script_path):
         return jsonify({"status": "error", "message": f"Le fichier {script_name} est introuvable."}), 404
+
+    # On prépare la commande système
+    cmd = ['py', script_path]
+
+    # Si des données JSON ont été envoyées (comme la version pour les sons)
+    data = request.get_json(silent=True) or {}
+    if script_type == 'sounds' and 'version' in data:
+        cmd.append(str(data['version']))
 
     try:
         result = subprocess.run(['py', script_path], capture_output=True, text=True, check=True)
@@ -46,8 +56,8 @@ def run_script(script_type):
 @app.route('/get-index/<index_type>', methods=['GET'])
 def get_index(index_type):
     files = {
-        'blocks': 'blocks.json',
-        'items': 'items.json'
+        'blocks': 'Index_Details_Blocks.json',
+        'items': 'Index_Details_Items.json'
     }
     if index_type not in files:
         return jsonify({"error": "Index inconnu"}), 400
@@ -61,16 +71,16 @@ def get_index(index_type):
 
 @app.route('/get-categories', methods=['GET'])
 def get_categories():
-    file_path = os.path.join(OUTPUT_DIR, 'categories.json')
+    file_path = os.path.join(OUTPUT_DIR, 'Index_Details_Category.json')
     if not os.path.exists(file_path):
         return jsonify({}), 200
     with open(file_path, 'r', encoding='utf-8') as f:
         return jsonify(json.load(f))
 
 # Nouvelle route pour récupérer le rapport de comparaison complet
-@app.route('/get-comparison', methods=['GET'])
-def get_comparison():
-    file_path = os.path.join(OUTPUT_DIR, 'comparison_report.json')
+@app.route('/get-Comparaison', methods=['GET'])
+def get_Comparaison():
+    file_path = os.path.join(OUTPUT_DIR, 'Index_Comparaison_Missing.json')
     if not os.path.exists(file_path):
         return jsonify([]), 200
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -139,6 +149,11 @@ def read_file():
         return jsonify({"status": "success", "content": content})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/IndexData/<path:filename>')
+def serve_index_data(filename):
+    # OUTPUT_DIR est déjà défini comme os.path.join(BASE_DIR, "IndexData")
+    return send_from_directory(OUTPUT_DIR, filename)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

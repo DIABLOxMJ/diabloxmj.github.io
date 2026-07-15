@@ -4,9 +4,9 @@ import shutil
 
 # Définition des dossiers
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-VANILLA_DIR = os.path.join(BASE_DIR, "Vanilla", "assets")
+VANILLA_DIR = os.path.join(BASE_DIR, "Pack (Next)", "assets")
 EXTRACT_DIR = os.path.join(BASE_DIR, "Extract", "assets")
-REPORT_PATH = os.path.join(BASE_DIR, "finish", "comparison_report.json")
+REPORT_PATH = os.path.join(BASE_DIR, "IndexData", "Index_Comparaison_Missing.json")
 
 def run_extraction():
     print("\n=== DÉBUT DE L'EXTRACTION DES FICHIERS MANQUANTS ===")
@@ -18,10 +18,10 @@ def run_extraction():
 
     # 2. Lire le rapport de comparaison
     with open(REPORT_PATH, 'r', encoding='utf-8') as f:
-        comparison_data = json.load(f)
+        comparaison_data = json.load(f)
 
     # 3. Filtrer pour obtenir uniquement les fichiers manquants (status == "missing")
-    missing_files = [item['path'] for item in comparison_data if item.get('status') == 'missing']
+    missing_files = [item['path'] for item in comparaison_data if item.get('status') == 'missing']
 
     if not missing_files:
         print(" -> Aucun fichier manquant à extraire !")

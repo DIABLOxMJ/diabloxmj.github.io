@@ -3,8 +3,9 @@ import json
 
 # Chemins relatifs basés sur ta structure
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PACK_DIR = os.path.join(BASE_DIR, "Pack", "assets", "minecraft")
-OUTPUT_DIR = os.path.join(BASE_DIR, "finish")
+PACK_DIR_SOURCE = os.path.join("Pack (Main)")
+PACK_DIR = os.path.join(BASE_DIR, PACK_DIR_SOURCE, "assets", "minecraft")
+OUTPUT_DIR = os.path.join(BASE_DIR, "IndexData")
 ITEM_MODELS_DIR = os.path.join(PACK_DIR, "models", "item")
 ALL_MODELS_DIR = os.path.join(PACK_DIR, "models") # Pour remonter les parents si besoin
 
@@ -69,23 +70,23 @@ def index_items():
                     # Extraction du chemin propre sans le "minecraft:"
                     clean_path = val.split(":")[-1] if ":" in val else val
                     # Les textures d'items peuvent être dans textures/item/ ou textures/block/
-                    clean_textures[key] = f"Pack/assets/minecraft/textures/{clean_path}.png"
+                    clean_textures[key] = f"{PACK_DIR_SOURCE}/assets/minecraft/textures/{clean_path}.png"
 
             # Construction de l'objet pour l'index des items
             item_entry = {
                 "id": item_id,
                 "buttonName": item_id.replace("_", " ").title(),
-                "model": f"Pack/assets/minecraft/models/item/{filename.split(':')[-1]}",
+                "model": f"{PACK_DIR_SOURCE}/assets/minecraft/models/item/{filename.split(':')[-1]}",
                 "textures": clean_textures
             }
             index_result.append(item_entry)
 
-    # Sauvegarde dans /finish/items.json
-    output_path = os.path.join(OUTPUT_DIR, "items.json")
+    # Sauvegarde dans /IndexData/Index_Details_Items.json
+    output_path = os.path.join(OUTPUT_DIR, "Index_Details_Items.json")
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(index_result, f, indent=4, ensure_ascii=False)
 
-    print(f"Indexation des items terminée ! {len(index_result)} items indexés dans /finish/items.json")
+    print(f"Indexation des items terminée ! {len(index_result)} items indexés dans /IndexData/Index_Details_Items.json")
 
 if __name__ == "__main__":
     index_items()

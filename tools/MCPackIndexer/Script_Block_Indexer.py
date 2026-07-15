@@ -2,8 +2,9 @@ import os
 import json
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PACK_DIR = os.path.join(BASE_DIR, "Pack", "assets", "minecraft")
-OUTPUT_DIR = os.path.join(BASE_DIR, "finish")
+PACK_DIR_SOURCE = os.path.join("Pack (Main)")
+PACK_DIR = os.path.join(BASE_DIR, PACK_DIR_SOURCE, "assets", "minecraft")
+OUTPUT_DIR = os.path.join(BASE_DIR, "IndexData")
 BLOCKSTATES_DIR = os.path.join(PACK_DIR, "blockstates")
 MODELS_DIR = os.path.join(PACK_DIR, "models")
 
@@ -100,19 +101,19 @@ def index_blocks():
                 clean_textures[key] = val
             else:
                 clean_path = val.split(":")[-1] if ":" in val else val
-                clean_textures[key] = f"Pack/assets/minecraft/textures/{clean_path}.png"
+                clean_textures[key] = f"{PACK_DIR_SOURCE}/assets/minecraft/textures/{clean_path}.png"
 
         block_entry = {
             "id": block_id,
             "buttonName": block_id.replace("_", " ").title(),
-            "blockstate": f"Pack/assets/minecraft/blockstates/{filename}",
-            "model": f"Pack/assets/minecraft/models/{model_ref.split(':')[-1]}.json" if model_ref else None,
+            "blockstate": f"{PACK_DIR_SOURCE}/assets/minecraft/blockstates/{filename}",
+            "model": f"{PACK_DIR_SOURCE}/assets/minecraft/models/{model_ref.split(':')[-1]}.json" if model_ref else None,
             "textures": clean_textures
         }
         index_result.append(block_entry)
         print(" OK") # Tout s'est bien passé pour ce bloc
 
-    output_path = os.path.join(OUTPUT_DIR, "blocks.json")
+    output_path = os.path.join(OUTPUT_DIR, "Index_Details_Blocks.json")
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(index_result, f, indent=4, ensure_ascii=False)
         

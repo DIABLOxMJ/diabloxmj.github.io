@@ -1,17 +1,22 @@
 import os
 import json
 import shutil
+import sys
 
 # 1. Chemins d'accès (S'adapte automatiquement à ton PC)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # Racine du script
 MINECRAFT_PATH = os.path.expandvars(r'G:\Minecraft')
-VERSION = '1.18'  # Remplace par ta version si besoin (ex: 1.20, 1.18.2)
+
+# Récupération de la version depuis l'argument ou '1.18' par défaut
+VERSION = sys.argv[1] if len(sys.argv) > 1 else '1.18'
+
 INDEX_PATH = os.path.join(MINECRAFT_PATH, 'assets', 'indexes', f'{VERSION}.json')
 OBJECTS_DIR = os.path.join(MINECRAFT_PATH, 'assets', 'objects')
 
-# Dossier de sortie sur ton bureau
-OUTPUT_DIR = os.path.join(os.path.expanduser('~'), 'Desktop', 'Minecraft_Sounds')
+# Dossier de sortie à la racine de là où se trouve le script
+OUTPUT_DIR = os.path.join(BASE_DIR, 'Pack (Sound)')
 
-print("Analyse de l'index de Minecraft...")
+print(f"Analyse de l'index de Minecraft (Version : {VERSION})...")
 with open(INDEX_PATH, 'r') as f:
     data = json.load(f)
 

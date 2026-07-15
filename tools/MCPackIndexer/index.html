@@ -86,7 +86,7 @@
             display: block;
             width: 100%;
             box-sizing: border-box;
-            padding: 10px 15px;
+            padding: 5px 15px;
             margin-bottom: 8px;
             background-color: var(--bg-bouton);
             color: var(--texte);
@@ -113,6 +113,20 @@
             border-left: 4px solid #00bcd4 !important;
             font-size: 0.85rem !important;
             opacity: 0.9;
+        }
+
+        .btn-catalogue {
+            display: flex;
+            align-items: center; /* Aligne verticalement l'image et le texte */
+            gap: 8px;           /* Espace entre l'icône et le texte */
+            text-align: left;
+        }
+        
+        .btn-icon {
+            width: 24px;       /* Taille fixe de ton icône */
+            height: 24px;
+            object-fit: contain;
+            flex-shrink: 0;    /* Empêche l'image de se compresser */
         }
         
         .liste-scroll { flex: 1; overflow-y: auto; padding-right: 5px; }
@@ -163,7 +177,7 @@
             font-size: 0.85rem;
         }
         .onglet-btn.actif { background-color: var(--accent); border-color: var(--accent); }
-        #tab-comparison.actif { background-color: #ff9800; border-color: #ff9800; }
+        #tab-comparaison.actif { background-color: #ff9800; border-color: #ff9800; }
 
         .clickable-path {
             color: #64b5f6;
@@ -282,11 +296,9 @@
 
     <div id="cadre-outils" class="cadre">
         <h2>Outils Index</h2>
-        <button class="btn-outil btn-run-script" onclick="runIndexer('blocks')">⚡ Indexer les Blocs</button>
-        <button class="btn-outil btn-run-script" onclick="runIndexer('items')">⚡ Indexer les Items</button>
-        <button class="btn-outil btn-run-script" style="background-color: #0288d1;" onclick="runIndexer('categories')">⚡ Indexer les Catégories</button>
+        <button class="btn-outil btn-run-script" style="background-color: #4caf50;" onclick="runIndexer('pack_all')">⚡ Indexer le Pack</button>
         <button class="btn-outil btn-run-script" style="background-color: #7b1fa2;" onclick="runIndexer('sounds')">🎵 Extraire les Sons</button>
-        <button class="btn-outil btn-run-script" style="background-color: #ff9800;" onclick="runIndexer('comparison')">🔍 Lancer la Comparaison</button>
+        <button class="btn-outil btn-run-script" style="background-color: #ff9800;" onclick="runIndexer('comparaison')">🔍 Lancer la Comparaison</button>
         <button class="btn-outil btn-run-script" style="background-color: #e91e63;" onclick="runIndexer('extract')">📦 Extraire les fichiers manquants</button>
         <h2>Catégories</h2>
         <div id="liste-categories-scroll" class="liste-scroll"></div>
@@ -297,7 +309,7 @@
         <div class="onglets">
             <button id="tab-blocks" class="onglet-btn actif" onclick="switchTab('blocks')">Blocs</button>
             <button id="tab-items" class="onglet-btn" onclick="switchTab('items')">Items</button>
-            <button id="tab-comparison" class="onglet-btn" onclick="switchTab('comparison')">⚠️ Comparateur</button>
+            <button id="tab-comparaison" class="onglet-btn" onclick="switchTab('comparaison')">⚠️ Comparateur</button>
         </div>
         <div class="search-container">
             <input type="text" id="search" class="search-bar" placeholder="Rechercher un élément..." oninput="filtrerElements()">
@@ -330,8 +342,8 @@
 
             <div class="preview-section" id="section-comparaison-details" style="display: none;">
                 <h3>Informations de Comparaison</h3>
-                <p style="margin-top: 8px;"><strong>Statut dans MyPack :</strong> <span id="comp-status-badge" style="font-weight: bold;">-</span></p>
-                <p style="margin-top: 4px;"><strong>Chemin relatif Vanilla :</strong> <span id="comp-vanilla-path" style="font-family: monospace; color: #aaa;">-</span></p>
+                <p style="margin-top: 8px;"><strong>Statut dans Pack (Main) :</strong> <span id="comp-status-badge" style="font-weight: bold;">-</span></p>
+                <p style="margin-top: 4px;"><strong>Chemin relatif Pack (Next) :</strong> <span id="comp-vanilla-path" style="font-family: monospace; color: #aaa;">-</span></p>
             </div>
 
             <div class="preview-section">
@@ -357,7 +369,7 @@
         let dbBlocks = [];
         let dbItems = [];
         let dbCategories = {};
-        let dbComparison = [];
+        let dbComparaison = [];
 
         let completedTasks = JSON.parse(localStorage.getItem('mcp_completedTasks')) || [];
 
@@ -376,16 +388,16 @@
                 fetch(`http://localhost:5000/get-index/blocks`).then(r => r.ok ? r.json() : []),
                 fetch(`http://localhost:5000/get-index/items`).then(r => r.ok ? r.json() : []),
                 fetch(`http://localhost:5000/get-categories`).then(r => r.ok ? r.json() : {}),
-                fetch(`http://localhost:5000/get-comparison`).then(r => r.ok ? r.json() : [])
-            ]).then(([blocks, items, categories, comparison]) => {
+                fetch(`http://localhost:5000/get-Comparaison`).then(r => r.ok ? r.json() : [])
+            ]).then(([blocks, items, categories, Comparaison]) => {
                 dbBlocks = blocks;
                 dbItems = items;
                 dbCategories = categories;
-                dbComparison = comparison;
+                dbComparaison = Comparaison;
 
                 genererBoutonsCategories();
 
-                if (currentTab === 'blocks' || currentTab === 'items' || currentTab === 'comparison') {
+                if (currentTab === 'blocks' || currentTab === 'items' || currentTab === 'comparaison') {
                     switchTab(currentTab, false);
                 } else {
                     switchToCategory(currentTab, false);
@@ -413,7 +425,7 @@
             conteneur.innerHTML = '';
 
             // CAS 1 : Si on est sur le comparateur, on construit l'arborescence dynamique
-            if (currentTab === 'comparison') {
+            if (currentTab === 'comparaison') {
                 // Bouton TOUT AFFICHER
                 const btnTous = document.createElement('button');
                 btnTous.className = 'btn-outil';
@@ -430,7 +442,7 @@
 
                 // Extraction dynamique de tous les chemins de dossiers uniques
                 let dossiersTrouves = new Set();
-                dbComparison.forEach(e => {
+                dbComparaison.forEach(e => {
                     if (e.path) {
                         const parts = e.path.split('/');
                         if (parts.length > 1) {
@@ -500,7 +512,7 @@
 
             // Application du filtre "Manquants uniquement" (Sécurisé contre la casse)
             if (filterOnlyMissing) {
-                if (currentTab === 'comparison') {
+                if (currentTab === 'comparaison') {
                     filteredElements = filteredElements.filter(e => e.status && e.status.toLowerCase() === 'missing');
                 } else {
                     filteredElements = filteredElements.filter(e => !completedTasks.includes(e.id));
@@ -516,7 +528,7 @@
                 const btn = document.createElement('button');
                 btn.className = 'btn-catalogue';
                 
-                if (currentTab === 'comparison') {
+                if (currentTab === 'comparaison') {
                     btn.innerText = elem.path;
                     btn.style.fontSize = "0.8rem";
                     btn.style.wordBreak = "break-all";
@@ -531,15 +543,16 @@
                     if (completedTasks.includes(elem.id)) {
                         btn.classList.add('valide');
                     }
+                    
                 }
 
                 btn.onclick = () => {
-                    currentSelectedId = currentTab === 'comparison' ? elem.path : elem.id;
+                    currentSelectedId = currentTab === 'comparaison' ? elem.path : elem.id;
                     localStorage.setItem('mcp_currentSelectedId', currentSelectedId);
                     
                     if (currentTab === 'blocks' || currentTab === 'items') {
                         afficherDetails(elem);
-                    } else if (currentTab === 'comparison') {
+                    } else if (currentTab === 'comparaison') {
                         afficherDetailsComparaison(elem);
                     } else {
                         afficherDetailsCategorie(elem);
@@ -555,11 +568,11 @@
             localStorage.setItem('mcp_currentTab', type);
             if(resetSelection) resetSelectedElement();
 
-            if (type !== 'comparison') filtreDossierComparateur = null;
+            if (type !== 'comparaison') filtreDossierComparateur = null;
 
             document.getElementById('tab-blocks').classList.toggle('actif', type === 'blocks');
             document.getElementById('tab-items').classList.toggle('actif', type === 'items');
-            document.getElementById('tab-comparison').classList.toggle('actif', type === 'comparison');
+            document.getElementById('tab-comparaison').classList.toggle('actif', type === 'comparaison');
             document.getElementById('search').value = '';
             
             genererBoutonsCategories();
@@ -574,7 +587,7 @@
 
             document.getElementById('tab-blocks').classList.remove('actif');
             document.getElementById('tab-items').classList.remove('actif');
-            document.getElementById('tab-comparison').classList.remove('actif');
+            document.getElementById('tab-comparaison').classList.remove('actif');
             document.getElementById('search').value = '';
             
             genererBoutonsCategories();
@@ -592,13 +605,13 @@
             let listToSearch = [];
             if (currentTab === 'blocks') listToSearch = dbBlocks;
             else if (currentTab === 'items') listToSearch = dbItems;
-            else if (currentTab === 'comparison') listToSearch = dbComparison;
+            else if (currentTab === 'comparaison') listToSearch = dbComparaison;
             else listToSearch = dbCategories[currentTab] || [];
 
-            const target = listToSearch.find(e => (currentTab === 'comparison' ? e.path : e.id) === currentSelectedId);
+            const target = listToSearch.find(e => (currentTab === 'comparaison' ? e.path : e.id) === currentSelectedId);
             if (target) {
                 if (currentTab === 'blocks' || currentTab === 'items') afficherDetails(target);
-                else if (currentTab === 'comparison') afficherDetailsComparaison(target);
+                else if (currentTab === 'comparaison') afficherDetailsComparaison(target);
                 else afficherDetailsCategorie(target);
                 updateTaskButtonVisual();
             }
@@ -610,23 +623,24 @@
             let baseData = [];
             if(currentTab === 'blocks') baseData = dbBlocks;
             else if(currentTab === 'items') baseData = dbItems;
-            else if(currentTab === 'comparison') baseData = dbComparison;
+            else if(currentTab === 'comparaison') baseData = dbComparaison;
             else baseData = dbCategories[currentTab] || [];
 
             // 1. Filtrage intelligent par dossier racine et sous-dossier (Onglet Comparateur)
-            if (currentTab === 'comparison' && filtreDossierComparateur) {
+            if (currentTab === 'comparaison' && filtreDossierComparateur) {
                 baseData = baseData.filter(e => {
                     if (!e.path) return false;
                     const pathLoweCase = e.path.toLowerCase();
                     const filtreLowerCase = filtreDossierComparateur.toLowerCase();
                     // Le fichier doit commencer par le chemin du dossier sélectionné
                     return pathLoweCase.startsWith(filtreLowerCase + '/');
+                    genererListe(dbComparaison);
                 });
             }
 
             // 2. Application de la barre de recherche textuelle
             const filtres = baseData.filter(elem => {
-                if (currentTab === 'comparison') {
+                if (currentTab === 'comparaison') {
                     return elem.path && elem.path.toLowerCase().includes(query);
                 }
                 return elem.buttonName.toLowerCase().includes(query) || elem.id.toLowerCase().includes(query);
@@ -693,7 +707,7 @@
             }
 
             const modelSpan = document.getElementById('path-model');
-            if (elem.model && elem.model !== "Pack/assets/minecraft/models/None.json") {
+            if (elem.model && elem.model !== "Pack (Next)/assets/minecraft/models/None.json") {
                 modelSpan.innerText = elem.model;
                 modelSpan.className = "clickable-path";
                 modelSpan.onclick = () => {
@@ -785,7 +799,7 @@
                 badge.style.color = "var(--accent)";
             }
 
-            const vPath = `Vanilla/assets/${elem.path}`;
+            const vPath = `Pack (Next)/assets/${elem.path}`;
             document.getElementById('comp-vanilla-path').innerText = vPath;
 
             const grid = document.getElementById('preview-textures-grid');
@@ -804,7 +818,7 @@
                 const resId = `res-comp-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
                 card.innerHTML = `
                     <img src="${vPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
-                    <strong>Visuel Vanilla</strong><br>
+                    <strong>Visuel Pack (Next)</strong><br>
                     <span>${elem.filename}</span><br>
                     <span id="${resId}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
                 `;
@@ -821,7 +835,7 @@
         }
 
         function handleImgError(img) {
-            img.src = 'https://placehold.co/64x64/333/fff?text=Error';
+            img.src = 'imgerror.svg';
             const card = img.closest('.card-texture');
             if(card) card.classList.add('has-error');
         }
@@ -850,41 +864,78 @@
         function runIndexer(scriptType) {
             const btn = event.target;
             const textOrigine = btn.innerText;
-            btn.innerText = "⏳ Calcul...";
+            
+            // 1. Gestion spécifique de l'extraction de sons avec pop-up de version
+            let payload = {};
+            if (scriptType === 'sounds') {
+                const version = prompt("Entrez la version de Minecraft pour extraire les sons (ex: 1.18, 1.20) :", "1.18");
+                if (version === null) return; // Annulation du pop-up
+                if (version.trim() === "") {
+                    alert("Version invalide !");
+                    return;
+                }
+                payload.version = version.trim();
+            }
+
+            // 2. Gestion spécifique de la fusion "Indexer le Pack" (Séquentiel)
+            if (scriptType === 'pack_all') {
+                btn.innerText = "⏳ Indexation des Blocs...";
+                btn.disabled = true;
+
+                // On exécute séquentiellement : blocks -> items -> categories
+                fetch('http://localhost:5000/run/blocks', { method: 'POST' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'error') throw new Error("Blocs : " + data.message);
+                        btn.innerText = "⏳ Indexation des Items...";
+                        return fetch('http://localhost:5000/run/items', { method: 'POST' });
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'error') throw new Error("Items : " + data.message);
+                        btn.innerText = "⏳ Indexation des Catégories...";
+                        return fetch('http://localhost:5000/run/categories', { method: 'POST' });
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'error') throw new Error("Catégories : " + data.message);
+                        alert("🎉 Indexation du Pack terminée avec succès !");
+                        runUpdateFinish();
+                    })
+                    .catch(err => {
+                        alert("❌ " + err.message);
+                    })
+                    .finally(() => {
+                        btn.innerText = textOrigine;
+                        btn.disabled = false;
+                    });
+                return;
+            }
+
+            // 3. Comportement standard pour les autres scripts (sounds, Comparaison, extract)
+            btn.innerText = "⏳ Exécution...";
             btn.disabled = true;
 
-            fetch(`http://localhost:5000/run/${scriptType}`, { method: 'POST' })
+            fetch(`http://localhost:5000/run/${scriptType}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
                 .then(response => response.json())
                 .then(data => {
-                    alert(data.message);
                     if (data.status === 'success') {
-                        if (scriptType === 'categories') {
-                            fetch(`http://localhost:5000/get-categories`)
-                                .then(r => r.ok ? r.json() : {})
-                                .then(categories => {
-                                    dbCategories = categories;
-                                    genererBoutonsCategories();
-                                    if (currentTab !== 'blocks' && currentTab !== 'items' && currentTab !== 'comparison') {
-                                        genererListe(dbCategories[currentTab]);
-                                    }
-                                });
-                        } else if (scriptType === 'comparison') {
-                            fetch(`http://localhost:5000/get-comparison`)
-                                .then(r => r.ok ? r.json() : [])
-                                .then(compData => {
-                                    dbComparison = compData;
-                                    if(currentTab === 'comparison') filtrerElements();
-                                });
+                        alert("Opération terminée avec succès !");
+                        // Si on est en mode Comparaison, on appelle le chargeur spécifique
+                        if (scriptType === 'comparaison') {
+                            chargerRapportComparaison();
                         } else {
-                            fetch(`http://localhost:5000/get-index/${scriptType}`)
-                                .then(r => r.ok ? r.json() : [])
-                                .then(dataIndex => {
-                                    if(scriptType === 'blocks') dbBlocks = dataIndex;
-                                    else dbItems = dataIndex;
-                                    if(currentTab === scriptType) genererListe(dataIndex);
-                                });
+                            alert("Erreur : " + data.message);
                         }
                     }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert("Impossible de joindre le serveur.");
                 })
                 .finally(() => {
                     btn.innerText = textOrigine;
@@ -892,8 +943,75 @@
                 });
         }
 
+        function runUpdateFinish() {
+            console.log("Mise à jour de l'interface après indexation...");
+            // 1. Récupération des Blocs
+            fetch('http://localhost:5000/get-index/blocks')
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    dbBlocks = data;
+                    if (currentTab === 'blocks') genererListe(dbBlocks);
+                });
+
+            // 2. Récupération des Items
+            fetch('http://localhost:5000/get-index/items')
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    dbItems = data;
+                    if (currentTab === 'items') genererListe(dbItems);
+                });
+
+            // 3. Récupération des Catégories
+            fetch('http://localhost:5000/get-categories')
+                .then(r => r.ok ? r.json() : {})
+                .then(categories => {
+                    dbCategories = categories;
+                    genererBoutonsCategories(); // Recharge le menu latéral
+                    if (currentTab !== 'blocks' && currentTab !== 'items' && currentTab !== 'comparaison') {
+                        genererListe(dbCategories[currentTab]);
+                    }
+                });
+        }
+
+        function chargerRapportComparaison() {
+            console.log("Tentative de chargement du rapport...");
+
+            // Ajout d'un paramètre aléatoire (cache-busting) pour forcer le navigateur à ne pas utiliser une vieille version
+            const timestamp = new Date().getTime();
+
+            fetch(`http://localhost:5000/IndexData/Index_Comparaison_Missing.json?t=${timestamp}`)
+                .then(response => {
+                    if (!response.ok) throw new Error("Fichier introuvable");
+                    return response.json();
+                })
+                .then(data => {
+                    dbComparaison = data; 
+                    console.log("Données chargées, éléments :", dbComparaison.length);
+
+                    // Ajout de cette sécurité pour forcer le basculement en mode Comparaison
+                    currentTab = 'comparaison'; 
+
+                    // On appelle la fonction de rendu spécifique à la Comparaison
+                    if (typeof filtrerElements === 'function') {
+                        // 1. Mise à jour de la liste des items
+                        filtrerElements();
+
+                        // 2. IMPORTANT : Régénérer les boutons de catégories pour le comparateur
+                        if (currentTab === 'comparaison') {
+                            genererBoutonsCategories();
+                        }
+                    } else {
+                        console.error("La fonction filtrerElements est introuvable !");
+                    }
+                })
+                .catch(error => {
+                    console.error("Erreur :", error);
+                    alert("Erreur lors de l'affichage : " + error.message);
+                });
+        }
+
         function toggleTaskStatus() {
-            if (!currentSelectedId || currentTab === 'comparison') return;
+            if (!currentSelectedId || currentTab === 'comparaison') return;
 
             const index = completedTasks.indexOf(currentSelectedId);
             if (index > -1) {
@@ -914,7 +1032,7 @@
 
         function updateTaskButtonVisual() {
             const btn = document.getElementById('task-btn');
-            if (currentTab === 'comparison') {
+            if (currentTab === 'comparaison') {
                 btn.style.display = 'none';
                 return;
             }
