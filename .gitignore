@@ -1,15 +1,17 @@
 /backup
-/tools/MCPackIndexer/finish
-/tools/MCPackIndexer/Pack
+/tools/MCPackIndexer/Extract
+/tools/MCPackIndexer/Extract_ver
+/tools/MCPackIndexer/IndexData
+/tools/MCPackIndexer/Pack (Main)
+/tools/MCPackIndexer/Pack (Next)
+/tools/MCPackIndexer/Pack (Sound)
 /tools/MCSoundExtractor
 /tools/AutoST/modele_ia
 /tools/AutoST/stock_srt
 tools/python-manager-26.2.msix
 /tools/MCWiki
 /builds/Faithful_Legacy
-/builds/Mods/LavaSky/YarnDoc
 /builds/troll
 /builds/Mods/Dimersion/YarnDoc
-/tools/MCPackIndexer/Vanilla
-/tools/MCPackIndexer/ComparaPack
 /builds/MJ_DataPacks
+desktop.ini
