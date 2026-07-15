@@ -18,7 +18,8 @@ def run_script(script_type):
         'items': 'itemindexer.py',
         'sounds': 'soundextractor.py',
         'categories': 'categoryindexer.py',
-        'comparison': 'Full_Index_Folder.py'
+        'comparison': 'Full_Index_Folder.py',
+        'extract': 'extract.py'
     }
     
     if script_type not in scripts:

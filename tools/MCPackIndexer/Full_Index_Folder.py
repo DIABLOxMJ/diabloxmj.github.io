@@ -3,7 +3,7 @@ import json
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 VANILLA_DIR = os.path.join(BASE_DIR, "Vanilla", "assets")
-MYPACK_DIR = os.path.join(BASE_DIR, "ComparaPack", "assets") # On garde "Pack" pour correspondre à ton dossier actuel
+MYPACK_DIR = os.path.join(BASE_DIR, "Pack", "assets") # On garde "Pack" pour correspondre à ton dossier actuel
 OUTPUT_DIR = os.path.join(BASE_DIR, "finish")
 
 def scan_assets_folder(target_dir):
