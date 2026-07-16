@@ -62,7 +62,7 @@ function initialiserTelechargements(containerId, packIdFilter = null, basePath =
                 Banner.className = 'border border-black w-full h-[100px] object-cover shadow-sm bg-gray-200';
 
                 const VarList = document.createElement('div');
-                const hauteurClass = packIdFilter ? 'h-[435px]' : 'h-[300px]';
+                const hauteurClass = packIdFilter ? 'h-[460px]' : 'h-[400px]';
                 VarList.className = `bg-white border border-gray-400 shadow-inner w-full ${hauteurClass} overflow-y-auto scroll-list flex flex-col mb-3 text-black`;
                 
                 // Extraction de la liste des versions

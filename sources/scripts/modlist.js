@@ -25,7 +25,7 @@ function initialiserPageMods(containerMenuId, containerMainId, versionTextId, ba
             menuContainer.innerHTML = '';
             
             const listContainer = document.createElement('div');
-            listContainer.className = 'bg-white border border-gray-400 shadow-inner w-full h-[635px] overflow-y-auto scroll-list flex flex-col mb-3 text-black';
+            listContainer.className = 'bg-white border border-gray-400 shadow-inner w-full h-[700px] overflow-y-auto scroll-list flex flex-col mb-3 text-black';
             menuContainer.appendChild(listContainer);
 
             data.forEach((item, index) => {

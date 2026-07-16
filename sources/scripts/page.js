@@ -4,8 +4,8 @@ function injecterHeader(cheminRacine) {
     if (!headerContainer) return;
 
     headerContainer.innerHTML = `
-        <header class="bg-[#d4d4d4]/25 py-6 backdrop-blur-sm border-gray-300 text-white text-ombre">
-            <nav class="flex justify-center items-center space-x-2 text-2xl font-bold uppercase tracking-wide">
+        <header class="bg-[#d4d4d4]/25 py-2 backdrop-blur-sm border-gray-300 text-white text-ombre">
+            <nav class="flex justify-center items-center space-x-2 text-3xl uppercase tracking-wide">
                 <a href="../${cheminRacine}index.html" class="hover:text-gray-300 underline decoration-2 underline-offset-4">ACCUEIL</a>
                 <span class="px-2">|</span>
                 <a href="../${cheminRacine}pages/faithful.html" class="hover:text-gray-300 underline decoration-2 underline-offset-4">FAITHFUL</a>
@@ -26,7 +26,7 @@ function injecterFooter(cheminRacine) {
     if (!FooterContainer) return;
 
     FooterContainer.innerHTML = `
-        <footer class="bg-[#b3b3b3]/25 backdrop-blur-sm py-5 px-10 text-xl font-bold text-white text-ombre flex flex-col sm:flex-row justify-between items-center gap-4">
+        <footer class="bg-[#b3b3b3]/25 backdrop-blur-sm py-2 px-10 text-xl text-white text-ombre flex flex-col sm:flex-row justify-between items-center gap-4">
             <p>2026 © DIABLOxMJ. Tous droits réservés.</p>
             <div class="flex space-x-6">
                 <a href="https://bio.link/diabloxmj" class="hover:text-gray-300 underline decoration-2 underline-offset-4">Réseau</a>

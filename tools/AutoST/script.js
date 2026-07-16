@@ -104,10 +104,13 @@ function traiterFichierZip(file) {
 // --- ÉTAPE 1 : AJOUT DE LA VIDÉO ---
 function handleVideo(file) {
     currentVideoFile = file;
-    const fileUrl = URL.createObjectURL(file);
-    videoPlayer.src = fileUrl;
-    videoContainer.style.display = 'block';
+    appTitle.innerText = `AutoST - ${file.name}`;
+    
+    const videoURL = URL.createObjectURL(file);
+    videoPlayer.src = videoURL;
+    
     dropZone.style.display = 'none';
+    videoContainer.style.display = 'block';
     
     // --- NOUVEAU : DETECTION DU FORMAT AUDIO SEUL ---
     // Si le fichier est un MP3 ou un WAV, on applique le style surélevé
@@ -117,15 +120,28 @@ function handleVideo(file) {
     } else {
         videoContainer.classList.remove('format-audio-seul');
     }
+
+    // Réinitialisation des sous-titres et messages
+    subtitlesFr = [];
+    subtitlesEn = [];
+    subtitlesDisplay.innerHTML = '';
+
+    // Message de statut initial
+    statusMessage.innerText = `Fichier chargée : ${file.name}. Prêt pour la génération IA ou le chargement d'un pack ZIP.`;
+    statusMessage.className = '';
     
-    // Activer les boutons
-    if (subtitlesFr.length > 0) {
-        downloadBtn.style.display = 'inline-block';
-        saveProjectBtn.style.display = 'inline-block';
-    }
+    // Reset visuel des boutons de sauvegarde/téléchargement
+    downloadBtn.style.display = 'none';
+    saveProjectBtn.style.display = 'none';
     
-    statusMessage.innerText = `Fichier chargé : ${file.name}`;
-    appTitle.innerText = file.name;
+    languageSelect.style.display = 'none'; // Masquer le sélecteur de langue car il n'y a plus de pistes chargées
+    
+    // Allumage du bouton de génération IA
+    generateIaBtn.disabled = false;
+    generateIaBtn.style.display = 'inline-block';
+    generateIaBtn.innerText = "🚀 Lancer la génération IA";
+    
+    videoPlayer.load();
 }
 
 // --- ÉTAPE 2 - OPTION A : LANCEMENT DE L'IA ---
