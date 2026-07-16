@@ -1,4 +1,4 @@
-<img src="sources/logo.png" alt="logo.png" align="right" height="256px">
+<img src="sources/files/logo.png" alt="logo.png" align="right" height="256px">
 <div align="center">
   <h1>MCPacks</h1>
   <h3>Site and package directory.</h3>
