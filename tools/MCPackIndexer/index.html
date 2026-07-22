@@ -295,11 +295,16 @@
 <body class="hide-errors">
 
     <div id="cadre-outils" class="cadre">
-        <h2>Outils Index</h2>
-        <button class="btn-outil btn-run-script" style="background-color: #4caf50;" onclick="runIndexer('pack_all')">⚡ Indexer le Pack</button>
-        <button class="btn-outil btn-run-script" style="background-color: #7b1fa2;" onclick="runIndexer('sounds')">🎵 Extraire les Sons</button>
-        <button class="btn-outil btn-run-script" style="background-color: #ff9800;" onclick="runIndexer('comparaison')">🔍 Lancer la Comparaison</button>
-        <button class="btn-outil btn-run-script" style="background-color: #e91e63;" onclick="runIndexer('extract')">📦 Extraire les fichiers manquants</button>
+        <div class="section-title-container" style="margin-bottom: 8px;">
+            <h2 style="margin-bottom: 0; border-bottom: none;">Outils Index</h2>
+            <button class="btn-toggle-errors" onclick="toggleOutilsIndex()" id="btn-toggle-outils">Masquer</button>
+        </div>
+        <div id="conteneur-outils-scripts">
+            <button class="btn-outil btn-run-script" style="background-color: #4caf50;" onclick="runIndexer('pack_all')">⚡ Indexer le Pack</button>
+            <button class="btn-outil btn-run-script" style="background-color: #7b1fa2;" onclick="runIndexer('sounds')">🎵 Extraire les Sons</button>
+            <button class="btn-outil btn-run-script" style="background-color: #ff9800;" onclick="runIndexer('comparaison')">🔍 Lancer la Comparaison</button>
+            <button class="btn-outil btn-run-script" style="background-color: #e91e63;" onclick="runIndexer('extract')">📦 Extraire les fichiers manquants</button>
+        </div>
         <h2>Catégories</h2>
         <div id="liste-categories-scroll" class="liste-scroll"></div>
     </div>
@@ -409,6 +414,18 @@
             });
         };
 
+        function toggleOutilsIndex() {
+            const conteneur = document.getElementById('conteneur-outils-scripts');
+            const btn = document.getElementById('btn-toggle-outils');
+            if (conteneur.style.display === 'none') {
+                conteneur.style.display = 'block';
+                btn.innerText = 'Masquer';
+            } else {
+                conteneur.style.display = 'none';
+                btn.innerText = 'Afficher';
+            }
+        }
+
         function toggleFilterMissing() {
             filterOnlyMissing = !filterOnlyMissing;
             localStorage.setItem('mcp_filterOnlyMissing', filterOnlyMissing);
@@ -457,31 +474,75 @@
 
                 const listeDossiersTries = Array.from(dossiersTrouves).sort();
 
+                // Variable globale à ajouter en haut avec tes autres let :
+                let dossiersFermes = JSON.parse(localStorage.getItem('mcp_dossiersFermes')) || [];
+
+                // Dans la boucle de génération :
                 listeDossiersTries.forEach(cheminDossier => {
                     const niveau = cheminDossier.split('/').length - 1; 
                     const nomDossier = cheminDossier.split('/').pop();   
-                    
+
+                    // Vérifier si un sous-dossier direct existe plus bas dans la liste
+                    const aDesEnfants = listeDossiersTries.some(d => d.startsWith(cheminDossier + '/') && d.split('/').length === cheminDossier.split('/').length + 1);
+                
+                    // Si le dossier parent direct est fermé, on masque ce sous-dossier
+                    const estMasqueParUnAncetre = dossiersFermes.some(dossierFerme => {
+                        // Si le chemin commence par un dossier fermé suivi d'un slash '/'
+                        return cheminDossier.startsWith(dossierFerme + '/');
+                    });
+
+                    if (estMasqueParUnAncetre) {
+                        return; // Masque ce sous-dossier ainsi que TOUTE sa descendance
+                    }
+                
                     const btn = document.createElement('button');
                     btn.className = 'btn-outil';
-                    btn.style.width = '100%'; // Reste toujours calé à 100% du bord droit
-                    
+                    btn.style.width = '100%';
+                    btn.style.display = 'flex';
+                    btn.style.justifyContent = 'space-between';
+                    btn.style.alignItems = 'center';
+                
+                    const spanTexte = document.createElement('span');
+                    spanTexte.style.overflow = 'hidden';
+                    spanTexte.style.textOverflow = 'ellipsis';
+                
                     if (niveau === 0) {
                         btn.classList.add('btn-dossier-racine');
-                        btn.innerText = `📁 ${nomDossier}`;
-                        btn.style.paddingLeft = '12px';
+                        spanTexte.innerText = `📁 ${nomDossier}`;
                     } else {
                         btn.classList.add('btn-sous-dossier');
-                        // Décalage propre du texte vers la droite à l'intérieur du bouton
-                        btn.style.paddingLeft = `${(niveau * 24) + 12}px`;
-                        btn.innerText = `└ 📂 ${nomDossier}`;
+                        btn.style.paddingLeft = `${(niveau * 16) + 8}px`;
+                        spanTexte.innerText = `└ 📂 ${nomDossier}`;
                     }
+                    btn.appendChild(spanTexte);
+                
+                    // Ajout du bouton fléché ▲▼ si le dossier possède des enfants
+                    if (aDesEnfants) {
+                        const estFerme = dossiersFermes.includes(cheminDossier);
+                        const btnToggle = document.createElement('span');
+                        btnToggle.innerText = estFerme ? ' ( ▼ Masquer ) ' : ' ( ▲ Afficher ) ';
+                        btnToggle.style.padding = '0 4px';
+                        btnToggle.style.cursor = 'pointer';
+                        btnToggle.style.fontSize = '0.75rem';
 
-                    // Surligner le dossier actuellement sélectionné
+                        btnToggle.onclick = (e) => {
+                            e.stopPropagation(); // Évite de déclencher le clic du dossier
+                            if (estFerme) {
+                                dossiersFermes = dossiersFermes.filter(d => d !== cheminDossier);
+                            } else {
+                                dossiersFermes.push(cheminDossier);
+                            }
+                            localStorage.setItem('mcp_dossiersFermes', JSON.stringify(dossiersFermes));
+                            genererBoutonsCategories();
+                        };
+                        btn.appendChild(btnToggle);
+                    }
+                
                     if (filtreDossierComparateur === cheminDossier) {
                         btn.style.backgroundColor = 'var(--bg-bouton-hover)';
                         btn.style.fontWeight = 'bold';
                     }
-
+                
                     btn.onclick = () => {
                         filtreDossierComparateur = cheminDossier;
                         genererBoutonsCategories(); 
@@ -799,33 +860,76 @@
                 badge.style.color = "var(--accent)";
             }
 
-            const vPath = `Pack (Next)/assets/${elem.path}`;
-            document.getElementById('comp-vanilla-path').innerText = vPath;
-
             const grid = document.getElementById('preview-textures-grid');
+            grid.classList.remove('mode-texte'); // On réactive la grille pour mettre les deux cartes côte à côte
             grid.innerHTML = '';
-
-            const gridTextures = document.getElementById('preview-textures-grid');
-            // On ajoute la classe pour casser la grille
-            gridTextures.classList.add('mode-texte'); 
-            gridTextures.innerHTML = `<p style="color: #aaa; font-style: italic;">Cet élément est un fichier de structure (.json, .mcmeta). Affichage du texte ci-dessous :</p>`;
+            
+            // 0. Chemin du Pack (Download) / Ton Pack personnalisé
+            const downloadPath = `Pack (Download)/assets/${elem.path}`;
+            // 1. Chemin du Pack (Main) / Ton Pack personnalisé
+            const mainPath = `Pack (Main)/assets/${elem.path}`;
+            // 2. Chemin du Pack (Next) / Vanilla
+            const nextPath = `Pack (Next)/assets/${elem.path}`;
+            // 3. Chemin du Pack (Default) / Ton Pack personnalisé
+            const defaultPath = `Pack (Default)/assets/${elem.path}`;
 
             if (elem.filename.endsWith('.png')) {
-                const card = document.createElement('div');
-                card.className = 'card-texture';
-                card.onclick = () => systemOpen(vPath, 'folder');
-                
-                const resId = `res-comp-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
-                card.innerHTML = `
-                    <img src="${vPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
-                    <strong>Visuel Pack (Next)</strong><br>
+
+                // Carte 0 : Pack (Downloaded)
+                const cardDownload = document.createElement('div');
+                cardDownload.className = 'card-texture';
+                cardDownload.onclick = () => systemOpen(downloadPath, 'folder');
+                const resIdDownload = `res-download-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
+                cardDownload.innerHTML = `
+                    <img src="${downloadPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdDownload}')">
+                    <strong>Pack (DL)</strong><br>
                     <span>${elem.filename}</span><br>
-                    <span id="${resId}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
+                    <span id="${resIdDownload}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
                 `;
-                grid.appendChild(card);
+                grid.appendChild(cardDownload);
+
+                // Carte 1 : Pack (Main)
+                const cardMain = document.createElement('div');
+                cardMain.className = 'card-texture';
+                cardMain.onclick = () => systemOpen(mainPath, 'folder');
+                const resIdMain = `res-main-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
+                cardMain.innerHTML = `
+                    <img src="${mainPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdMain}')">
+                    <strong>Pack (Main)</strong><br>
+                    <span>${elem.filename}</span><br>
+                    <span id="${resIdMain}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
+                `;
+                grid.appendChild(cardMain);
+
+                // Carte 2 : Pack (Next)
+                const cardNext = document.createElement('div');
+                cardNext.className = 'card-texture';
+                cardNext.onclick = () => systemOpen(nextPath, 'folder');
+                const resIdNext = `res-next-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
+                cardNext.innerHTML = `
+                    <img src="${nextPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdNext}')">
+                    <strong>Pack (Next)</strong><br>
+                    <span>${elem.filename}</span><br>
+                    <span id="${resIdNext}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
+                `;
+                grid.appendChild(cardNext);
+
+                // Carte 3 : Pack (Default)
+                const cardDefault = document.createElement('div');
+                cardDefault.className = 'card-texture';
+                cardDefault.onclick = () => systemOpen(defaultPath, 'folder');
+                const resIdDefault = `res-default-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
+                cardDefault.innerHTML = `
+                    <img src="${defaultPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdDefault}')">
+                    <strong>Pack (Default)</strong><br>
+                    <span>${elem.filename}</span><br>
+                    <span id="${resIdDefault}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
+                `;
+                grid.appendChild(cardDefault);
             } else {
+                grid.classList.add('mode-texte');
                 grid.innerHTML = '<p style="color: #aaa; font-style: italic;">Cet élément est un fichier de structure (.json, .mcmeta). Affichage du texte ci-dessous :</p>';
-                chargerFichierDansVisualiseur(vPath);
+                chargerFichierDansVisualiseur(nextPath);
             }
         }
 
