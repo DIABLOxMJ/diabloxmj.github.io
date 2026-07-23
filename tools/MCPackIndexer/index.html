@@ -41,8 +41,8 @@
         }
 
         #cadre-outils { width: 20%; background-color: #22222b; }
-        #cadre-liste { width: 35%; background-color: var(--bg-cadre); }
-        #cadre-aperçu { width: 45%; background-color: #2d2d38; border-right: none; overflow-y: auto; }
+        #cadre-liste { width: 30%; background-color: var(--bg-cadre); }
+        #cadre-aperçu { width: 55%; background-color: #2d2d38; border-right: none; overflow-y: auto; }
 
         h2 {
             font-size: 1.2rem;
@@ -103,8 +103,7 @@
         .btn-catalogue.comp-present.comp-selected,
         .btn-catalogue.comp-missing.comp-selected {
             border-left: 5px solid #2196f3 !important; /* Barre bleue */
-            background-color: #1a2738 !important;     /* Fond bleu très sombre */
-            box-shadow: inset 0 0 10px rgba(33, 150, 243, 0.3) !important;
+            background-color: #132d50 !important;     /* Fond bleu très sombre */
         }
 
         .btn-outil:hover, .btn-catalogue:hover { background-color: var(--bg-bouton-hover); }
@@ -216,7 +215,7 @@
 
         .preview-header { margin-bottom: 20px; }
         .preview-section { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 6px; margin-bottom: 15px; }
-        .grid-textures { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 10px; }
+        .grid-textures { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 15px; margin-top: 10px; }
 
         /* Quand le conteneur de textures passe en mode texte ou comparateur, on désactive la grille */
         .grid-textures.mode-texte {
@@ -242,8 +241,8 @@
         .card-texture:hover { border-color: var(--accent); background: #25252d; }
         
         .card-texture img {
-            width: 128px;
-            height: 128px;
+            width: 256px;
+            height: 256px;
             object-fit: contain;
             image-rendering: pixelated;
             display: block;
@@ -529,7 +528,7 @@
                     if (aDesEnfants) {
                         const estFerme = dossiersFermes.includes(cheminDossier);
                         const btnToggle = document.createElement('span');
-                        btnToggle.innerText = estFerme ? ' ( ▼ Masquer ) ' : ' ( ▲ Afficher ) ';
+                        btnToggle.innerText = estFerme ? ' ( ▲ Masquer ) ' : ' ( ▼ Afficher ) ';
                         btnToggle.style.padding = '0 4px';
                         btnToggle.style.cursor = 'pointer';
                         btnToggle.style.fontSize = '0.75rem';
@@ -892,7 +891,7 @@
             grid.innerHTML = '';
             
             // 0. Chemin du Pack (Download) / Ton Pack personnalisé
-            const downloadPath = `Pack (Download)/assets/${elem.path}`;
+            // const downloadPath = `Pack (Download)/assets/${elem.path}`;
             // 1. Chemin du Pack (Main) / Ton Pack personnalisé
             const mainPath = `Pack (Main)/assets/${elem.path}`;
             // 2. Chemin du Pack (Next) / Vanilla
@@ -902,18 +901,18 @@
 
             if (elem.filename.endsWith('.png')) {
 
-                // Carte 0 : Pack (Downloaded)
-                const cardDownload = document.createElement('div');
-                cardDownload.className = 'card-texture';
-                cardDownload.onclick = () => systemOpen(downloadPath, 'folder');
-                const resIdDownload = `res-download-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
-                cardDownload.innerHTML = `
-                    <img src="${downloadPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdDownload}')">
-                    <strong>Pack (DL)</strong><br>
-                    <span>${elem.filename}</span><br>
-                    <span id="${resIdDownload}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
-                `;
-                grid.appendChild(cardDownload);
+            //    // Carte 0 : Pack (Downloaded)
+            //    const cardDownload = document.createElement('div');
+            //    cardDownload.className = 'card-texture';
+            //    cardDownload.onclick = () => systemOpen(downloadPath, 'folder');
+            //    const resIdDownload = `res-download-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
+            //    cardDownload.innerHTML = `
+            //        <img src="${downloadPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdDownload}')">
+            //        <strong>Pack (DL)</strong><br>
+            //        <span>${elem.filename}</span><br>
+            //        <span id="${resIdDownload}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
+            //    `;
+            //    grid.appendChild(cardDownload);
 
                 // Carte 1 : Pack (Main)
                 const cardMain = document.createElement('div');
