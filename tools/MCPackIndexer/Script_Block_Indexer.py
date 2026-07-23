@@ -16,14 +16,12 @@ def find_textures_in_model(model_name):
     model_path = os.path.join(MODELS_DIR, f"{model_name}.json")
     
     if not os.path.exists(model_path):
-        print(f"  [INFO] Modèle parent introuvable : {model_name}.json (Peut être un modèle de base du jeu non inclus)")
         return {}
 
     with open(model_path, 'r', encoding='utf-8') as f:
         try:
             data = json.load(f)
         except json.JSONDecodeError:
-            print(f"  [ERROR] Impossible de lire le JSON du modèle : {model_name}.json")
             return {}
 
     textures = {}
@@ -38,9 +36,19 @@ def find_textures_in_model(model_name):
                 
     return textures
 
+def extract_models_from_variant(variant_data):
+    """Extrait tous les modèles d'une variante (soit un dictionnaire, soit une liste de dictionnaires)"""
+    models = []
+    if isinstance(variant_data, list):
+        for item in variant_data:
+            if isinstance(item, dict) and "model" in item:
+                models.append(item["model"])
+    elif isinstance(variant_data, dict) and "model" in variant_data:
+        models.append(variant_data["model"])
+    return models
+
 def index_blocks():
     print("\n=== DÉBUT DE L'INDEXATION DES BLOCS ===")
-    print(f"[LOG] Vérification du dossier Pack : {BLOCKSTATES_DIR}")
     
     if not os.path.exists(BLOCKSTATES_DIR):
         print(f"[ERROR] Le dossier {BLOCKSTATES_DIR} n'existe pas !")
@@ -50,7 +58,6 @@ def index_blocks():
     index_result = []
     
     files = [f for f in os.listdir(BLOCKSTATES_DIR) if f.endswith(".json")]
-    print(f"[LOG] {len(files)} fichiers trouvés dans blockstates. Début de l'analyse...")
 
     for filename in files:
         block_id = filename.replace(".json", "")
@@ -62,41 +69,45 @@ def index_blocks():
             with open(blockstate_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
         except Exception as e:
-            print(f"\n  [ERROR] Erreur de lecture sur le fichier {filename} : {e}")
+            print(f"\n  [ERROR] Erreur de lecture : {e}")
             continue
 
-        model_ref = None
+        raw_models = []
+
         try:
-            if "variants" in data:
-                if not data["variants"]: # Si le dictionnaire de variantes est vide
-                    print(" [Passé: variantes vides]")
-                    continue
-                first_variant = list(data["variants"].values())[0]
-                if isinstance(first_variant, list):
-                    if len(first_variant) > 0:
-                        model_ref = first_variant[0].get("model")
-                else:
-                    model_ref = first_variant.get("model")
-            elif "multipart" in data:
-                if len(data["multipart"]) > 0 and "apply" in data["multipart"][0]:
-                    apply_data = data["multipart"][0]["apply"]
-                    if isinstance(apply_data, list) and len(apply_data) > 0:
-                        model_ref = apply_data[0].get("model")
-                    else:
-                        model_ref = apply_data.get("model")
+            # 1. Analyse des "variants"
+            if "variants" in data and isinstance(data["variants"], dict):
+                for variant_name, variant_content in data["variants"].items():
+                    raw_models.extend(extract_models_from_variant(variant_content))
+            
+            # 2. Analyse des "multipart"
+            if "multipart" in data and isinstance(data["multipart"], list):
+                for part in data["multipart"]:
+                    if isinstance(part, dict) and "apply" in part:
+                        raw_models.extend(extract_models_from_variant(part["apply"]))
+
         except Exception as e:
-            print(f"\n  [ERROR] Structure de blockstate imprévue pour {filename} : {e}")
+            print(f"\n  [ERROR] Structure imprévue pour {filename} : {e}")
             continue
 
-        textures = {}
-        if model_ref:
-            try:
-                textures = find_textures_in_model(model_ref)
-            except Exception as e:
-                print(f"\n  [ERROR] Erreur lors de la recherche des textures pour le modèle {model_ref} : {e}")
+        # Suppression des doublons tout en gardant l'ordre original
+        unique_models = list(dict.fromkeys(raw_models))
 
+        # Récupération de toutes les textures combinées de tous les modèles
+        combined_textures = {}
+        model_paths = []
+
+        for m_ref in unique_models:
+            clean_m = m_ref.split(":")[-1] if ":" in m_ref else m_ref
+            model_paths.append(f"{PACK_DIR_SOURCE}/assets/minecraft/models/{clean_m}.json")
+            
+            # Extraction des textures pour ce modèle
+            tex_found = find_textures_in_model(m_ref)
+            combined_textures.update(tex_found)
+
+        # Nettoyage des chemins de textures
         clean_textures = {}
-        for key, val in textures.items():
+        for key, val in combined_textures.items():
             if val.startswith("#"):
                 clean_textures[key] = val
             else:
@@ -107,11 +118,11 @@ def index_blocks():
             "id": block_id,
             "buttonName": block_id.replace("_", " ").title(),
             "blockstate": f"{PACK_DIR_SOURCE}/assets/minecraft/blockstates/{filename}",
-            "model": f"{PACK_DIR_SOURCE}/assets/minecraft/models/{model_ref.split(':')[-1]}.json" if model_ref else None,
+            "models": model_paths,  # Nouvelle liste de chemins de modèles
             "textures": clean_textures
         }
         index_result.append(block_entry)
-        print(" OK") # Tout s'est bien passé pour ce bloc
+        print(" OK")
 
     output_path = os.path.join(OUTPUT_DIR, "Index_Details_Blocks.json")
     with open(output_path, 'w', encoding='utf-8') as f:

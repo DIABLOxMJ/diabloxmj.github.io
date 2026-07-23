@@ -15,6 +15,7 @@
             --accent: #4caf50;
             --rouge-manquant: #ef5350;
             --fond-manquant: #3d2323;
+            --img-size: 256px; /* Taille dynamique pilotable via JS */
         }
 
         * {
@@ -64,22 +65,12 @@
             transition: background 0.2s;
             font-size: 0.9rem;
             margin-bottom: 4px;
-
-            /* Sécurité anti-débordement Flexbox */
             box-sizing: border-box !important;
-            display: flex !important;          /* Utilise flex pour aligner icône + texte verticalement */
-            align-items: center;               /* Centre le texte verticalement */
+            display: flex !important;
+            align-items: center;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
-        }
-
-        /* On s'assure que le texte interne respecte aussi les points de suspension (...) */
-        .btn-outil {
-            display: block !important; /* Requis pour que le text-overflow: ellipsis fonctionne sur un bouton */
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .btn-outil, .btn-catalogue {
@@ -98,12 +89,11 @@
             transition: background 0.2s, transform 0.1s;
         }
 
-        /* En combinant les classes, la spécificité gagne à coup sûr sur comp-present et comp-missing */
         .btn-catalogue.comp-selected,
         .btn-catalogue.comp-present.comp-selected,
         .btn-catalogue.comp-missing.comp-selected {
-            border-left: 5px solid #2196f3 !important; /* Barre bleue */
-            background-color: #132d50 !important;     /* Fond bleu très sombre */
+            border-left: 5px solid #2196f3 !important;
+            background-color: #132d50 !important;
         }
 
         .btn-outil:hover, .btn-catalogue:hover { background-color: var(--bg-bouton-hover); }
@@ -111,7 +101,6 @@
         .btn-run-script { background-color: var(--accent); font-weight: bold; margin-bottom: 10px; }
         .btn-run-script:hover { background-color: #45a049; }
 
-        /* Styles pour l'arborescence des sous-dossiers */
         .btn-dossier-racine {
             border-left: 4px solid #9c27b0 !important;
             font-weight: bold;
@@ -125,23 +114,23 @@
 
         .btn-catalogue {
             display: flex;
-            align-items: center; /* Aligne verticalement l'image et le texte */
-            gap: 8px;           /* Espace entre l'icône et le texte */
+            align-items: center;
+            gap: 8px;
             text-align: left;
         }
         
         .btn-icon {
-            width: 24px;       /* Taille fixe de ton icône */
+            width: 24px;
             height: 24px;
             object-fit: contain;
-            flex-shrink: 0;    /* Empêche l'image de se compresser */
+            flex-shrink: 0;
         }
         
         .liste-scroll { flex: 1; overflow-y: auto; padding-right: 5px; }
         #liste-categories-scroll {
             flex: 1;
-            overflow-y: auto;   /* Autorise le scroll vertical */
-            overflow-x: hidden;  /* Interdit STRICTEMENT le scroll horizontal */
+            overflow-y: auto;
+            overflow-x: hidden;
             padding-right: 5px;
         }
         .search-container { display: flex; gap: 5px; margin-bottom: 15px; }
@@ -202,7 +191,13 @@
             align-items: center;
             margin-bottom: 10px;
         }
-        .btn-toggle-errors {
+        
+        .title-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-toggle-errors, .btn-toggle-zoom {
             background: var(--bg-bouton);
             color: var(--texte);
             border: 1px solid #555;
@@ -211,20 +206,24 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .btn-toggle-errors:hover { background: var(--bg-bouton-hover); }
+        .btn-toggle-errors:hover, .btn-toggle-zoom:hover { background: var(--bg-bouton-hover); }
 
         .preview-header { margin-bottom: 20px; }
         .preview-section { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 6px; margin-bottom: 15px; }
-        .grid-textures { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 15px; margin-top: 10px; }
+        .grid-textures { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(calc(var(--img-size) + 10px), 1fr)); 
+            gap: 15px; 
+            margin-top: 10px; 
+        }
 
-        /* Quand le conteneur de textures passe en mode texte ou comparateur, on désactive la grille */
         .grid-textures.mode-texte {
-            display: block !important; /* Annule le mode grid et passe en affichage bloc normal */
+            display: block !important;
         }
 
         .grid-textures.mode-texte p {
             width: 100% !important;
-            white-space: normal !important; /* Permet au texte de revenir à la ligne naturellement */
+            white-space: normal !important;
             margin: 0;
             padding: 5px 0;
         }
@@ -241,8 +240,8 @@
         .card-texture:hover { border-color: var(--accent); background: #25252d; }
         
         .card-texture img {
-            width: 256px;
-            height: 256px;
+            width: var(--img-size);
+            height: var(--img-size);
             object-fit: contain;
             image-rendering: pixelated;
             display: block;
@@ -250,6 +249,7 @@
             background-image: linear-gradient(45deg, #333 25%, transparent 25%), linear-gradient(-45deg, #333 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #333 75%), linear-gradient(-45deg, transparent 75%, #333 75%);
             background-size: 16px 16px;
             background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+            transition: width 0.2s, height 0.2s;
         }
         .card-texture span { font-size: 0.75rem; color: #aaa; word-break: break-all; }
 
@@ -325,7 +325,7 @@
             <button id="tab-comparaison" class="onglet-btn" onclick="switchTab('comparaison')">⚠️ Comparateur</button>
         </div>
         <div class="search-container">
-            <input type="text" id="search" class="search-bar" placeholder="Rechercher un élément..." oninput="filtrerElements()">
+            <input type="text" id="search" class="search-bar" placeholder="Rechercher un élément..." oninput="onSearchInput()">
             <button id="btn-filter-missing" class="btn-filter-toggle" onclick="toggleFilterMissing()" title="Masquer les éléments terminés / présents">👁️ Manquants</button>
         </div>
         <div id="liste-elements" class="liste-scroll">
@@ -362,7 +362,10 @@
             <div class="preview-section">
                 <div class="section-title-container">
                     <h3>Textures / Contenu</h3>
-                    <button id="toggle-err-btn" class="btn-toggle-errors" onclick="toggleErrorsVisibility()">Afficher les erreurs</button>
+                    <div class="title-actions">
+                        <button id="btn-zoom" class="btn-toggle-zoom" onclick="toggleZoom()">🔍 Zoom: 256px</button>
+                        <button id="toggle-err-btn" class="btn-toggle-errors" onclick="toggleErrorsVisibility()">Afficher les erreurs</button>
+                    </div>
                 </div>
                 <div id="preview-textures-grid" class="grid-textures"></div>
             </div>
@@ -379,6 +382,11 @@
         let currentSelectedId = localStorage.getItem('mcp_currentSelectedId') || null;
         let filterOnlyMissing = JSON.parse(localStorage.getItem('mcp_filterOnlyMissing')) || false;
         
+        // --- NOUVEAUX STOCKS DANS LOCALSTORAGE ---
+        let imageSize = parseInt(localStorage.getItem('mcp_imageSize')) || 256;
+        let filterComparatorFolder = localStorage.getItem('mcp_filterComparatorFolder') || null;
+        let savedSearchQuery = localStorage.getItem('mcp_searchQuery') || '';
+
         let dbBlocks = [];
         let dbItems = [];
         let dbCategories = {};
@@ -386,14 +394,18 @@
 
         let completedTasks = JSON.parse(localStorage.getItem('mcp_completedTasks')) || [];
 
-        // Liste fixe des grands dossiers racines de Minecraft pour le filtre du comparateur
         const dossiersRacinesMinecraft = [
             "blockstates", "font", "lang", "models", "particles", "sounds", "texts", "textures"
         ];
-        
-        let filtreDossierComparateur = null; // Stocke le sous-dossier sélectionné pour le comparateur
 
         window.onload = function() {
+            // Appliquer la taille d'image sauvegardée
+            applyImageSize(imageSize);
+
+            // Restaurer le champ de recherche
+            const searchInput = document.getElementById('search');
+            if (searchInput) searchInput.value = savedSearchQuery;
+
             const btnFilter = document.getElementById('btn-filter-missing');
             if(filterOnlyMissing) btnFilter.classList.add('active');
 
@@ -422,14 +434,41 @@
             });
         };
 
+        // --- FONCTIONS ZOOM & TAILLE IMAGE ---
+        function toggleZoom() {
+            imageSize = (imageSize === 256) ? 128 : 256;
+            localStorage.setItem('mcp_imageSize', imageSize);
+            applyImageSize(imageSize);
+        }
+
+        function applyImageSize(size) {
+            document.documentElement.style.setProperty('--img-size', `${size}px`);
+            const btn = document.getElementById('btn-zoom');
+            if (btn) btn.innerText = `🔍 Zoom: ${size}px`;
+        }
+
+        // --- GESTION RECHERCHE DE TEXTE ET CACHE ---
+        function onSearchInput() {
+            const query = document.getElementById('search').value;
+            localStorage.setItem('mcp_searchQuery', query);
+            filtrerElements();
+        }
+
+        // Utilitaire : Génère un suffixe dynamique pour ignorer le cache d'image navigateur
+        function getAntiCacheUrl(url) {
+            if (!url) return url;
+            const sep = url.includes('?') ? '&' : '?';
+            return `${url}${sep}_v=${Date.now()}`;
+        }
+
         function toggleOutilsIndex() {
-            const conteneur = document.getElementById('conteneur-outils-scripts');
+            const container = document.getElementById('conteneur-outils-scripts');
             const btn = document.getElementById('btn-toggle-outils');
-            if (conteneur.style.display === 'none') {
-                conteneur.style.display = 'block';
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
                 btn.innerText = 'Masquer';
             } else {
-                conteneur.style.display = 'none';
+                container.style.display = 'none';
                 btn.innerText = 'Afficher';
             }
         }
@@ -445,64 +484,53 @@
         }
 
         function genererBoutonsCategories() {
-            const conteneur = document.getElementById('liste-categories-scroll');
-            if (!conteneur) return;
-            conteneur.innerHTML = '';
+            const container = document.getElementById('liste-categories-scroll');
+            if (!container) return;
+            container.innerHTML = '';
 
-            // CAS 1 : Si on est sur le comparateur, on construit l'arborescence dynamique
             if (currentTab === 'comparaison') {
-                // Bouton TOUT AFFICHER
                 const btnTous = document.createElement('button');
                 btnTous.className = 'btn-outil';
-                btnTous.style.borderLeft = filtreDossierComparateur === null ? '4px solid #ff9800' : '4px solid #555';
+                btnTous.style.borderLeft = filterComparatorFolder === null ? '4px solid #ff9800' : '4px solid #555';
                 btnTous.style.marginBottom = '6px';
                 btnTous.style.width = '100%';
                 btnTous.innerText = `📂 TOUT AFFICHER`;
                 btnTous.onclick = () => {
-                    filtreDossierComparateur = null;
+                    filterComparatorFolder = null;
+                    localStorage.removeItem('mcp_filterComparatorFolder');
                     genererBoutonsCategories();
                     filtrerElements();
                 };
-                conteneur.appendChild(btnTous);
+                container.appendChild(btnTous);
 
-                // Extraction dynamique de tous les chemins de dossiers uniques
-                let dossiersTrouves = new Set();
+                let findFolders = new Set();
                 dbComparaison.forEach(e => {
                     if (e.path) {
                         const parts = e.path.split('/');
                         if (parts.length > 1) {
-                            let cheminAccumule = "";
+                            let ropeRoad = "";
                             for (let i = 0; i < parts.length - 1; i++) {
-                                cheminAccumule += (cheminAccumule ? "/" : "") + parts[i];
-                                dossiersTrouves.add(cheminAccumule);
+                                ropeRoad += (ropeRoad ? "/" : "") + parts[i];
+                                findFolders.add(ropeRoad);
                             }
                         }
                     }
                 });
 
-                const listeDossiersTries = Array.from(dossiersTrouves).sort();
+                const listeDossiersTries = Array.from(findFolders).sort();
+                let closeFolders = JSON.parse(localStorage.getItem('mcp_closeFolders')) || [];
 
-                // Variable globale à ajouter en haut avec tes autres let :
-                let dossiersFermes = JSON.parse(localStorage.getItem('mcp_dossiersFermes')) || [];
-
-                // Dans la boucle de génération :
                 listeDossiersTries.forEach(cheminDossier => {
                     const niveau = cheminDossier.split('/').length - 1; 
                     const nomDossier = cheminDossier.split('/').pop();   
-
-                    // Vérifier si un sous-dossier direct existe plus bas dans la liste
                     const aDesEnfants = listeDossiersTries.some(d => d.startsWith(cheminDossier + '/') && d.split('/').length === cheminDossier.split('/').length + 1);
                 
-                    // Si le dossier parent direct est fermé, on masque ce sous-dossier
-                    const estMasqueParUnAncetre = dossiersFermes.some(dossierFerme => {
-                        // Si le chemin commence par un dossier fermé suivi d'un slash '/'
+                    const estMasqueParUnAncetre = closeFolders.some(dossierFerme => {
                         return cheminDossier.startsWith(dossierFerme + '/');
                     });
 
-                    if (estMasqueParUnAncetre) {
-                        return; // Masque ce sous-dossier ainsi que TOUTE sa descendance
-                    }
-                
+                    if (estMasqueParUnAncetre) return;
+
                     const btn = document.createElement('button');
                     btn.className = 'btn-outil';
                     btn.style.width = '100%';
@@ -524,43 +552,41 @@
                     }
                     btn.appendChild(spanTexte);
                 
-                    // Ajout du bouton fléché ▲▼ si le dossier possède des enfants
                     if (aDesEnfants) {
-                        const estFerme = dossiersFermes.includes(cheminDossier);
+                        const isClose = closeFolders.includes(cheminDossier);
                         const btnToggle = document.createElement('span');
-                        btnToggle.innerText = estFerme ? ' ( ▲ Masquer ) ' : ' ( ▼ Afficher ) ';
+                        btnToggle.innerText = isClose ? ' ( ▲ Masquer ) ' : ' ( ▼ Afficher ) ';
                         btnToggle.style.padding = '0 4px';
                         btnToggle.style.cursor = 'pointer';
                         btnToggle.style.fontSize = '0.75rem';
 
                         btnToggle.onclick = (e) => {
-                            e.stopPropagation(); // Évite de déclencher le clic du dossier
-                            if (estFerme) {
-                                dossiersFermes = dossiersFermes.filter(d => d !== cheminDossier);
+                            e.stopPropagation();
+                            if (isClose) {
+                                closeFolders = closeFolders.filter(d => d !== cheminDossier);
                             } else {
-                                dossiersFermes.push(cheminDossier);
+                                closeFolders.push(cheminDossier);
                             }
-                            localStorage.setItem('mcp_dossiersFermes', JSON.stringify(dossiersFermes));
+                            localStorage.setItem('mcp_closeFolders', JSON.stringify(closeFolders));
                             genererBoutonsCategories();
                         };
                         btn.appendChild(btnToggle);
                     }
                 
-                    if (filtreDossierComparateur === cheminDossier) {
+                    if (filterComparatorFolder === cheminDossier) {
                         btn.style.backgroundColor = 'var(--bg-bouton-hover)';
                         btn.style.fontWeight = 'bold';
                     }
                 
                     btn.onclick = () => {
-                        filtreDossierComparateur = cheminDossier;
+                        filterComparatorFolder = cheminDossier;
+                        localStorage.setItem('mcp_filterComparatorFolder', filterComparatorFolder);
                         genererBoutonsCategories(); 
                         filtrerElements();          
                     };
-                    conteneur.appendChild(btn);
+                    container.appendChild(btn);
                 });
-            } 
-            // CAS 2 : Sinon, on affiche les catégories de textures normales
-            else {
+            } else {
                 Object.keys(dbCategories).forEach(catName => {
                     const btn = document.createElement('button');
                     btn.className = 'btn-outil btn-cat-dynamique';
@@ -568,18 +594,17 @@
                     btn.style.width = '100%';
                     btn.innerText = `📂 ${catName.toUpperCase()}`;
                     btn.onclick = () => switchToCategory(catName);
-                    conteneur.appendChild(btn);
+                    container.appendChild(btn);
                 });
             }
         }
 
         function genererListe(elements) {
-            const conteneur = document.getElementById('liste-elements');
-            conteneur.innerHTML = '';
+            const container = document.getElementById('liste-elements');
+            container.innerHTML = '';
             
             let filteredElements = elements;
 
-            // Application du filtre "Manquants uniquement" (Sécurisé contre la casse)
             if (filterOnlyMissing) {
                 if (currentTab === 'comparaison') {
                     filteredElements = filteredElements.filter(e => e.status && e.status.toLowerCase() === 'missing');
@@ -589,65 +614,59 @@
             }
 
             if(!filteredElements || filteredElements.length === 0) {
-                conteneur.innerHTML = `<p style="color: #888; text-align: center; margin-top: 20px;">Aucun élément (ou tout est filtré/complété ! 🎉)</p>`;
+                container.innerHTML = `<p style="color: #888; text-align: center; margin-top: 20px;">Aucun élément (ou tout est filtré/complété ! 🎉)</p>`;
                 return;
             }
 
             filteredElements.forEach(elem => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-catalogue';
+                const btn = document.createElement('button');
+                btn.className = 'btn-catalogue';
 
-            // Identifiant unique selon l'onglet
-            const elemIdentifier = currentTab === 'comparaison' ? elem.path : elem.id;
-            const isSelected = (currentSelectedId === elemIdentifier);
+                const elemIdentifier = currentTab === 'comparaison' ? elem.path : elem.id;
+                const isSelected = (currentSelectedId === elemIdentifier);
 
-            if (currentTab === 'comparaison') {
-                // Si c'est l'élément ouvert, on ajoute " ( Ouvert ) " à la fin du texte
-                const txtSuffix = isSelected ? '  👈 ( Ouvert )' : '';
-                btn.innerText = elem.path + txtSuffix;
+                if (currentTab === 'comparaison') {
+                    const txtSuffix = isSelected ? '  👈 ( Ouvert )' : '';
+                    btn.innerText = elem.path + txtSuffix;
+                    btn.style.fontSize = "0.8rem";
+                    btn.style.wordBreak = "break-all";
 
-                btn.style.fontSize = "0.8rem";
-                btn.style.wordBreak = "break-all";
-
-                // Couleur de fond de base (Présent / Manquant)
-                if (elem.status && elem.status.toLowerCase() === 'missing') {
-                    btn.classList.add('comp-missing');
+                    if (elem.status && elem.status.toLowerCase() === 'missing') {
+                        btn.classList.add('comp-missing');
+                    } else {
+                        btn.classList.add('comp-present');
+                    }
                 } else {
-                    btn.classList.add('comp-present');
-                }
-            } else {
-                const txtSuffix = isSelected ? '  👈 ( Ouvert )' : '';
-                btn.innerText = elem.buttonName + txtSuffix;
+                    const txtSuffix = isSelected ? '  👈 ( Ouvert )' : '';
+                    btn.innerText = elem.buttonName + txtSuffix;
 
-                if (completedTasks.includes(elem.id)) {
-                    btn.classList.add('valide');
+                    if (completedTasks.includes(elem.id)) {
+                        btn.classList.add('valide');
+                    }
                 }
-            }
-        
-            // 🌟 SI C'EST L'ÉLÉMENT OUVERT : On applique la classe bleu
-            if (isSelected) {
-                btn.classList.add('comp-selected');
-            }
-        
-            btn.onclick = () => {
-                currentSelectedId = elemIdentifier;
-                localStorage.setItem('mcp_currentSelectedId', currentSelectedId);
-
-                // On rafraîchit la liste pour déplacer le surlignage bleu sur ce bouton
-                genererListe(filteredElements);
             
-                if (currentTab === 'blocks' || currentTab === 'items') {
-                    afficherDetails(elem);
-                } else if (currentTab === 'comparaison') {
-                    afficherDetailsComparaison(elem);
-                } else {
-                    afficherDetailsCategorie(elem);
+                if (isSelected) {
+                    btn.classList.add('comp-selected');
                 }
-                updateTaskButtonVisual();
-            };
+            
+                btn.onclick = () => {
+                    currentSelectedId = elemIdentifier;
+                    localStorage.setItem('mcp_currentSelectedId', currentSelectedId);
 
-            conteneur.appendChild(btn);
-        });
+                    genererListe(filteredElements);
+                
+                    if (currentTab === 'blocks' || currentTab === 'items') {
+                        afficherDetails(elem);
+                    } else if (currentTab === 'comparaison') {
+                        afficherDetailsComparaison(elem);
+                    } else {
+                        afficherDetailsCategorie(elem);
+                    }
+                    updateTaskButtonVisual();
+                };
+
+                container.appendChild(btn);
+            });
         }
 
         function switchTab(type, resetSelection = true) {
@@ -655,27 +674,29 @@
             localStorage.setItem('mcp_currentTab', type);
             if(resetSelection) resetSelectedElement();
 
-            if (type !== 'comparaison') filtreDossierComparateur = null;
+            if (type !== 'comparaison') {
+                filterComparatorFolder = null;
+                localStorage.removeItem('mcp_filterComparatorFolder');
+            }
 
             document.getElementById('tab-blocks').classList.toggle('actif', type === 'blocks');
             document.getElementById('tab-items').classList.toggle('actif', type === 'items');
             document.getElementById('tab-comparaison').classList.toggle('actif', type === 'comparaison');
-            document.getElementById('search').value = '';
             
             genererBoutonsCategories();
-            filtrerElements(); // Utilise le filtre centralisé pour charger les éléments au changement d'onglet
+            filtrerElements();
         }
 
         function switchToCategory(catName, resetSelection = true) {
             currentTab = catName;
             localStorage.setItem('mcp_currentTab', catName);
             if(resetSelection) resetSelectedElement();
-            filtreDossierComparateur = null;
+            filterComparatorFolder = null;
+            localStorage.removeItem('mcp_filterComparatorFolder');
 
             document.getElementById('tab-blocks').classList.remove('actif');
             document.getElementById('tab-items').classList.remove('actif');
             document.getElementById('tab-comparaison').classList.remove('actif');
-            document.getElementById('search').value = '';
             
             genererBoutonsCategories();
             genererListe(dbCategories[catName]);
@@ -704,28 +725,23 @@
             }
         }
 
-        // LE FILTRE CENTRALISÉ ET SÉCURISÉ
         function filtrerElements() {
-            const query = document.getElementById('search').value.toLowerCase();
+            const query = (document.getElementById('search').value || '').toLowerCase();
             let baseData = [];
             if(currentTab === 'blocks') baseData = dbBlocks;
             else if(currentTab === 'items') baseData = dbItems;
             else if(currentTab === 'comparaison') baseData = dbComparaison;
             else baseData = dbCategories[currentTab] || [];
 
-            // 1. Filtrage intelligent par dossier racine et sous-dossier (Onglet Comparateur)
-            if (currentTab === 'comparaison' && filtreDossierComparateur) {
+            if (currentTab === 'comparaison' && filterComparatorFolder) {
                 baseData = baseData.filter(e => {
                     if (!e.path) return false;
                     const pathLoweCase = e.path.toLowerCase();
-                    const filtreLowerCase = filtreDossierComparateur.toLowerCase();
-                    // Le fichier doit commencer par le chemin du dossier sélectionné
+                    const filtreLowerCase = filterComparatorFolder.toLowerCase();
                     return pathLoweCase.startsWith(filtreLowerCase + '/');
-                    genererListe(dbComparaison);
                 });
             }
 
-            // 2. Application de la barre de recherche textuelle
             const filtres = baseData.filter(elem => {
                 if (currentTab === 'comparaison') {
                     return elem.path && elem.path.toLowerCase().includes(query);
@@ -793,26 +809,40 @@
                 bStateSpan.onclick = null;
             }
 
+            // --- GESTION MULTI-MODÈLES ET RÉTROCOMPATIBILITÉ ---
             const modelSpan = document.getElementById('path-model');
-            if (elem.model && elem.model !== "Pack (Next)/assets/minecraft/models/None.json") {
-                modelSpan.innerText = elem.model;
-                modelSpan.className = "clickable-path";
-                modelSpan.onclick = () => {
-                    systemOpen(elem.model, 'file');
-                    chargerFichierDansVisualiseur(elem.model);
-                };
-            } else {
+            modelSpan.innerHTML = ''; // Réinitialisation du contenu
+
+            // Support pour "models" (liste) ou "model" (ancien string unique)
+            let modelsList = elem.models || (elem.model ? [elem.model] : []);
+
+            if (modelsList.length > 0) {
+                modelsList.forEach((mPath, idx) => {
+                    if (mPath.includes("None.json")) return;
+
+                    const pLink = document.createElement('span');
+                    pLink.className = "clickable-path";
+                    pLink.style.display = "block";
+                    pLink.style.marginTop = idx > 0 ? "2px" : "0px";
+                    pLink.innerText = (modelsList.length > 1 ? `• ` : '') + mPath;
+                    pLink.onclick = () => {
+                        systemOpen(mPath, 'file');
+                        chargerFichierDansVisualiseur(mPath);
+                    };
+                    modelSpan.appendChild(pLink);
+                });
+            }
+
+            if (!modelSpan.hasChildNodes()) {
                 modelSpan.innerText = "Non défini (Généré par le code du jeu)";
                 modelSpan.className = "";
                 modelSpan.onclick = null;
             }
 
+            // --- RENDER TEXTURES ---
             const grid = document.getElementById('preview-textures-grid');
+            grid.classList.remove('mode-texte');
             grid.innerHTML = '';
-
-            const gridTextures = document.getElementById('preview-textures-grid');
-            gridTextures.classList.remove('mode-texte'); // On restaure la grille pour les images !
-            gridTextures.innerHTML = ''; // ... suite de ton code qui crée les éléments de texture
 
             if(!elem.textures || Object.keys(elem.textures).length === 0) {
                 grid.innerHTML = '<p style="color: #aaa; font-style: italic;">Aucune texture détectée.</p>';
@@ -827,7 +857,7 @@
                 
                 const resId = `res-${key}-${elem.id}`.replace(/:/g, '-').replace(/\//g, '-');
                 card.innerHTML = `
-                    <img src="${cheminTexture}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
+                    <img src="${getAntiCacheUrl(cheminTexture)}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
                     <strong>${key}</strong><br>
                     <span>${cheminTexture.split('/').pop()}</span><br>
                     <span id="${resId}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
@@ -848,6 +878,7 @@
             document.getElementById('preview-id').innerText = `Dossier : ${elem.folder_path}`;
 
             const grid = document.getElementById('preview-textures-grid');
+            grid.classList.remove('mode-texte');
             grid.innerHTML = '';
             
             elem.textures.forEach(tex => {
@@ -857,7 +888,7 @@
                 
                 const resId = `res-cat-${elem.id}-${tex.name}`.replace(/[^a-zA-Z0-9]/g, '-');
                 card.innerHTML = `
-                    <img src="${tex.path}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
+                    <img src="${getAntiCacheUrl(tex.path)}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
                     <strong>${tex.name.replace(/_/g, ' ')}</strong><br>
                     <span>${tex.filename}</span><br>
                     <span id="${resId}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
@@ -887,40 +918,21 @@
             }
 
             const grid = document.getElementById('preview-textures-grid');
-            grid.classList.remove('mode-texte'); // On réactive la grille pour mettre les deux cartes côte à côte
+            grid.classList.remove('mode-texte');
             grid.innerHTML = '';
             
-            // 0. Chemin du Pack (Download) / Ton Pack personnalisé
-            // const downloadPath = `Pack (Download)/assets/${elem.path}`;
-            // 1. Chemin du Pack (Main) / Ton Pack personnalisé
             const mainPath = `Pack (Main)/assets/${elem.path}`;
-            // 2. Chemin du Pack (Next) / Vanilla
             const nextPath = `Pack (Next)/assets/${elem.path}`;
-            // 3. Chemin du Pack (Default) / Ton Pack personnalisé
             const defaultPath = `Pack (Default)/assets/${elem.path}`;
 
             if (elem.filename.endsWith('.png')) {
-
-            //    // Carte 0 : Pack (Downloaded)
-            //    const cardDownload = document.createElement('div');
-            //    cardDownload.className = 'card-texture';
-            //    cardDownload.onclick = () => systemOpen(downloadPath, 'folder');
-            //    const resIdDownload = `res-download-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
-            //    cardDownload.innerHTML = `
-            //        <img src="${downloadPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdDownload}')">
-            //        <strong>Pack (DL)</strong><br>
-            //        <span>${elem.filename}</span><br>
-            //        <span id="${resIdDownload}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
-            //    `;
-            //    grid.appendChild(cardDownload);
-
                 // Carte 1 : Pack (Main)
                 const cardMain = document.createElement('div');
                 cardMain.className = 'card-texture';
                 cardMain.onclick = () => systemOpen(mainPath, 'folder');
                 const resIdMain = `res-main-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
                 cardMain.innerHTML = `
-                    <img src="${mainPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdMain}')">
+                    <img src="${getAntiCacheUrl(mainPath)}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdMain}')">
                     <strong>Pack (Main)</strong><br>
                     <span>${elem.filename}</span><br>
                     <span id="${resIdMain}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
@@ -933,7 +945,7 @@
                 cardNext.onclick = () => systemOpen(nextPath, 'folder');
                 const resIdNext = `res-next-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
                 cardNext.innerHTML = `
-                    <img src="${nextPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdNext}')">
+                    <img src="${getAntiCacheUrl(nextPath)}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdNext}')">
                     <strong>Pack (Next)</strong><br>
                     <span>${elem.filename}</span><br>
                     <span id="${resIdNext}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
@@ -946,7 +958,7 @@
                 cardDefault.onclick = () => systemOpen(defaultPath, 'folder');
                 const resIdDefault = `res-default-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
                 cardDefault.innerHTML = `
-                    <img src="${defaultPath}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdDefault}')">
+                    <img src="${getAntiCacheUrl(defaultPath)}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdDefault}')">
                     <strong>Pack (Default)</strong><br>
                     <span>${elem.filename}</span><br>
                     <span id="${resIdDefault}" style="color: #4caf50; font-weight: bold; font-size: 0.75rem; display:block; margin-top:4px;">🔍 Chargement...</span>
@@ -995,11 +1007,10 @@
             const btn = event.target;
             const textOrigine = btn.innerText;
             
-            // 1. Gestion spécifique de l'extraction de sons avec pop-up de version
             let payload = {};
             if (scriptType === 'sounds') {
                 const version = prompt("Entrez la version de Minecraft pour extraire les sons (ex: 1.18, 1.20) :", "1.18");
-                if (version === null) return; // Annulation du pop-up
+                if (version === null) return;
                 if (version.trim() === "") {
                     alert("Version invalide !");
                     return;
@@ -1007,12 +1018,10 @@
                 payload.version = version.trim();
             }
 
-            // 2. Gestion spécifique de la fusion "Indexer le Pack" (Séquentiel)
             if (scriptType === 'pack_all') {
                 btn.innerText = "⏳ Indexation des Blocs...";
                 btn.disabled = true;
 
-                // On exécute séquentiellement : blocks -> items -> categories
                 fetch('http://localhost:5000/run/blocks', { method: 'POST' })
                     .then(res => res.json())
                     .then(data => {
@@ -1042,7 +1051,6 @@
                 return;
             }
 
-            // 3. Comportement standard pour les autres scripts (sounds, Comparaison, extract)
             btn.innerText = "⏳ Exécution...";
             btn.disabled = true;
 
@@ -1055,12 +1063,11 @@
                 .then(data => {
                     if (data.status === 'success') {
                         alert("Opération terminée avec succès !");
-                        // Si on est en mode Comparaison, on appelle le chargeur spécifique
                         if (scriptType === 'comparaison') {
                             chargerRapportComparaison();
-                        } else {
-                            alert("Erreur : " + data.message);
                         }
+                    } else {
+                        alert("Erreur : " + data.message);
                     }
                 })
                 .catch(error => {
@@ -1075,7 +1082,6 @@
 
         function runUpdateFinish() {
             console.log("Mise à jour de l'interface après indexation...");
-            // 1. Récupération des Blocs
             fetch('http://localhost:5000/get-index/blocks')
                 .then(r => r.ok ? r.json() : [])
                 .then(data => {
@@ -1083,7 +1089,6 @@
                     if (currentTab === 'blocks') genererListe(dbBlocks);
                 });
 
-            // 2. Récupération des Items
             fetch('http://localhost:5000/get-index/items')
                 .then(r => r.ok ? r.json() : [])
                 .then(data => {
@@ -1091,12 +1096,11 @@
                     if (currentTab === 'items') genererListe(dbItems);
                 });
 
-            // 3. Récupération des Catégories
             fetch('http://localhost:5000/get-categories')
                 .then(r => r.ok ? r.json() : {})
                 .then(categories => {
                     dbCategories = categories;
-                    genererBoutonsCategories(); // Recharge le menu latéral
+                    genererBoutonsCategories();
                     if (currentTab !== 'blocks' && currentTab !== 'items' && currentTab !== 'comparaison') {
                         genererListe(dbCategories[currentTab]);
                     }
@@ -1105,8 +1109,6 @@
 
         function chargerRapportComparaison() {
             console.log("Tentative de chargement du rapport...");
-
-            // Ajout d'un paramètre aléatoire (cache-busting) pour forcer le navigateur à ne pas utiliser une vieille version
             const timestamp = new Date().getTime();
 
             fetch(`http://localhost:5000/IndexData/Index_Comparaison_Missing.json?t=${timestamp}`)
@@ -1117,16 +1119,10 @@
                 .then(data => {
                     dbComparaison = data; 
                     console.log("Données chargées, éléments :", dbComparaison.length);
-
-                    // Ajout de cette sécurité pour forcer le basculement en mode Comparaison
                     currentTab = 'comparaison'; 
 
-                    // On appelle la fonction de rendu spécifique à la Comparaison
                     if (typeof filtrerElements === 'function') {
-                        // 1. Mise à jour de la liste des items
                         filtrerElements();
-
-                        // 2. IMPORTANT : Régénérer les boutons de catégories pour le comparateur
                         if (currentTab === 'comparaison') {
                             genererBoutonsCategories();
                         }
