@@ -298,6 +298,34 @@
             white-space: pre-wrap;
             margin-top: 10px;
         }
+
+        /* --- NOUVEAU : STYLE COMPARAISON DE CODE CÔTÉ À CÔTÉ --- */
+        .diff-container {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .diff-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .diff-box h4 {
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            color: #64b5f6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .diff-box .code-viewer {
+            margin-top: 0;
+            height: 450px;
+        }
     </style>
 </head>
 <body class="hide-errors">
@@ -359,7 +387,7 @@
                 <p style="margin-top: 4px;"><strong>Chemin relatif Pack (Next) :</strong> <span id="comp-vanilla-path" style="font-family: monospace; color: #aaa;">-</span></p>
             </div>
 
-            <div class="preview-section">
+            <div class="preview-section" id="section-textures">
                 <div class="section-title-container">
                     <h3>Textures / Contenu</h3>
                     <div class="title-actions">
@@ -370,9 +398,25 @@
                 <div id="preview-textures-grid" class="grid-textures"></div>
             </div>
 
+            <!-- VISUALISEUR SINGLE (BLOCS / ITEMS) -->
             <div class="preview-section" id="section-code-viewer" style="display: none;">
                 <h3>Visualiseur de Données (.json / .mcmeta)</h3>
                 <div id="code-box" class="code-viewer">Sélectionnez un fichier compatible pour lire son contenu...</div>
+            </div>
+
+            <!-- VISUALISEUR DUO (COMPARATEUR) -->
+            <div class="preview-section" id="section-code-viewer-diff" style="display: none;">
+                <h3>Comparaison Fichiers de Structure (.json / .mcmeta)</h3>
+                <div class="diff-container">
+                    <div class="diff-box">
+                        <h4 style="color: #4caf50;">📁 Pack (Main) - Actuel</h4>
+                        <div id="code-box-main" class="code-viewer">Chargement...</div>
+                    </div>
+                    <div class="diff-box">
+                        <h4 style="color: #ff9800;">📁 Pack (Next) - Nouveau</h4>
+                        <div id="code-box-next" class="code-viewer">Chargement...</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -382,7 +426,6 @@
         let currentSelectedId = localStorage.getItem('mcp_currentSelectedId') || null;
         let filterOnlyMissing = JSON.parse(localStorage.getItem('mcp_filterOnlyMissing')) || false;
         
-        // --- NOUVEAUX STOCKS DANS LOCALSTORAGE ---
         let imageSize = parseInt(localStorage.getItem('mcp_imageSize')) || 256;
         let filterComparatorFolder = localStorage.getItem('mcp_filterComparatorFolder') || null;
         let savedSearchQuery = localStorage.getItem('mcp_searchQuery') || '';
@@ -399,10 +442,8 @@
         ];
 
         window.onload = function() {
-            // Appliquer la taille d'image sauvegardée
             applyImageSize(imageSize);
 
-            // Restaurer le champ de recherche
             const searchInput = document.getElementById('search');
             if (searchInput) searchInput.value = savedSearchQuery;
 
@@ -434,7 +475,6 @@
             });
         };
 
-        // --- FONCTIONS ZOOM & TAILLE IMAGE ---
         function toggleZoom() {
             imageSize = (imageSize === 256) ? 128 : 256;
             localStorage.setItem('mcp_imageSize', imageSize);
@@ -447,14 +487,12 @@
             if (btn) btn.innerText = `🔍 Zoom: ${size}px`;
         }
 
-        // --- GESTION RECHERCHE DE TEXTE ET CACHE ---
         function onSearchInput() {
             const query = document.getElementById('search').value;
             localStorage.setItem('mcp_searchQuery', query);
             filtrerElements();
         }
 
-        // Utilitaire : Génère un suffixe dynamique pour ignorer le cache d'image navigateur
         function getAntiCacheUrl(url) {
             if (!url) return url;
             const sep = url.includes('?') ? '&' : '?';
@@ -756,6 +794,7 @@
             const codeBox = document.getElementById('code-box');
             const sectionCode = document.getElementById('section-code-viewer');
             
+            document.getElementById('section-code-viewer-diff').style.display = 'none';
             sectionCode.style.display = 'block';
             codeBox.innerText = "⏳ Lecture du contenu par le serveur...";
 
@@ -782,13 +821,63 @@
             });
         }
 
+        // --- NOUVEAU : CHARGEMENT COMPARATIF DUO (CÔTÉ À CÔTÉ) ---
+        function chargerFichiersComparaisonDiff(mainPath, nextPath) {
+            const sectionCodeDiff = document.getElementById('section-code-viewer-diff');
+            const sectionCodeSingle = document.getElementById('section-code-viewer');
+            const boxMain = document.getElementById('code-box-main');
+            const boxNext = document.getElementById('code-box-next');
+
+            sectionCodeSingle.style.display = 'none';
+            sectionCodeDiff.style.display = 'block';
+
+            boxMain.innerText = "⏳ Lecture du fichier Main...";
+            boxNext.innerText = "⏳ Lecture du fichier Next...";
+
+            // Lecture Pack (Main)
+            fetch(`http://localhost:5000/read-file`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: mainPath })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    try { boxMain.innerText = JSON.stringify(JSON.parse(data.content), null, 4); }
+                    catch(e) { boxMain.innerText = data.content; }
+                } else {
+                    boxMain.innerText = `⚠️ Fichier introuvable ou absent dans Pack (Main).\nChemin : ${mainPath}`;
+                }
+            })
+            .catch(err => { boxMain.innerText = "Erreur réseau au chargement de Pack (Main)"; });
+
+            // Lecture Pack (Next)
+            fetch(`http://localhost:5000/read-file`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: nextPath })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    try { boxNext.innerText = JSON.stringify(JSON.parse(data.content), null, 4); }
+                    catch(e) { boxNext.innerText = data.content; }
+                } else {
+                    boxNext.innerText = `⚠️ Fichier introuvable dans Pack (Next).\nChemin : ${nextPath}`;
+                }
+            })
+            .catch(err => { boxNext.innerText = "Erreur réseau au chargement de Pack (Next)"; });
+        }
+
         function afficherDetails(elem) {
             document.getElementById('zone-aperçu-vide').style.display = 'none';
             document.getElementById('zone-aperçu-contenu').style.display = 'block';
             document.getElementById('section-json-fichiers').style.display = 'block';
             document.getElementById('section-comparaison-details').style.display = 'none';
+            document.getElementById('section-textures').style.display = 'block';
             document.getElementById('task-btn').style.display = 'block';
             document.getElementById('section-code-viewer').style.display = 'none';
+            document.getElementById('section-code-viewer-diff').style.display = 'none';
 
             document.getElementById('preview-title').innerText = elem.buttonName;
             document.getElementById('preview-id').innerText = elem.id;
@@ -809,11 +898,9 @@
                 bStateSpan.onclick = null;
             }
 
-            // --- GESTION MULTI-MODÈLES ET RÉTROCOMPATIBILITÉ ---
             const modelSpan = document.getElementById('path-model');
-            modelSpan.innerHTML = ''; // Réinitialisation du contenu
+            modelSpan.innerHTML = '';
 
-            // Support pour "models" (liste) ou "model" (ancien string unique)
             let modelsList = elem.models || (elem.model ? [elem.model] : []);
 
             if (modelsList.length > 0) {
@@ -839,7 +926,6 @@
                 modelSpan.onclick = null;
             }
 
-            // --- RENDER TEXTURES ---
             const grid = document.getElementById('preview-textures-grid');
             grid.classList.remove('mode-texte');
             grid.innerHTML = '';
@@ -871,8 +957,10 @@
             document.getElementById('zone-aperçu-contenu').style.display = 'block';
             document.getElementById('section-json-fichiers').style.display = 'none';
             document.getElementById('section-comparaison-details').style.display = 'none';
+            document.getElementById('section-textures').style.display = 'block';
             document.getElementById('task-btn').style.display = 'block';
             document.getElementById('section-code-viewer').style.display = 'none';
+            document.getElementById('section-code-viewer-diff').style.display = 'none';
             
             document.getElementById('preview-title').innerText = elem.buttonName;
             document.getElementById('preview-id').innerText = `Dossier : ${elem.folder_path}`;
@@ -904,6 +992,7 @@
             document.getElementById('section-comparaison-details').style.display = 'block';
             document.getElementById('task-btn').style.display = 'none';
             document.getElementById('section-code-viewer').style.display = 'none';
+            document.getElementById('section-code-viewer-diff').style.display = 'none';
 
             document.getElementById('preview-title').innerText = elem.filename;
             document.getElementById('preview-id').innerText = `Catégorie : ${elem.category.toUpperCase()}`;
@@ -926,6 +1015,8 @@
             const defaultPath = `Pack (Default)/assets/${elem.path}`;
 
             if (elem.filename.endsWith('.png')) {
+                document.getElementById('section-textures').style.display = 'block';
+                
                 // Carte 1 : Pack (Main)
                 const cardMain = document.createElement('div');
                 cardMain.className = 'card-texture';
@@ -965,9 +1056,9 @@
                 `;
                 grid.appendChild(cardDefault);
             } else {
-                grid.classList.add('mode-texte');
-                grid.innerHTML = '<p style="color: #aaa; font-style: italic;">Cet élément est un fichier de structure (.json, .mcmeta). Affichage du texte ci-dessous :</p>';
-                chargerFichierDansVisualiseur(nextPath);
+                // Fichiers de Structure (.json, .mcmeta) : Masquer la grille image et lancer la comparaison duo
+                document.getElementById('section-textures').style.display = 'none';
+                chargerFichiersComparaisonDiff(mainPath, nextPath);
             }
         }
 
