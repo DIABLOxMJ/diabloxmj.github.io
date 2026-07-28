@@ -2,7 +2,7 @@
     {
         "dimersion": {
             "img": "../sources/img/mj_mods_dimersion.png",
-            "title": "Dimersion Mods",
+            "title": "Dimersion Mods (MC v1.21.11)",
             "description": "Un grand modpack, Ciel de lave, Vision Nettoyer sous liquide, Bouteille d'expérience, Auto Casseur, Bottes Anti-Gravity, Super Outils 3x3",
             "mod_version": "v1.0.0",
             "download": "../packs/Mods/dimersion-1.0.0.jar",

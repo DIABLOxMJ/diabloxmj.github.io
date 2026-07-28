@@ -4,8 +4,12 @@
         "file": "/ModList_Version/mymods.json"
     },
     {
-        "id": "Bundle",
-        "file": "/ModList_Version/bundle.json"
+        "id": "26.2",
+        "file": "/ModList_Version/26.2.json"
+    },
+    {
+        "id": "26.1.2",
+        "file": "/ModList_Version/26.1.2.json"
     },
     {
         "id": "1.21.11",

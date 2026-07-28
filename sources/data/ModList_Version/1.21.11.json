@@ -6,7 +6,7 @@
             "description": "L'API principale utilisée pour faire fonctionner Fabric est celle des mods.",
             "link": "https://modrinth.com/mod/fabric-api",
             "mod_version": "v0.141.4",
-            "download": "https://cdn.modrinth.com/data/P7dR8mSH/versions/5zJNhXV2/fabric-api-0.141.4%2B1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11",
+            "download": "https://cdn.modrinth.com/data/P7dR8mSH/versions/5zJNhXV2/fabric-api-0.141.4%2B1.21.11.jar",
             "Dependant": {}
         },
         "sodium": {
@@ -15,9 +15,9 @@
             "description": "Sodium est un puissant moteur de rendu pour Minecraft qui améliore considérablement la fréquence d'images et les micro-saccades.",
             "link": "https://modrinth.com/mod/sodium",
             "mod_version": "v0.8.12",
-            "download": "https://cdn.modrinth.com/data/AANobbMI/versions/NFkjnzWE/sodium-fabric-0.8.12%2Bmc1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/AANobbMI/versions/NFkjnzWE/sodium-fabric-0.8.12%2Bmc1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -29,13 +29,13 @@
             "description": "Un module complémentaire pour Sodium qui ajoute des fonctionnalités qui n'ont rien à faire dans Sodium.",
             "link": "https://modrinth.com/mod/sodium-extra",
             "mod_version": "v0.8.3",
-            "download": "https://cdn.modrinth.com/data/PtjYWJkn/versions/yqY1efrC/sodium-extra-fabric-0.8.3%2Bmc1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/PtjYWJkn/versions/yqY1efrC/sodium-extra-fabric-0.8.3%2Bmc1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Sodium",
                     "link": "https://modrinth.com/mod/sodium"
                 }
@@ -46,12 +46,30 @@
             "title": "Lithium",
             "description": "Mod d'optimisation de la logique de jeu sans compromis, utile aussi bien pour les jeux solo que pour les serveurs multijoueurs.",
             "link": "https://modrinth.com/mod/lithium",
-            "mod_version": "v0.8.3",
-            "download": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/Ow7wA0kG/lithium-fabric-0.21.4%2Bmc1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "mod_version": "v0.21.4",
+            "download": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/Ow7wA0kG/lithium-fabric-0.21.4%2Bmc1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
+                }
+            }
+        },
+        "iris": {
+            "img": "https://cdn.modrinth.com/data/YL57xq9U/18d0e7f076d3d6ed5bedd472b853909aac5da202_96.webp",
+            "title": "iris",
+            "description": "Un chargeur de packs de shaders moderne pour Minecraft.",
+            "link": "https://modrinth.com/mod/iris",
+            "mod_version": "v1.10.7",
+            "download": "https://cdn.modrinth.com/data/YL57xq9U/versions/fDpuVzVr/iris-fabric-1.10.7%2Bmc1.21.11.jar",
+            "Dependant": {
+                "1": {
+                    "Title": "Fabric API",
+                    "link": "https://modrinth.com/mod/fabric-api"
+                },
+                "2": {
+                    "Title": "Sodium",
+                    "link": "https://modrinth.com/mod/sodium"
                 }
             }
         },
@@ -61,17 +79,17 @@
             "description": "Un mod de rendu de niveau de détail.",
             "link": "https://modrinth.com/mod/voxy",
             "mod_version": "v0.2.16-beta",
-            "download": "https://cdn.modrinth.com/data/fxxUqruK/versions/H3w2nVdU/voxy-0.2.16-beta%2B1.21.11.jar?mr_download_reason=standalone",
+            "download": "https://cdn.modrinth.com/data/fxxUqruK/versions/H3w2nVdU/voxy-0.2.16-beta%2B1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Sodium",
                     "link": "https://modrinth.com/mod/sodium"
                 },
-                "Dep_3": {
+                "3": {
                     "Title": "Mod Menu",
                     "link": "https://modrinth.com/mod/modmenu"
                 }
@@ -83,9 +101,9 @@
             "description": "Un éditeur de cartes Minecraft… qui fonctionne directement en jeu ! Avec sélections, schémas, copier-coller, pinceaux et scripts.",
             "link": "https://modrinth.com/plugin/worldedit",
             "mod_version": "v7.4.2",
-            "download": "https://cdn.modrinth.com/data/1u6JkXh5/versions/oY3E2pzA/worldedit-mod-7.4.2.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/1u6JkXh5/versions/oY3E2pzA/worldedit-mod-7.4.2.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -97,13 +115,13 @@
             "description": "Un mod qui ajoute une interface utilisateur graphique pour WorldEdit, conçue pour faciliter l'utilisation et prévenir les erreurs accidentelles.",
             "link": "https://modrinth.com/mod/worldedit-cui",
             "mod_version": "v1.21.11+01",
-            "download": "https://cdn.modrinth.com/data/NSLJJooQ/versions/SD1ZtHLA/WorldEditCUI-1.21.11%2B01.jar?mr_download_reason=standalone&mr_game_version=1.21.11",
+            "download": "https://cdn.modrinth.com/data/NSLJJooQ/versions/SD1ZtHLA/WorldEditCUI-1.21.11%2B01.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "WorldEdit",
                     "link": "https://modrinth.com/plugin/worldedit"
                 }
@@ -115,9 +133,9 @@
             "description": "Un moyen de réduire l'utilisation exagéré de la mémoire vive (RAM).",
             "link": "https://modrinth.com/mod/ferrite-core",
             "mod_version": "v8.2.0",
-            "download": "https://cdn.modrinth.com/data/uXXizFIs/versions/Ii0gP3D8/ferritecore-8.2.0-fabric.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/uXXizFIs/versions/Ii0gP3D8/ferritecore-8.2.0-fabric.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -129,15 +147,11 @@
             "description": "Un petit API permettant au mod d'appliquer des modifications de texte et de formater l'affichage.",
             "link": "https://modrinth.com/mod/placeholder-api",
             "mod_version": "v2.8.2",
-            "download": "https://cdn.modrinth.com/data/mOgUt4GM/versions/Tyk71iSw/modmenu-17.0.0.jar?mr_download_reason=dependency&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/mOgUt4GM/versions/Tyk71iSw/modmenu-17.0.0.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
-                },
-                "Dep_2": {
-                    "Title": "Placeholder API",
-                    "link": "https://modrinth.com/mod/placeholder-api"
                 }
             }
         },
@@ -147,13 +161,13 @@
             "description": "Ajoute un menu de mods permettant de visualiser la liste des mods installés et configurable.",
             "link": "https://modrinth.com/mod/modmenu",
             "mod_version": "v17.0.0",
-            "download": "https://cdn.modrinth.com/data/mOgUt4GM/versions/Tyk71iSw/modmenu-17.0.0.jar?mr_download_reason=dependency&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/mOgUt4GM/versions/Tyk71iSw/modmenu-17.0.0.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Placeholder API",
                     "link": "https://modrinth.com/mod/placeholder-api"
                 }
@@ -165,13 +179,13 @@
             "description": "Voir l'intérieur des boîtes de shulker depuis votre inventaire.",
             "link": "https://modrinth.com/mod/shulkerboxtooltip",
             "mod_version": "v5.2.16",
-            "download": "https://cdn.modrinth.com/data/2M01OLQq/versions/rZovgkWT/shulkerboxtooltip-fabric-5.2.16%2B1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/2M01OLQq/versions/rZovgkWT/shulkerboxtooltip-fabric-5.2.16%2B1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Mod Menu",
                     "link": "https://modrinth.com/mod/modmenu"
                 }
@@ -183,9 +197,9 @@
             "description": "Une bibliothèque pour les mods clients de Masa.",
             "link": "https://modrinth.com/mod/malilib",
             "mod_version": "v0.27.12",
-            "download": "https://cdn.modrinth.com/data/GcWjdA9I/versions/m5frsnWf/malilib-fabric-1.21.11-0.27.12.jar?mr_download_reason=standalone",
+            "download": "https://cdn.modrinth.com/data/GcWjdA9I/versions/m5frsnWf/malilib-fabric-1.21.11-0.27.12.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -197,13 +211,13 @@
             "description": "Un module schématique côté client avec des fonctionnalités supplémentaires pour le travail en mode créatif.",
             "link": "https://modrinth.com/mod/litematica",
             "mod_version": "v0.26.8",
-            "download": "https://cdn.modrinth.com/data/bEpr0Arc/versions/kSNW8FbJ/litematica-fabric-1.21.11-0.26.8.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/bEpr0Arc/versions/kSNW8FbJ/litematica-fabric-1.21.11-0.26.8.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Mod Menu",
                     "link": "https://modrinth.com/mod/modmenu"
                 }
@@ -215,13 +229,13 @@
             "description": "Un mod qui permet d'avoir un mod spectateur libre.",
             "link": "https://modrinth.com/mod/freecam",
             "mod_version": "v1.4.0-Alpha.3",
-            "download": "https://cdn.modrinth.com/data/XeEZ3fK2/versions/ryOINyPJ/freecam-fabric-1.4.0-alpha.3%2Bmc1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/XeEZ3fK2/versions/ryOINyPJ/freecam-fabric-1.4.0-alpha.3%2Bmc1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Mod Menu",
                     "link": "https://modrinth.com/mod/modmenu"
                 }
@@ -233,13 +247,13 @@
             "description": "Améliore la gestion des stocks en ajoutant diverses fonctions aux boutons de la souris.",
             "link": "https://modrinth.com/mod/mouse-tweaks",
             "mod_version": "v2.30",
-            "download": "https://cdn.modrinth.com/data/aC3cM3Vq/versions/i1duwnJl/MouseTweaks-fabric-mc1.21.11-2.30.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/aC3cM3Vq/versions/i1duwnJl/MouseTweaks-fabric-mc1.21.11-2.30.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Mod Menu",
                     "link": "https://modrinth.com/mod/modmenu"
                 }
@@ -251,9 +265,9 @@
             "description": "Couche d'abstraction pour les modules multi-chargeurs.",
             "link": "https://modrinth.com/mod/balm",
             "mod_version": "v21.11.9",
-            "download": "https://cdn.modrinth.com/data/MBAkmtvl/versions/wk8IL07y/balm-fabric-1.21.11-21.11.9.jar?mr_download_reason=dependency&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/MBAkmtvl/versions/wk8IL07y/balm-fabric-1.21.11-21.11.9.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -265,13 +279,13 @@
             "description": "Apportes trois nouveaux boutons à côté de la zone de fabrication pour simplifier ça gestion.",
             "link": "https://modrinth.com/mod/crafting-tweaks",
             "mod_version": "v21.11.5",
-            "download": "https://cdn.modrinth.com/data/DMu0oBKf/versions/1s1JHamL/craftingtweaks-fabric-1.21.11-21.11.5.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/DMu0oBKf/versions/1s1JHamL/craftingtweaks-fabric-1.21.11-21.11.5.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Balm",
                     "link": "https://modrinth.com/mod/balm"
                 }
@@ -283,9 +297,9 @@
             "description": "Bibliothèque de configuration pour les mods Minecraft.",
             "link": "https://modrinth.com/mod/cloth-config",
             "mod_version": "v21.11.153",
-            "download": "https://cdn.modrinth.com/data/9s6osm5g/versions/xuX40TN5/cloth-config-21.11.153-fabric.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/9s6osm5g/versions/xuX40TN5/cloth-config-21.11.153-fabric.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -297,17 +311,17 @@
             "description": "BetterF3 est un mod qui remplace l'interface de base par une interface hautement personnalisable et lisible.",
             "link": "https://modrinth.com/mod/betterf3",
             "mod_version": "v17.0.0",
-            "download": "https://cdn.modrinth.com/data/8shC1gFX/versions/Qw1nhj7u/BetterF3-17.0.0-Fabric-1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/8shC1gFX/versions/Qw1nhj7u/BetterF3-17.0.0-Fabric-1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Cloth Config",
                     "link": "https://modrinth.com/mod/cloth-config"
                 },
-                "Dep_3": {
+                "3": {
                     "Title": "Mod Menu",
                     "link": "https://modrinth.com/mod/modmenu"
                 }
@@ -319,9 +333,9 @@
             "description": "La bibliothèque personnelle de TheCSDev pour l'environnement de modding Minecraft.",
             "link": "https://modrinth.com/mod/tcdcommons",
             "mod_version": "v5.1.0",
-            "download": "https://cdn.modrinth.com/data/Eldc1g37/versions/X850L9UC/tcdcommons-5.1.0%2Bfabric-1.21.11.jar?mr_download_reason=dependency&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/Eldc1g37/versions/X850L9UC/tcdcommons-5.1.0%2Bfabric-1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -333,13 +347,13 @@
             "description": "Un mod pour Minecraft qui améliore l'écran des statistiques et le rend plus utile.",
             "link": "https://modrinth.com/mod/better-stats",
             "mod_version": "v5.1.0",
-            "download": "https://cdn.modrinth.com/data/n6PXGAoM/versions/99mBkJp1/betterstats-5.1.0%2Bfabric-1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/n6PXGAoM/versions/99mBkJp1/betterstats-5.1.0%2Bfabric-1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "TCDCommons API",
                     "link": "https://modrinth.com/mod/tcdcommons"
                 }
@@ -351,17 +365,17 @@
             "description": "Simplifier l'utilisation des packs de données.",
             "link": "https://modrinth.com/mod/simple-datapacks",
             "mod_version": "v2.7",
-            "download": "https://cdn.modrinth.com/data/Re6xQ62Z/versions/Aj3ap0Bs/simple-datapacks-2.7-fabric%2B1.21.2.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/Re6xQ62Z/versions/Aj3ap0Bs/simple-datapacks-2.7-fabric%2B1.21.2.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Cloth Config",
                     "link": "https://modrinth.com/mod/cloth-config"
                 },
-                "Dep_3": {
+                "3": {
                     "Title": "Mod Menu",
                     "link": "https://modrinth.com/mod/modmenu"
                 }
@@ -373,9 +387,9 @@
             "description": "Collective est une bibliothèque partagée contenant du code commun à tous les mods de Serilum.",
             "link": "https://modrinth.com/mod/collective",
             "mod_version": "v8.22",
-            "download": "https://cdn.modrinth.com/data/e0M1UDsY/versions/6EPDFSpU/collective-1.21.11-8.22.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/e0M1UDsY/versions/6EPDFSpU/collective-1.21.11-8.22.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -387,13 +401,13 @@
             "description": "Un mod qui permet d'alterner entre la lumière normal et sans obscurité.",
             "link": "https://modrinth.com/mod/full-brightness-toggle",
             "mod_version": "v4.5",
-            "download": "https://cdn.modrinth.com/data/aEK1KhsC/versions/4PhWRSH8/fullbrightnesstoggle-1.21.11-4.5.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/aEK1KhsC/versions/4PhWRSH8/fullbrightnesstoggle-1.21.11-4.5.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Collective",
                     "link": "https://modrinth.com/mod/collective"
                 }
@@ -405,9 +419,9 @@
             "description": "Empêchez les endermen de récupérer les blocs du monde.",
             "link": "https://modrinth.com/datapack/no-enderman-grief",
             "mod_version": "v3.0.3.4",
-            "download": "https://cdn.modrinth.com/data/ss02V75k/versions/ai5SJS4j/no-enderman-grief-v3.0.3.4.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/ss02V75k/versions/ai5SJS4j/no-enderman-grief-v3.0.3.4.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -419,9 +433,9 @@
             "description": "Supprime les chauve-souris dans le jeu.",
             "link": "https://modrinth.com/datapack/no-bat",
             "mod_version": "v1.0",
-            "download": "https://cdn.modrinth.com/data/w5htmJLB/versions/eysCeuUW/no-bat-1.0.jar?mr_download_reason=standalone",
+            "download": "https://cdn.modrinth.com/data/w5htmJLB/versions/eysCeuUW/no-bat-1.0.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -433,9 +447,9 @@
             "description": "Ajoute une carte du monde en plein écran affichant les zones explorées. Fonctionne parfaitement avec la mini-carte de Xaero.",
             "link": "https://modrinth.com/mod/xaeros-world-map",
             "mod_version": "v1.40.16",
-            "download": "https://cdn.modrinth.com/data/NcUtCpym/versions/vOQ76ooY/xaeroworldmap-fabric-1.21.11-1.40.16.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/NcUtCpym/versions/vOQ76ooY/xaeroworldmap-fabric-1.21.11-1.40.16.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -447,9 +461,9 @@
             "description": "Affiche une carte dans un coin de votre écran. Permet de créer des points de repère pour retrouver facilement les lieux marqués.",
             "link": "https://modrinth.com/mod/xaeros-minimap",
             "mod_version": "v25.3.12",
-            "download": "https://cdn.modrinth.com/data/1bokaNcj/versions/q5DQinHS/xaerominimap-fabric-1.21.11-25.3.12.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/1bokaNcj/versions/q5DQinHS/xaerominimap-fabric-1.21.11-25.3.12.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -461,9 +475,9 @@
             "description": "Voir les articles et les recettes.",
             "link": "https://modrinth.com/mod/jei",
             "mod_version": "v27.4.0.22",
-            "download": "https://cdn.modrinth.com/data/u6dRKJwZ/versions/oHe0elMI/jei-1.21.11-fabric-27.4.0.22.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/u6dRKJwZ/versions/oHe0elMI/jei-1.21.11-fabric-27.4.0.22.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -475,13 +489,13 @@
             "description": "Intégration JEI qui ajoute des informations sur les créatures, la génération du monde, les villageois et bien plus encore !",
             "link": "https://modrinth.com/mod/just-enough-resources-jer",
             "mod_version": "v1.9.0.31",
-            "download": "https://cdn.modrinth.com/data/uEfK2CXF/versions/wtZJoBTD/JustEnoughResources-Fabric-1.21.11-1.9.0.31.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/uEfK2CXF/versions/wtZJoBTD/JustEnoughResources-Fabric-1.21.11-1.9.0.31.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "JEI",
                     "link": "https://modrinth.com/mod/jei"
                 }
@@ -493,13 +507,13 @@
             "description": "Un module complémentaire JEI qui ajoute des postes de travail professionnels.",
             "link": "https://modrinth.com/mod/just-enough-professions-jep",
             "mod_version": "v10.0.0",
-            "download": "https://cdn.modrinth.com/data/kB56GtWA/versions/hGoqP2tN/JustEnoughProfessions-fabric-1.21.11-10.0.0.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/kB56GtWA/versions/hGoqP2tN/JustEnoughProfessions-fabric-1.21.11-10.0.0.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "JEI",
                     "link": "https://modrinth.com/mod/jei"
                 }
@@ -511,13 +525,13 @@
             "description": "Un module complémentaire JEI qui affiche les informations sur l'élevage.",
             "link": "https://modrinth.com/mod/justenoughbreeding",
             "mod_version": "v10.0.0",
-            "download": "https://cdn.modrinth.com/data/9Pk89J3g/versions/FW0WEEL0/justenoughbreeding-fabric-1.21.11-1.6.6.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/9Pk89J3g/versions/FW0WEEL0/justenoughbreeding-fabric-1.21.11-1.6.6.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "JEI",
                     "link": "https://modrinth.com/mod/jei"
                 }
@@ -529,9 +543,9 @@
             "description": "Un utilitaire général, une interface graphique et une bibliothèque de configuration pour le modding de Fabric et Quilt.",
             "link": "https://modrinth.com/mod/owo-lib",
             "mod_version": "v0.13.0",
-            "download": "https://cdn.modrinth.com/data/ccKDOlHs/versions/33Ei8Thm/owo-lib-0.13.0%2B1.21.11.jar?mr_download_reason=dependency&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/ccKDOlHs/versions/33Ei8Thm/owo-lib-0.13.0%2B1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -543,9 +557,9 @@
             "description": "Il s'agit d'un module qui permet d'utiliser le langage de programmation Kotlin pour les modules Fabric.",
             "link": "https://modrinth.com/mod/fabric-language-kotlin",
             "mod_version": "v1.13.11",
-            "download": "https://cdn.modrinth.com/data/Ha28R6CL/versions/2i87JpYj/fabric-language-kotlin-1.13.11%2Bkotlin.2.3.21.jar?mr_download_reason=dependency&mr_game_version=1.21.11",
+            "download": "https://cdn.modrinth.com/data/Ha28R6CL/versions/2i87JpYj/fabric-language-kotlin-1.13.11%2Bkotlin.2.3.21.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -557,17 +571,17 @@
             "description": "Il permet de réduire voir supprimé l'affichage du feu devant les yeux.",
             "link": "https://modrinth.com/mod/low-fire-reborn",
             "mod_version": "v1.0.10",
-            "download": "https://cdn.modrinth.com/data/9ZPMzrQQ/versions/ObulIxaM/low-fire-reborn-1.0.10.jar?mr_download_reason=standalone",
+            "download": "https://cdn.modrinth.com/data/9ZPMzrQQ/versions/ObulIxaM/low-fire-reborn-1.0.10.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "owo-lib",
                     "link": "https://modrinth.com/mod/owo-lib"
                 },
-                "Dep_3": {
+                "3": {
                     "Title": "FLK",
                     "link": "https://modrinth.com/mod/fabric-language-kotlin"
                 }
@@ -579,9 +593,9 @@
             "description": "Permet de voir clairement dans n'importe quel liquide (eau, lave, neige poudreuse, etc.).",
             "link": "https://modrinth.com/mod/clear-waterlavapowdersnow",
             "mod_version": "v1",
-            "download": "https://cdn.modrinth.com/data/UFRJve4V/versions/6WjDpmpO/ClearWaterLava-Fabric-1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/UFRJve4V/versions/6WjDpmpO/ClearWaterLava-Fabric-1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -593,9 +607,9 @@
             "description": "Ce pour l'emclume qui supprime le message « Trop cher ! » qui s'affiche lorsque le coût en XP dépasse 40 niveaux.",
             "link": "https://modrinth.com/mod/ante",
             "mod_version": "v1.2.1",
-            "download": "https://cdn.modrinth.com/data/TEOa2X8B/versions/Q4HKC0iZ/AnvilNeverTooExpensive-fabric-1.21%2B-1.2.1.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/TEOa2X8B/versions/Q4HKC0iZ/AnvilNeverTooExpensive-fabric-1.21%2B-1.2.1.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -609,7 +623,7 @@
             "mod_version": "v1.0.20",
             "download": "https://www.curseforge.com/minecraft/mc-mods/expanded-armor-enchanting/download/7569549",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -623,7 +637,7 @@
             "mod_version": "v1.2.10",
             "download": "https://www.curseforge.com/minecraft/mc-mods/expanded-weapon-enchanting/download/7569537",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -637,7 +651,7 @@
             "mod_version": "v1.1.13",
             "download": "https://www.curseforge.com/minecraft/mc-mods/expanded-bow-enchanting/download/7569486",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -649,9 +663,9 @@
             "description": "Empêche le blocage des échanges avec les villageois, les rendant toujours disponibles. Échangez à votre guise !",
             "link": "https://modrinth.com/mod/infinite-trading",
             "mod_version": "v1.1.0",
-            "download": "https://cdn.modrinth.com/data/U3eoZT3o/versions/aCozovzQ/infinitetrading-1.21.11-5.0.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/U3eoZT3o/versions/aCozovzQ/infinitetrading-1.21.11-5.0.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -663,9 +677,9 @@
             "description": "Permet de charger les packs de ressources en arrière-plan, ce qui vous permet de faire d'autres choses pendant l'attente !",
             "link": "https://modrinth.com/mod/rrls",
             "mod_version": "v0.5",
-            "download": "https://cdn.modrinth.com/data/ZP7xHXtw/versions/TCSbq6jC/rrlsFabric-5.1.15%2Bmc.1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/ZP7xHXtw/versions/TCSbq6jC/rrlsFabric-5.1.15%2Bmc.1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -677,9 +691,9 @@
             "description": "Un mod simple qui ajoute différents types de marteaux et d'excavatrices, capables d'exploiter une zone de 3x1.",
             "link": "https://modrinth.com/mod/only-hammers-and-excavators",
             "mod_version": "v0.5",
-            "download": "https://cdn.modrinth.com/data/OwtcCsNI/versions/1ns6wS78/1.21.11-1.21.11-0.5.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/OwtcCsNI/versions/1ns6wS78/1.21.11-1.21.11-0.5.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -691,9 +705,9 @@
             "description": "Un mod côté client qui rend la lave translucide.",
             "link": "https://modrinth.com/mod/i-see-lava-(fork)",
             "mod_version": "v1.2.0",
-            "download": "https://cdn.modrinth.com/data/SEpAlBvn/versions/rDjmSkfC/iseelava-1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11",
+            "download": "https://cdn.modrinth.com/data/SEpAlBvn/versions/rDjmSkfC/iseelava-1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -705,13 +719,13 @@
             "description": "Les systèmes de configuration de NeoForge et Forge sont fournis à d'autres écosystèmes de modding. Ils sont conçus pour une architecture multiloader.",
             "link": "https://modrinth.com/mod/forge-config-api-port",
             "mod_version": "v21.11.1",
-            "download": "https://cdn.modrinth.com/data/ohNO6lps/versions/uXrWPsCu/ForgeConfigAPIPort-v21.11.1-mc1.21.11-Fabric.jar?mr_download_reason=dependency&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/ohNO6lps/versions/uXrWPsCu/ForgeConfigAPIPort-v21.11.1-mc1.21.11-Fabric.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Mod Menu",
                     "link": "https://modrinth.com/mod/modmenu"
                 }
@@ -723,13 +737,13 @@
             "description": "Solution de stockage en vrac interactive.",
             "link": "https://modrinth.com/mod/storagedrawers",
             "mod_version": "v21.11.106",
-            "download": "https://cdn.modrinth.com/data/guitPqEi/versions/Q9r8LMQL/StorageDrawers-fabric-1.21.11-20.0.0.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/guitPqEi/versions/Q9r8LMQL/StorageDrawers-fabric-1.21.11-20.0.0.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Forge Config API",
                     "link": "https://modrinth.com/mod/forge-config-api-port"
                 }
@@ -741,9 +755,9 @@
             "description": "Une récolte fonctionnelle par clic droit. Gain d'XP grâce à la récolte.",
             "link": "https://modrinth.com/mod/actually-harvest",
             "mod_version": "v1.1.7.0",
-            "download": "https://cdn.modrinth.com/data/sUbuUC7R/versions/dZkaUZRz/actuallyharvest-1.21.11-fabric-1.1.7.0-FABRIC.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/sUbuUC7R/versions/dZkaUZRz/actuallyharvest-1.21.11-fabric-1.1.7.0-FABRIC.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -755,9 +769,9 @@
             "description": "Récupérer les générateurs à créatures en utilisant une pioche avec l'enchantement Toucher de soie.",
             "link": "https://modrinth.com/mod/mine-spawners",
             "mod_version": "v1.6.6",
-            "download": "https://cdn.modrinth.com/data/7VESbzyX/versions/Wle6zwiu/mine-spawners-1.6.6.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/7VESbzyX/versions/Wle6zwiu/mine-spawners-1.6.6.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -769,13 +783,13 @@
             "description": "Téléportez-vous aux pierres de téléportation activées.",
             "link": "https://modrinth.com/mod/waystones",
             "mod_version": "v21.11.9",
-            "download": "https://cdn.modrinth.com/data/LOpKHB2A/versions/MydMW2TT/waystones-fabric-1.21.11-21.11.9.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/LOpKHB2A/versions/MydMW2TT/waystones-fabric-1.21.11-21.11.9.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Balm",
                     "link": "https://modrinth.com/mod/balm"
                 }
@@ -787,9 +801,9 @@
             "description": "Un mod léger permettant de prendre des notes et de suivre les constructions en jeu.",
             "link": "https://modrinth.com/mod/buildnotes",
             "mod_version": "v1.3.1",
-            "download": "https://cdn.modrinth.com/data/1v2FSkam/versions/7v4qsB4P/buildnotes-1.3.1-1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11",
+            "download": "https://cdn.modrinth.com/data/1v2FSkam/versions/7v4qsB4P/buildnotes-1.3.1-1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -801,9 +815,9 @@
             "description": "Ajoute une nouvelle recette pour dupliquer les livres enchantés !",
             "link": "https://modrinth.com/datapack/enchanted-book-cloning",
             "mod_version": "v1.21.11",
-            "download": "https://cdn.modrinth.com/data/QaOMtKxW/versions/Y4LJS29j/enchanted-book-cloning-1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/QaOMtKxW/versions/Y4LJS29j/enchanted-book-cloning-1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -815,9 +829,9 @@
             "description": "Désenchanter et transférer les enchantements à l'aide d'une meule.",
             "link": "https://modrinth.com/mod/grind-enchantments",
             "mod_version": "v1.12.1",
-            "download": "https://cdn.modrinth.com/data/QQXAdCzh/versions/cjH2IhPv/Ping-Wheel-1.12.1-fabric-1.21.11.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/QQXAdCzh/versions/cjH2IhPv/Ping-Wheel-1.12.1-fabric-1.21.11.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -829,9 +843,9 @@
             "description": "Permet aux joueurs de marquer temporairement des emplacements et des entités.",
             "link": "https://modrinth.com/mod/ping-wheel",
             "mod_version": "v4.1.0",
-            "download": "https://cdn.modrinth.com/data/WC4UgDcZ/versions/XX0LqtxX/grind-enchantments-4.1.0%2B1.21.11-pre2.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/WC4UgDcZ/versions/XX0LqtxX/grind-enchantments-4.1.0%2B1.21.11-pre2.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -843,9 +857,9 @@
             "description": "Un accessoire mod basé sur les données.",
             "link": "https://modrinth.com/mod/trinkets-canary",
             "mod_version": "v3.11.1",
-            "download": "https://cdn.modrinth.com/data/nH02ielQ/versions/LI34xEqN/trinkets-3.11.1.jar?mr_download_reason=standalone&mr_game_version=1.21.11&mr_loader=fabric",
+            "download": "https://cdn.modrinth.com/data/nH02ielQ/versions/LI34xEqN/trinkets-3.11.1.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 }
@@ -857,13 +871,13 @@
             "description": "Ajoutez un emplacement dorsal à l'inventaire du joueur, lui permettant d'y ranger des élytres. Ainsi, il pourra utiliser les élytres sans occuper l'emplacement du plastron.",
             "link": "https://modrinth.com/mod/wed_elytra-slot",
             "mod_version": "v1.0.0",
-            "download": "https://cdn.modrinth.com/data/8HcpCwZQ/versions/uA3hx1ha/%E9%9E%98%E7%BF%85%E6%8F%92%E6%A7%BD-1.0.0.jar?mr_download_reason=standalone",
+            "download": "https://cdn.modrinth.com/data/8HcpCwZQ/versions/uA3hx1ha/%E9%9E%98%E7%BF%85%E6%8F%92%E6%A7%BD-1.0.0.jar",
             "Dependant": {
-                "Dep_1": {
+                "1": {
                     "Title": "Fabric API",
                     "link": "https://modrinth.com/mod/fabric-api"
                 },
-                "Dep_2": {
+                "2": {
                     "Title": "Trinkets Canary",
                     "link": "https://modrinth.com/mod/trinkets-canary"
                 }
