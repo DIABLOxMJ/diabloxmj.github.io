@@ -185,6 +185,15 @@
         }
         .clickable-path:hover { color: #90caf9; }
 
+        .clickable-header {
+            cursor: pointer;
+            text-decoration: underline;
+            transition: opacity 0.2s;
+        }
+        .clickable-header:hover {
+            opacity: 0.8;
+        }
+
         .section-title-container {
             display: flex;
             justify-content: space-between;
@@ -295,11 +304,21 @@
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 0.8rem;
             overflow: auto;
-            white-space: pre-wrap;
+            white-space: pre;
             margin-top: 10px;
         }
 
-        /* --- NOUVEAU : STYLE COMPARAISON DE CODE CÔTÉ À CÔTÉ --- */
+        /* NUMÉROS DE LIGNES */
+        .line-number {
+            display: inline-block;
+            width: 35px;
+            color: #555566;
+            text-align: right;
+            padding-right: 12px;
+            user-select: none; /* Empeche la sélection du numéro lors du copier-coller */
+            -webkit-user-select: none;
+        }
+
         .diff-container {
             display: flex;
             gap: 15px;
@@ -409,11 +428,11 @@
                 <h3>Comparaison Fichiers de Structure (.json / .mcmeta)</h3>
                 <div class="diff-container">
                     <div class="diff-box">
-                        <h4 style="color: #4caf50;">📁 Pack (Main) - Actuel</h4>
+                        <h4 id="header-main-file" class="clickable-header" style="color: #4caf50;">📁 Pack (Main) - Actuel ↗️</h4>
                         <div id="code-box-main" class="code-viewer">Chargement...</div>
                     </div>
                     <div class="diff-box">
-                        <h4 style="color: #ff9800;">📁 Pack (Next) - Nouveau</h4>
+                        <h4 id="header-next-file" class="clickable-header" style="color: #ff9800;">📁 Pack (Next) - Nouveau ↗️</h4>
                         <div id="code-box-next" class="code-viewer">Chargement...</div>
                     </div>
                 </div>
@@ -497,6 +516,36 @@
             if (!url) return url;
             const sep = url.includes('?') ? '&' : '?';
             return `${url}${sep}_v=${Date.now()}`;
+        }
+
+        // FORMATAGE DU CODE AVEC NUMÉROS DE LIGNES
+        function formatCodeWithLineNumbers(rawText) {
+            let formattedText = rawText;
+            try {
+                // Tente de formater proprement le JSON
+                const parsed = JSON.parse(rawText);
+                formattedText = JSON.stringify(parsed, null, 4);
+            } catch(e) {
+                // Garde le texte brut si ce n'est pas du JSON valide
+            }
+
+            const lines = formattedText.split('\n');
+            const totalLines = lines.length;
+            const padSize = totalLines.toString().length;
+
+            return lines.map((line, index) => {
+                const lineNum = (index + 1).toString().padStart(padSize, ' ');
+                return `<span class="line-number">${lineNum}</span>${escapeHtml(line)}`;
+            }).join('\n');
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
         function toggleOutilsIndex() {
@@ -806,12 +855,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    try {
-                        const parsed = JSON.parse(data.content);
-                        codeBox.innerText = JSON.stringify(parsed, null, 4);
-                    } catch(e) {
-                        codeBox.innerText = data.content;
-                    }
+                    codeBox.innerHTML = formatCodeWithLineNumbers(data.content);
                 } else {
                     codeBox.innerText = `Erreur : Impossible de lire le fichier.\nChemin : ${path}`;
                 }
@@ -821,12 +865,19 @@
             });
         }
 
-        // --- NOUVEAU : CHARGEMENT COMPARATIF DUO (CÔTÉ À CÔTÉ) ---
+        // CHARGEMENT COMPARATIF DUO + TITRES CLIQUABLES
         function chargerFichiersComparaisonDiff(mainPath, nextPath) {
             const sectionCodeDiff = document.getElementById('section-code-viewer-diff');
             const sectionCodeSingle = document.getElementById('section-code-viewer');
             const boxMain = document.getElementById('code-box-main');
             const boxNext = document.getElementById('code-box-next');
+
+            // Binder l'ouverture système lors du clic sur les headers
+            const headerMain = document.getElementById('header-main-file');
+            const headerNext = document.getElementById('header-next-file');
+            
+            headerMain.onclick = () => systemOpen(mainPath, 'file');
+            headerNext.onclick = () => systemOpen(nextPath, 'file');
 
             sectionCodeSingle.style.display = 'none';
             sectionCodeDiff.style.display = 'block';
@@ -843,8 +894,7 @@
             .then(r => r.json())
             .then(data => {
                 if (data.status === 'success') {
-                    try { boxMain.innerText = JSON.stringify(JSON.parse(data.content), null, 4); }
-                    catch(e) { boxMain.innerText = data.content; }
+                    boxMain.innerHTML = formatCodeWithLineNumbers(data.content);
                 } else {
                     boxMain.innerText = `⚠️ Fichier introuvable ou absent dans Pack (Main).\nChemin : ${mainPath}`;
                 }
@@ -860,8 +910,7 @@
             .then(r => r.json())
             .then(data => {
                 if (data.status === 'success') {
-                    try { boxNext.innerText = JSON.stringify(JSON.parse(data.content), null, 4); }
-                    catch(e) { boxNext.innerText = data.content; }
+                    boxNext.innerHTML = formatCodeWithLineNumbers(data.content);
                 } else {
                     boxNext.innerText = `⚠️ Fichier introuvable dans Pack (Next).\nChemin : ${nextPath}`;
                 }
@@ -939,7 +988,7 @@
                 const cheminTexture = elem.textures[key];
                 const card = document.createElement('div');
                 card.className = 'card-texture';
-                card.onclick = () => systemOpen(cheminTexture, 'folder');
+                card.onclick = () => systemOpen(cheminTexture, 'file');
                 
                 const resId = `res-${key}-${elem.id}`.replace(/:/g, '-').replace(/\//g, '-');
                 card.innerHTML = `
@@ -972,7 +1021,7 @@
             elem.textures.forEach(tex => {
                 const card = document.createElement('div');
                 card.className = 'card-texture';
-                card.onclick = () => systemOpen(tex.path, 'folder');
+                card.onclick = () => systemOpen(tex.path, 'file');
                 
                 const resId = `res-cat-${elem.id}-${tex.name}`.replace(/[^a-zA-Z0-9]/g, '-');
                 card.innerHTML = `
@@ -1020,7 +1069,7 @@
                 // Carte 1 : Pack (Main)
                 const cardMain = document.createElement('div');
                 cardMain.className = 'card-texture';
-                cardMain.onclick = () => systemOpen(mainPath, 'folder');
+                cardMain.onclick = () => systemOpen(mainPath, 'file');
                 const resIdMain = `res-main-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
                 cardMain.innerHTML = `
                     <img src="${getAntiCacheUrl(mainPath)}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdMain}')">
@@ -1033,7 +1082,7 @@
                 // Carte 2 : Pack (Next)
                 const cardNext = document.createElement('div');
                 cardNext.className = 'card-texture';
-                cardNext.onclick = () => systemOpen(nextPath, 'folder');
+                cardNext.onclick = () => systemOpen(nextPath, 'file');
                 const resIdNext = `res-next-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
                 cardNext.innerHTML = `
                     <img src="${getAntiCacheUrl(nextPath)}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdNext}')">
@@ -1046,7 +1095,7 @@
                 // Carte 3 : Pack (Default)
                 const cardDefault = document.createElement('div');
                 cardDefault.className = 'card-texture';
-                cardDefault.onclick = () => systemOpen(defaultPath, 'folder');
+                cardDefault.onclick = () => systemOpen(defaultPath, 'file');
                 const resIdDefault = `res-default-${elem.filename}`.replace(/[^a-zA-Z0-9]/g, '-');
                 cardDefault.innerHTML = `
                     <img src="${getAntiCacheUrl(defaultPath)}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resIdDefault}')">
