@@ -15,22 +15,26 @@
         },
         "list": {
             "1": {
-                "version": "26.1.*",
-                "download": "packs/Faithful_Legacy/Faithful_Legacy_26.1.2.zip"
+                "version": "26.2",
+                "download": "packs/Faithful_Legacy/Faithful_Legacy_26.2.zip"
             },
             "2": {
+                "version": "26.1.2",
+                "download": "packs/Faithful_Legacy/Faithful_Legacy_26.1.2.zip"
+            },
+            "3": {
                 "version": "1.21.11",
                 "download": "packs/Faithful_Legacy/Faithful_Legacy_1.21.11.zip"
             },
-            "3": {
+            "4": {
                 "version": "1.21",
                 "download": "packs/Faithful_Legacy/Faithful_Legacy_1.21.zip"
             },
-            "4": {
+            "5": {
                 "version": "1.20.1",
                 "download": "packs/Faithful_Legacy/Faithful_Legacy_1.20.1.zip"
             },
-            "5": {
+            "6": {
                 "version": "1.18.2",
                 "download": "packs/Faithful_Legacy/Faithful_Legacy_1.18.2.zip"
             }
@@ -51,18 +55,22 @@
         },
         "list": {
             "1": {
-                "version": "26.1.*",
-                "download": "packs/Beta_Legacy/Beta_Legacy_26.1.2.zip"
+                "version": "26.2",
+                "download": "packs/Beta_Legacy/Beta_Legacy_26.2.zip"
             },
             "2": {
+                "version": "26.1.2",
+                "download": "packs/Beta_Legacy/Beta_Legacy_26.1.2.zip"
+            },
+            "3": {
                 "version": "1.21.11",
                 "download": "packs/Beta_Legacy/Beta_Legacy_1.21.11.zip"
             },
-            "3": {
+            "4": {
                 "version": "1.20.1",
                 "download": "packs/Beta_Legacy/Beta_Legacy_1.20.1.zip"
             },
-            "4": {
+            "5": {
                 "version": "1.18.2",
                 "download": "packs/Beta_Legacy/Beta_Legacy_1.18.2.zip"
             }
@@ -83,18 +91,22 @@
         },
         "list": {
             "1": {
-                "version": "26.1.*",
-                "download": "packs/Alpha_Legacy/Alpha_Legacy_26.1.2.zip"
+                "version": "26.2",
+                "download": "packs/Alpha_Legacy/Alpha_Legacy_26.2.zip"
             },
             "2": {
+                "version": "26.1.2",
+                "download": "packs/Alpha_Legacy/Alpha_Legacy_26.1.2.zip"
+            },
+            "3": {
                 "version": "1.21.11",
                 "download": "packs/Alpha_Legacy/Alpha_Legacy_1.21.11.zip"
             },
-            "3": {
+            "4": {
                 "version": "1.20.1",
                 "download": "packs/Alpha_Legacy/Alpha_Legacy_1.20.1.zip"
             },
-            "4": {
+            "5": {
                 "version": "1.18.2",
                 "download": "packs/Alpha_Legacy/Alpha_Legacy_1.18.2.zip"
             }
