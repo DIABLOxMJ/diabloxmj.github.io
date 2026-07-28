@@ -3,6 +3,7 @@ import json
 import subprocess
 import platform
 import time
+import shutil
 from flask import Flask, jsonify, request
 from flask import send_from_directory
 from flask_cors import CORS
@@ -154,6 +155,32 @@ def read_file():
 def serve_index_data(filename):
     # OUTPUT_DIR est déjà défini comme os.path.join(BASE_DIR, "IndexData")
     return send_from_directory(OUTPUT_DIR, filename)
+
+@app.route('/extract-single-file', methods=['POST'])
+def extract_single_file():
+    data = request.json or {}
+    rel_path = data.get('path')
+    
+    if not rel_path:
+        return jsonify({"status": "error", "message": "Aucun chemin fourni"}), 400
+
+    # Retirer "Pack (Next)/assets/" si le chemin envoyé le contient déjà
+    clean_path = rel_path.replace("Pack (Next)/assets/", "").replace("Pack (Main)/assets/", "")
+    
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    src_file = os.path.normpath(os.path.join(base_dir, "Pack (Next)", "assets", clean_path))
+    dest_file = os.path.normpath(os.path.join(base_dir, "Extract", "assets", clean_path))
+
+    if not os.path.exists(src_file):
+        return jsonify({"status": "error", "message": f"Fichier source introuvable dans Pack (Next) : {clean_path}"}), 404
+
+    try:
+        # Reconstitution exacte de l'arborescence dans Extract/assets/
+        os.makedirs(os.path.dirname(dest_file), exist_ok=True)
+        shutil.copy2(src_file, dest_file)
+        return jsonify({"status": "success", "message": f"Fichier extrait avec succès dans {dest_file}"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

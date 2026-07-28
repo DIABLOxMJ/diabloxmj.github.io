@@ -391,7 +391,10 @@
                     <h1 id="preview-title">Nom de l'élément</h1>
                     <span id="preview-id" style="color: var(--accent); font-family: monospace;">id_technique</span>
                 </div>
-                <button id="task-btn" class="btn-check-task" onclick="toggleTaskStatus()">✔️ Marquer comme fait</button>
+                <div style="display: flex; gap: 8px;">
+                    <button id="extract-single-btn" class="btn-check-task" style="background-color: #e91e63;" onclick="extraireFichierSelectionne()">📦 Extraire le fichier</button>
+                    <button id="task-btn" class="btn-check-task" onclick="toggleTaskStatus()">✔️ Marquer comme fait</button>
+                </div>
             </div>
             
             <div class="preview-section" id="section-json-fichiers">
@@ -876,8 +879,8 @@
             const headerMain = document.getElementById('header-main-file');
             const headerNext = document.getElementById('header-next-file');
             
-            headerMain.onclick = () => systemOpen(mainPath, 'file');
-            headerNext.onclick = () => systemOpen(nextPath, 'file');
+            headerMain.onclick = () => systemOpen(mainPath, 'folder');
+            headerNext.onclick = () => systemOpen(nextPath, 'folder');
 
             sectionCodeSingle.style.display = 'none';
             sectionCodeDiff.style.display = 'block';
@@ -1309,6 +1312,42 @@
                 btn.innerText = "✔️ Marquer comme fait";
                 btn.className = "btn-check-task";
             }
+        }
+
+        function extraireFichierSelectionne() {
+            if (!currentSelectedId) {
+                alert("Veuillez sélectionner un fichier à extraire.");
+                return;
+            }
+        
+            // Récupération du chemin relatif selon l'onglet ouvert
+            let relativePath = currentSelectedId;
+        
+            const btn = document.getElementById('extract-single-btn');
+            const oldText = btn.innerText;
+            btn.innerText = "⏳ Extraction...";
+            btn.disabled = true;
+        
+            fetch('http://localhost:5000/extract-single-file', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: relativePath })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert("🎉 Fichier extrait avec succès dans le dossier Extract !");
+                } else {
+                    alert("❌ Erreur : " + data.message);
+                }
+            })
+            .catch(err => {
+                alert("❌ Impossible de contacter le serveur.");
+            })
+            .finally(() => {
+                btn.innerText = oldText;
+                btn.disabled = false;
+            });
         }
     </script>
 </body>
