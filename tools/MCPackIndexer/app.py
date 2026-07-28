@@ -43,7 +43,8 @@ def run_script(script_type):
         cmd.append(str(data['version']))
 
     try:
-        result = subprocess.run(['py', script_path], capture_output=True, text=True, check=True)
+        # CORRECTION ICI : On passe la liste `cmd` complète à subprocess.run au lieu d'une liste fixe !
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         return jsonify({
             "status": "success", 
             "message": f"Le script {script_name} s'est exécuté avec succès !\n" + result.stdout
