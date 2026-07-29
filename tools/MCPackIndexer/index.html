@@ -16,6 +16,7 @@
             --rouge-manquant: #ef5350;
             --fond-manquant: #3d2323;
             --img-size: 256px; /* Taille dynamique pilotable via JS */
+            --shadow: rgba(0, 0, 0, 0.5);
         }
 
         * {
@@ -41,9 +42,21 @@
             padding: 15px;
         }
 
-        #cadre-outils { width: 20%; background-color: #22222b; }
         #cadre-liste { width: 30%; background-color: var(--bg-cadre); }
-        #cadre-aperçu { width: 55%; background-color: #2d2d38; border-right: none; overflow-y: auto; }
+        #cadre-aperçu { width: 70%; background-color: #2d2d38; border-right: none; overflow-y: auto; }
+
+        
+        #cadre-outils {
+            position: absolute; top: 15px; left: 15px; width: 20%; height: calc(100% - 30px);
+            background-color: rgb(36, 36, 43, 0.5); padding: 15px; border-radius: 8px;
+            box-shadow: 0 8px 32px var(--shadow); border: 1px solid #2d2d37;
+            display: flex; flex-direction: column; z-index: 10;
+            backdrop-filter: blur(4px); /* Petit effet optionnel pour lier la transparence */
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
+        }
+        #cadre-outils.hidden { transform: translateX(-280px); opacity: 0; pointer-events: none; }
+        .search-bar { width: 100%; padding: 8px 12px; margin-bottom: 12px; background-color: var(--bg-principal); border: 1px solid #333; border-radius: 4px; color: var(--texte); font-size: 0.85rem; }
+
 
         h2 {
             font-size: 1.2rem;
@@ -133,7 +146,7 @@
             overflow-x: hidden;
             padding-right: 5px;
         }
-        .search-container { display: flex; gap: 5px; margin-bottom: 15px; }
+        .search-container { display: flex; align-items: baseline; gap: 5px; }
         .search-bar {
             flex: 1;
             padding: 8px 12px;
@@ -147,7 +160,10 @@
             background-color: var(--bg-bouton);
             color: var(--texte);
             border: 1px solid var(--bg-bouton-hover);
-            padding: 0 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 0.85rem;
@@ -187,7 +203,7 @@
 
         .clickable-header {
             cursor: pointer;
-            text-decoration: underline;
+            /*text-decoration: underline;*/
             transition: opacity 0.2s;
         }
         .clickable-header:hover {
@@ -295,12 +311,12 @@
 
         .code-viewer {
             width: 100%;
-            max-height: 445px;
+            max-height: 530px;
             background-color: #121214;
             color: #a5d6a7;
             border: 1px solid #333;
             border-radius: 4px;
-            padding: 10px;
+            padding: 5px;
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 0.8rem;
             overflow: auto;
@@ -343,29 +359,17 @@
 
         .diff-box .code-viewer {
             margin-top: 0;
-            height: 450px;
+            height: auto;
         }
     </style>
 </head>
 <body class="hide-errors">
 
-    <div id="cadre-outils" class="cadre">
-        <div class="section-title-container" style="margin-bottom: 8px;">
-            <h2 style="margin-bottom: 0; border-bottom: none;">Outils Index</h2>
-            <button class="btn-toggle-errors" onclick="toggleOutilsIndex()" id="btn-toggle-outils">Masquer</button>
-        </div>
-        <div id="conteneur-outils-scripts">
-            <button class="btn-outil btn-run-script" style="background-color: #4caf50;" onclick="runIndexer('pack_all')">⚡ Indexer le Pack</button>
-            <button class="btn-outil btn-run-script" style="background-color: #7b1fa2;" onclick="runIndexer('sounds')">🎵 Extraire les Sons</button>
-            <button class="btn-outil btn-run-script" style="background-color: #ff9800;" onclick="runIndexer('comparaison')">🔍 Lancer la Comparaison</button>
-            <button class="btn-outil btn-run-script" style="background-color: #e91e63;" onclick="runIndexer('extract')">📦 Extraire les fichiers manquants</button>
-        </div>
-        <h2>Catégories</h2>
-        <div id="liste-categories-scroll" class="liste-scroll"></div>
-    </div>
-
     <div id="cadre-liste" class="cadre">
-        <h2>Catalogue</h2>
+        <h2 class="section-title-container" style="margin-bottom: 8px;">
+            Catalogue
+            <button class="btn-toggle-errors" onclick="togglePanneauElements()" id="toggle-elements-btn" title="Afficher/Masquer les éléments">☰ Éléments</button>
+        </h2>
         <div class="onglets">
             <button id="tab-blocks" class="onglet-btn actif" onclick="switchTab('blocks')">Blocs</button>
             <button id="tab-items" class="onglet-btn" onclick="switchTab('items')">Items</button>
@@ -378,6 +382,24 @@
         <div id="liste-elements" class="liste-scroll">
             <p style="color: #888; text-align: center; margin-top: 20px;">Chargement du catalogue...</p>
         </div>
+    </div>
+
+    <div id="cadre-outils">
+
+        <h2 class="section-title-container" style="margin-bottom: 8px;">
+            Outils Index
+            <button class="btn-toggle-errors" onclick="toggleOutilsIndex()" id="btn-toggle-outils">Masquer</button>
+        </h2>
+        
+        <div id="conteneur-outils-scripts">
+            <button class="btn-outil btn-run-script" style="background-color: #4caf50;" onclick="runIndexer('pack_all')">⚡ Indexer le Pack</button>
+            <button class="btn-outil btn-run-script" style="background-color: #7b1fa2;" onclick="runIndexer('sounds')">🎵 Extraire les Sons</button>
+            <button class="btn-outil btn-run-script" style="background-color: #ff9800;" onclick="runIndexer('comparaison')">🔍 Lancer la Comparaison</button>
+            <button class="btn-outil btn-run-script" style="background-color: #e91e63;" onclick="runIndexer('extract')">📦 Extraire les fichiers manquants</button>
+        </div>
+
+        <h2>Catégories</h2>
+        <div id="liste-categories-scroll" class="liste-scroll"></div>
     </div>
 
     <div id="cadre-aperçu" class="cadre">
@@ -451,6 +473,11 @@
         let imageSize = parseInt(localStorage.getItem('mcp_imageSize')) || 256;
         let filterComparatorFolder = localStorage.getItem('mcp_filterComparatorFolder') || null;
         let savedSearchQuery = localStorage.getItem('mcp_searchQuery') || '';
+        const isHidden = localStorage.getItem('mcp_panneauQuery') === 'true';
+        const panneau = document.getElementById('cadre-outils');
+        if (isHidden) {
+            panneau.classList.add('hidden');
+        }
 
         let dbBlocks = [];
         let dbItems = [];
@@ -496,6 +523,13 @@
                 }
             });
         };
+
+        function togglePanneauElements() {
+            const panneau = document.getElementById('cadre-outils');
+            panneau.classList.toggle('hidden');
+            const panneauHidden = panneau.classList.contains('hidden');
+            localStorage.setItem('mcp_panneauQuery', panneauHidden);
+        }
 
         function toggleZoom() {
             imageSize = (imageSize === 256) ? 128 : 256;
@@ -1349,6 +1383,8 @@
                 btn.disabled = false;
             });
         }
+        
+        window.togglePanneauElements = togglePanneauElements;
     </script>
 </body>
 </html>
