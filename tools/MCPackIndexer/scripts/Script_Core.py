@@ -169,7 +169,9 @@ def extract_single_file():
     # Retirer "Pack (Next)/assets/" si le chemin envoyé le contient déjà
     clean_path = rel_path.replace("Pack (Next)/assets/", "").replace("Pack (Main)/assets/", "")
     
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+
+    base_dir_script = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.dirname(BASE_DIR_SCRIPT)
     src_file = os.path.normpath(os.path.join(base_dir, "Pack (Next)", "assets", clean_path))
     dest_file = os.path.normpath(os.path.join(base_dir, "Extract", "assets", clean_path))
 
