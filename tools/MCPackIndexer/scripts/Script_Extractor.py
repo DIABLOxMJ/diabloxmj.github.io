@@ -3,7 +3,8 @@ import json
 import shutil
 
 # Définition des dossiers
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR_SCRIPT = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(BASE_DIR_SCRIPT)
 VANILLA_DIR = os.path.join(BASE_DIR, "Pack (Next)", "assets")
 EXTRACT_DIR = os.path.join(BASE_DIR, "Extract", "assets")
 REPORT_PATH = os.path.join(BASE_DIR, "IndexData", "Index_Comparaison_Missing.json")

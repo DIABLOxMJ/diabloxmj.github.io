@@ -1,7 +1,8 @@
 import os
 import json
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR_SCRIPT = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(BASE_DIR_SCRIPT)
 PACK_DIR_SOURCE = os.path.join("Pack (Main)")
 PACK_DIR = os.path.join(BASE_DIR, PACK_DIR_SOURCE, "assets", "minecraft")
 OUTPUT_DIR = os.path.join(BASE_DIR, "IndexData")

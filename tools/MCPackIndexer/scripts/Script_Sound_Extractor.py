@@ -4,7 +4,9 @@ import shutil
 import sys
 
 # 1. Chemins d'accès (S'adapte automatiquement à ton PC)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # Racine du script
+
+BASE_DIR_SCRIPT = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(BASE_DIR_SCRIPT)
 MINECRAFT_PATH = os.path.expandvars(r'G:\Minecraft')
 
 # Récupération de la version depuis l'argument ou '1.18' par défaut

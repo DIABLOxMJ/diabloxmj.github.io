@@ -11,7 +11,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR_SCRIPT = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(BASE_DIR_SCRIPT)
 OUTPUT_DIR = os.path.join(BASE_DIR, "IndexData")
 
 @app.route('/run/<script_type>', methods=['POST'])
@@ -29,7 +30,7 @@ def run_script(script_type):
         return jsonify({"status": "error", "message": "Script inconnu"}), 400
         
     script_name = scripts[script_type]
-    script_path = os.path.join(BASE_DIR, script_name)
+    script_path = os.path.join(BASE_DIR_SCRIPT, script_name)
     
     if not os.path.exists(script_path):
         return jsonify({"status": "error", "message": f"Le fichier {script_name} est introuvable."}), 404

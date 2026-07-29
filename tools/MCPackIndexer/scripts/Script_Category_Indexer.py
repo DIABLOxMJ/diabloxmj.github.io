@@ -1,7 +1,8 @@
 import os
 import json
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR_SCRIPT = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(BASE_DIR_SCRIPT)
 TEXTURES_DIR = os.path.join(BASE_DIR, "Pack (Main)", "assets", "minecraft", "textures")
 OUTPUT_DIR = os.path.join(BASE_DIR, "IndexData")
 

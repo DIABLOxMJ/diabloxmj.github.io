@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="icon" type="image/x-icon" href="./scripts/icon.ico">
     <title>MCPackIndex - Catalogue & Comparateur de Ressources</title>
     <style>
         :root {
@@ -178,7 +178,7 @@
 
         .clickable-path {
             color: #64b5f6;
-            text-decoration: underline;
+            /*text-decoration: underline;*/
             cursor: pointer;
             font-family: monospace;
             word-break: break-all;
@@ -222,7 +222,7 @@
         .grid-textures { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(calc(var(--img-size) + 10px), 1fr)); 
-            gap: 15px; 
+            gap: 10px; 
             margin-top: 10px; 
         }
 
@@ -239,7 +239,7 @@
 
         .card-texture {
             background: var(--bg-principal);
-            padding: 10px;
+            padding: 8px;
             border-radius: 4px;
             text-align: center;
             cursor: pointer;
@@ -1120,7 +1120,7 @@
         }
 
         function handleImgError(img) {
-            img.src = 'imgerror.svg';
+            img.src = './scripts/imgerror.svg';
             const card = img.closest('.card-texture');
             if(card) card.classList.add('has-error');
         }

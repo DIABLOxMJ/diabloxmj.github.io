@@ -4,7 +4,7 @@ cd /d "%~dp0"
 
 echo [1/3] Demarrage du serveur local Python (IA)...
 :: Lance Python en arrière-plan sans bloquer le script
-start "" py app.py
+start "" py ./scripts/Script_Core.py
 
 :: Petite pause pour laisser Flask s'initialiser tranquillement
 timeout /t 4 /nobreak >nul
