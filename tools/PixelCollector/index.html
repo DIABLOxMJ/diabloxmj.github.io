@@ -190,7 +190,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #14151a;
+      background: #61616169;
       border-radius: 8px;
       padding: 16px;
       border: 1px dashed var(--border);
@@ -522,7 +522,7 @@
           } else if (hex === targetHex) {
             ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
           } else {
-            ctx.fillStyle = `rgba(${Math.floor(r * 0.15)}, ${Math.floor(g * 0.15)}, ${Math.floor(b * 0.15)}, 0.8)`;
+            ctx.fillStyle = `rgba(${Math.floor(r * 0.15)}, ${Math.floor(g * 0.15)}, ${Math.floor(b * 0.15)}, 0.35)`;
           }
 
           ctx.fillRect(x * pixelScale, y * pixelScale, pixelScale, pixelScale);

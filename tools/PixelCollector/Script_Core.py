@@ -69,7 +69,7 @@ if __name__ == "__main__":
     os.chdir(Path(__file__).parent)
     with socketserver.TCPServer(("", PORT), CoreHTTPRequestHandler) as httpd:
         print(f"==================================================")
-        print(f" MCPackIndexer - Core Server actif")
+        print(f" ColorCollector - Core Server actif")
         print(f" Accès Web : http://localhost:{PORT}")
         print(f" Dossier de sauvegarde : {SAVE_DIR.resolve()}")
         print(f"==================================================")
