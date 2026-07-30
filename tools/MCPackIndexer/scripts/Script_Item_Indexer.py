@@ -64,10 +64,7 @@ def index_items():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     index_result = []
 
-    # 1. Analyse si le dossier assets/minecraft/items/ existe
     if os.path.exists(ITEMS_DEF_DIR) and len(os.listdir(ITEMS_DEF_DIR)) > 0:
-        print(f"[MODE] Analyse via la structure Items > Models > Item > Textures")
-        
         for filename in os.listdir(ITEMS_DEF_DIR):
             if not filename.endswith(".json"):
                 continue
@@ -79,14 +76,36 @@ def index_items():
                 with open(item_def_path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
             except Exception as e:
-                print(f"  [ERROR] Erreur de lecture pour {filename} : {e}")
                 continue
 
             raw_models = extract_models_from_item_def(data)
+
+            # --- NETTOYAGE ET DÉTECTION BLOC ---
+            is_block = False
+            filtered_models = []
+
+            for m in raw_models:
+                # Retirer le prefixe "minecraft:" s'il existe
+                clean_ref = m.split(":")[-1] if ":" in m else m
+
+                # Vérifier si c'est un modèle de bloc
+                if clean_ref.startswith("block/") or clean_ref.startswith("models/block/"):
+                    is_block = True
+                else:
+                    filtered_models.append(m)
+
+            # METHODE 1 : Si tu veux TOUT EXCLURE ce qui pointe vers un bloc
+            if is_block:
+                print(f"[FILTRÉ] L'item '{item_id}' est ignoré car il utilise un modèle de Bloc ({raw_models})")
+                continue
+
+            # METHODE 2 : Si tu veux garder mais renomer (décommente ci-dessous et commente le 'if is_block:' du dessus)
+            # btn_name = item_id.replace("_", " ").title() + (" (Bloc)" if is_block else "")
+
             combined_textures = {}
             model_paths = []
 
-            for m_ref in raw_models:
+            for m_ref in filtered_models: # ou raw_models pour la méthode 2
                 clean_m = m_ref.split(":")[-1] if ":" in m_ref else m_ref
                 model_paths.append(f"{PACK_DIR_SOURCE}/assets/minecraft/models/{clean_m}.json")
                 tex_found = find_textures_in_item_model(m_ref)
@@ -102,38 +121,12 @@ def index_items():
 
             item_entry = {
                 "id": item_id,
-                "buttonName": item_id.replace("_", " ").title(),
+                "buttonName": item_id.replace("_", " ").title(), # ou btn_name pour méthode 2
                 "item_definition": f"{PACK_DIR_SOURCE}/assets/minecraft/items/{filename}",
                 "models": model_paths,
                 "textures": clean_textures
             }
             index_result.append(item_entry)
-
-    # 2. Mode de secours (si le dossier items/ n'existe pas encore dans le pack)
-    elif os.path.exists(ITEM_MODELS_DIR):
-        print(f"[MODE] Analyse de secours via models/item/")
-        for filename in os.listdir(ITEM_MODELS_DIR):
-            if filename.endswith(".json"):
-                item_id = filename.replace(".json", "")
-                model_path = os.path.join(ITEM_MODELS_DIR, filename)
-
-                textures = find_textures_in_item_model(model_path)
-                clean_textures = {}
-                for key, val in textures.items():
-                    if val.startswith("#"):
-                        clean_textures[key] = val
-                    else:
-                        clean_path = val.split(":")[-1] if ":" in val else val
-                        clean_textures[key] = f"{PACK_DIR_SOURCE}/assets/minecraft/textures/{clean_path}.png"
-
-                item_entry = {
-                    "id": item_id,
-                    "buttonName": item_id.replace("_", " ").title(),
-                    "item_definition": None,
-                    "models": [f"{PACK_DIR_SOURCE}/assets/minecraft/models/item/{filename}"],
-                    "textures": clean_textures
-                }
-                index_result.append(item_entry)
 
     output_path = os.path.join(OUTPUT_DIR, "Index_Details_Items.json")
     with open(output_path, 'w', encoding='utf-8') as f:
