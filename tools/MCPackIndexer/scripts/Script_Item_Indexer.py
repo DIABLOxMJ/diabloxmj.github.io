@@ -1,21 +1,20 @@
 import os
 import json
 
-# Chemins relatifs basés sur ta structure
 BASE_DIR_SCRIPT = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(BASE_DIR_SCRIPT)
 PACK_DIR_SOURCE = os.path.join("Pack (Main)")
 PACK_DIR = os.path.join(BASE_DIR, PACK_DIR_SOURCE, "assets", "minecraft")
 OUTPUT_DIR = os.path.join(BASE_DIR, "IndexData")
+
+ITEMS_DEF_DIR = os.path.join(PACK_DIR, "items")
 ITEM_MODELS_DIR = os.path.join(PACK_DIR, "models", "item")
-ALL_MODELS_DIR = os.path.join(PACK_DIR, "models") # Pour remonter les parents si besoin
+ALL_MODELS_DIR = os.path.join(PACK_DIR, "models")
 
 def find_textures_in_item_model(model_path_or_name):
     """Fonction récursive pour extraire les textures d'un modèle d'item via son parent"""
-    # Nettoyage du nom si format "minecraft:item/stone"
     clean_name = model_path_or_name.split(":")[-1] if ":" in model_path_or_name else model_path_or_name
     
-    # On gère le fait que le chemin peut être absolu ou relatif à la racine des modèles
     if clean_name.endswith(".json"):
         full_path = clean_name
     else:
@@ -32,11 +31,9 @@ def find_textures_in_item_model(model_path_or_name):
 
     textures = {}
 
-    # 1. On récupère les textures locales (souvent layer0, layer1, etc. pour les items)
     if "textures" in data:
         textures.update(data["textures"])
 
-    # 2. On remonte chez le parent si nécessaire pour combler les manques
     if "parent" in data:
         parent_textures = find_textures_in_item_model(data["parent"])
         for k, v in parent_textures.items():
@@ -45,49 +42,104 @@ def find_textures_in_item_model(model_path_or_name):
 
     return textures
 
-def index_items():
-    if not os.path.exists(ITEM_MODELS_DIR):
-        print(f"Erreur : Le dossier {ITEM_MODELS_DIR} est introuvable. Vérifie le dossier /Pack.")
-        return
+def extract_models_from_item_def(data):
+    """Extrait les chemins/noms de modèles depuis un fichier de définition d'item (items/*.json)"""
+    models = []
+    
+    def search_model(obj):
+        if isinstance(obj, dict):
+            if "model" in obj and isinstance(obj["model"], str):
+                models.append(obj["model"])
+            for v in obj.values():
+                search_model(v)
+        elif isinstance(obj, list):
+            for item in obj:
+                search_model(item)
 
+    search_model(data)
+    return list(dict.fromkeys(models))
+
+def index_items():
+    print("\n=== DÉBUT DE L'INDEXATION DES ITEMS ===")
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     index_result = []
 
-    # On scanne le dossier des modèles d'items
-    for filename in os.listdir(ITEM_MODELS_DIR):
-        if filename.endswith(".json"):
+    # 1. Analyse si le dossier assets/minecraft/items/ existe
+    if os.path.exists(ITEMS_DEF_DIR) and len(os.listdir(ITEMS_DEF_DIR)) > 0:
+        print(f"[MODE] Analyse via la structure Items > Models > Item > Textures")
+        
+        for filename in os.listdir(ITEMS_DEF_DIR):
+            if not filename.endswith(".json"):
+                continue
+                
             item_id = filename.replace(".json", "")
-            model_path = os.path.join(ITEM_MODELS_DIR, filename)
+            item_def_path = os.path.join(ITEMS_DEF_DIR, filename)
+            
+            try:
+                with open(item_def_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            except Exception as e:
+                print(f"  [ERROR] Erreur de lecture pour {filename} : {e}")
+                continue
 
-            # On cherche les textures en partant de ce fichier de base
-            textures = find_textures_in_item_model(model_path)
+            raw_models = extract_models_from_item_def(data)
+            combined_textures = {}
+            model_paths = []
 
-            # Nettoyage des chemins de textures pour l'interface web
+            for m_ref in raw_models:
+                clean_m = m_ref.split(":")[-1] if ":" in m_ref else m_ref
+                model_paths.append(f"{PACK_DIR_SOURCE}/assets/minecraft/models/{clean_m}.json")
+                tex_found = find_textures_in_item_model(m_ref)
+                combined_textures.update(tex_found)
+
             clean_textures = {}
-            for key, val in textures.items():
-                if val.startswith("#"): # Référence interne
+            for key, val in combined_textures.items():
+                if val.startswith("#"):
                     clean_textures[key] = val
                 else:
-                    # Extraction du chemin propre sans le "minecraft:"
                     clean_path = val.split(":")[-1] if ":" in val else val
-                    # Les textures d'items peuvent être dans textures/item/ ou textures/block/
                     clean_textures[key] = f"{PACK_DIR_SOURCE}/assets/minecraft/textures/{clean_path}.png"
 
-            # Construction de l'objet pour l'index des items
             item_entry = {
                 "id": item_id,
                 "buttonName": item_id.replace("_", " ").title(),
-                "model": f"{PACK_DIR_SOURCE}/assets/minecraft/models/item/{filename.split(':')[-1]}",
+                "item_definition": f"{PACK_DIR_SOURCE}/assets/minecraft/items/{filename}",
+                "models": model_paths,
                 "textures": clean_textures
             }
             index_result.append(item_entry)
 
-    # Sauvegarde dans /IndexData/Index_Details_Items.json
+    # 2. Mode de secours (si le dossier items/ n'existe pas encore dans le pack)
+    elif os.path.exists(ITEM_MODELS_DIR):
+        print(f"[MODE] Analyse de secours via models/item/")
+        for filename in os.listdir(ITEM_MODELS_DIR):
+            if filename.endswith(".json"):
+                item_id = filename.replace(".json", "")
+                model_path = os.path.join(ITEM_MODELS_DIR, filename)
+
+                textures = find_textures_in_item_model(model_path)
+                clean_textures = {}
+                for key, val in textures.items():
+                    if val.startswith("#"):
+                        clean_textures[key] = val
+                    else:
+                        clean_path = val.split(":")[-1] if ":" in val else val
+                        clean_textures[key] = f"{PACK_DIR_SOURCE}/assets/minecraft/textures/{clean_path}.png"
+
+                item_entry = {
+                    "id": item_id,
+                    "buttonName": item_id.replace("_", " ").title(),
+                    "item_definition": None,
+                    "models": [f"{PACK_DIR_SOURCE}/assets/minecraft/models/item/{filename}"],
+                    "textures": clean_textures
+                }
+                index_result.append(item_entry)
+
     output_path = os.path.join(OUTPUT_DIR, "Index_Details_Items.json")
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(index_result, f, indent=4, ensure_ascii=False)
 
-    print(f"Indexation des items terminée ! {len(index_result)} items indexés dans /IndexData/Index_Details_Items.json")
+    print(f"=== FIN DE L'INDEXATION : {len(index_result)} items enregistrés ===\n")
 
 if __name__ == "__main__":
     index_items()

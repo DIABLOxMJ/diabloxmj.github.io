@@ -1,0 +1,4 @@
+Étape 1 : Installer Flask
+Ouvre ton terminal (Invite de commandes sur Windows, ou Terminal sur Mac) et tape cette commande pour installer l'outil qui va créer le serveur :
+py -m pip install flask flask-cors
+(Note : flask-cors est un petit outil indispensable pour autoriser ton fichier index.html local à parler à ton serveur Python sans blocage de sécurité).

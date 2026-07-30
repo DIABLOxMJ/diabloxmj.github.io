@@ -186,5 +186,42 @@ def extract_single_file():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+@app.route('/extract-batch-files', methods=['POST'])
+def extract_batch_files():
+    data = request.json or {}
+    paths = data.get('paths', [])
+    
+    if not paths:
+        return jsonify({"status": "error", "message": "Aucun chemin fourni"}), 400
+
+    base_dir_script = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.dirname(base_dir_script)
+    
+    extracted_count = 0
+    errors = []
+
+    for rel_path in paths:
+        # Nettoyage des préfixes éventuels
+        clean_path = rel_path.replace("Pack (Next)/assets/", "").replace("Pack (Main)/assets/", "")
+        
+        src_file = os.path.normpath(os.path.join(base_dir, "Pack (Next)", "assets", clean_path))
+        dest_file = os.path.normpath(os.path.join(base_dir, "Extract", "assets", clean_path))
+
+        if os.path.exists(src_file):
+            try:
+                os.makedirs(os.path.dirname(dest_file), exist_ok=True)
+                shutil.copy2(src_file, dest_file)
+                extracted_count += 1
+            except Exception as e:
+                errors.append(f"{clean_path}: {str(e)}")
+        else:
+            errors.append(f"{clean_path}: Fichier source introuvable")
+
+    return jsonify({
+        "status": "success",
+        "extracted_count": extracted_count,
+        "errors": errors
+    })
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

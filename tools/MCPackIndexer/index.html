@@ -42,8 +42,8 @@
             padding: 15px;
         }
 
-        #cadre-liste { width: 30%; background-color: var(--bg-cadre); }
-        #cadre-aperçu { width: 70%; background-color: #2d2d38; border-right: none; overflow-y: auto; }
+        #cadre-liste { width: 34%; background-color: var(--bg-cadre); }
+        #cadre-aperçu { width: 66%; background-color: #2d2d38; border-right: none; overflow-y: auto; }
 
         
         #cadre-outils {
@@ -255,7 +255,7 @@
 
         .card-texture {
             background: var(--bg-principal);
-            padding: 8px;
+            padding: 6px;
             border-radius: 4px;
             text-align: center;
             cursor: pointer;
@@ -324,14 +324,13 @@
             margin-top: 10px;
         }
 
-        /* NUMÉROS DE LIGNES */
         .line-number {
             display: inline-block;
             width: 35px;
             color: #555566;
             text-align: right;
             padding-right: 12px;
-            user-select: none; /* Empeche la sélection du numéro lors du copier-coller */
+            user-select: none;
             -webkit-user-select: none;
         }
 
@@ -373,11 +372,21 @@
         <div class="onglets">
             <button id="tab-blocks" class="onglet-btn actif" onclick="switchTab('blocks')">Blocs</button>
             <button id="tab-items" class="onglet-btn" onclick="switchTab('items')">Items</button>
-            <button id="tab-comparaison" class="onglet-btn" onclick="switchTab('comparaison')">⚠️ Comparateur</button>
+            <button id="tab-comparaison" class="onglet-btn" onclick="switchTab('comparaison')">🔎 Comparateur</button>
         </div>
         <div class="search-container">
             <input type="text" id="search" class="search-bar" placeholder="Rechercher un élément..." oninput="onSearchInput()">
             <button id="btn-filter-missing" class="btn-filter-toggle" onclick="toggleFilterMissing()" title="Masquer les éléments terminés / présents">👁️ Manquants</button>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; margin-bottom: 8px;">
+            <div style="display: flex; gap: 5px;">
+                <div id="toolbar-actions" class="toolbar-actions" style="display: flex; gap: 5px;">
+                    <button class="btn-toggle-errors" onclick="toggleSelectAll(true)" style="font-size: 0.75rem;">☑️ Tout cocher</button>
+                    <button class="btn-toggle-errors" onclick="toggleSelectAll(false)" style="font-size: 0.75rem;">☐ Tout décocher</button>
+                    <button id="extract-single-btn" class="btn-toggle-errors" style="background-color: #e91e63;" onclick="gererActionExtraction()">📦 Extraire le fichier</button>
+                </div>
+            </div>
+            <span id="counter-elements-visible" style="font-size: 0.8rem; color: #aaa; font-weight: bold;">0 élément(s)</span>
         </div>
         <div id="liste-elements" class="liste-scroll">
             <p style="color: #888; text-align: center; margin-top: 20px;">Chargement du catalogue...</p>
@@ -414,21 +423,20 @@
                     <span id="preview-id" style="color: var(--accent); font-family: monospace;">id_technique</span>
                 </div>
                 <div style="display: flex; gap: 8px;">
-                    <button id="extract-single-btn" class="btn-check-task" style="background-color: #e91e63;" onclick="extraireFichierSelectionne()">📦 Extraire le fichier</button>
                     <button id="task-btn" class="btn-check-task" onclick="toggleTaskStatus()">✔️ Marquer comme fait</button>
                 </div>
             </div>
             
             <div class="preview-section" id="section-json-fichiers">
                 <h3>Fichiers de Structure (.json)</h3>
-                <p style="margin-top: 8px;"><strong>Blockstate :</strong> <span id="path-blockstate" class="clickable-path">-</span></p>
-                <p style="margin-top: 4px;"><strong>Modèle :</strong> <span id="path-model" class="clickable-path">-</span></p>
+                <p id="row-blockstate" style="margin-top: 8px;"><strong>Blockstate :</strong> <span id="path-blockstate" class="clickable-path">-</span></p>
+                <p id="row-item-def" style="margin-top: 8px;"><strong>Item :</strong> <span id="path-item-def" class="clickable-path">-</span></p>
+                <p style="margin-top: 4px;"><strong>Modèle(s) :</strong> <span id="path-model" class="clickable-path">-</span></p>
             </div>
 
             <div class="preview-section" id="section-comparaison-details" style="display: none;">
                 <h3>Informations de Comparaison</h3>
                 <p style="margin-top: 8px;"><strong>Statut dans Pack (Main) :</strong> <span id="comp-status-badge" style="font-weight: bold;">-</span></p>
-                <p style="margin-top: 4px;"><strong>Chemin relatif Pack (Next) :</strong> <span id="comp-vanilla-path" style="font-family: monospace; color: #aaa;">-</span></p>
             </div>
 
             <div class="preview-section" id="section-textures">
@@ -483,8 +491,10 @@
         let dbItems = [];
         let dbCategories = {};
         let dbComparaison = [];
+        let currentFilteredElements = []; // Stocke les éléments actuellement filtrés/visibles
 
         let completedTasks = JSON.parse(localStorage.getItem('mcp_completedTasks')) || [];
+        let selectedForExtraction = new Set();
 
         const dossiersRacinesMinecraft = [
             "blockstates", "font", "lang", "models", "particles", "sounds", "texts", "textures"
@@ -521,6 +531,8 @@
                 if (currentSelectedId) {
                     restaurerDernierElement();
                 }
+
+                updateToolbarVisibility();
             });
         };
 
@@ -555,16 +567,12 @@
             return `${url}${sep}_v=${Date.now()}`;
         }
 
-        // FORMATAGE DU CODE AVEC NUMÉROS DE LIGNES
         function formatCodeWithLineNumbers(rawText) {
             let formattedText = rawText;
             try {
-                // Tente de formater proprement le JSON
                 const parsed = JSON.parse(rawText);
                 formattedText = JSON.stringify(parsed, null, 4);
-            } catch(e) {
-                // Garde le texte brut si ce n'est pas du JSON valide
-            }
+            } catch(e) {}
 
             const lines = formattedText.split('\n');
             const totalLines = lines.length;
@@ -726,7 +734,7 @@
         function genererListe(elements) {
             const container = document.getElementById('liste-elements');
             container.innerHTML = '';
-            
+
             let filteredElements = elements;
 
             if (filterOnlyMissing) {
@@ -736,26 +744,66 @@
                     filteredElements = filteredElements.filter(e => !completedTasks.includes(e.id));
                 }
             }
-
-            if(!filteredElements || filteredElements.length === 0) {
+        
+            // Mise à jour du compteur d'éléments visibles
+            const counterSpan = document.getElementById('counter-elements-visible');
+            if (counterSpan) {
+                counterSpan.innerText = `${filteredElements.length} élément(s)`;
+            }
+        
+            if (!filteredElements || filteredElements.length === 0) {
                 container.innerHTML = `<p style="color: #888; text-align: center; margin-top: 20px;">Aucun élément (ou tout est filtré/complété ! 🎉)</p>`;
+                updateExtractionButtonVisual();
                 return;
             }
-
+        
             filteredElements.forEach(elem => {
+                const wrapper = document.createElement('div');
+                wrapper.style.display = 'flex';
+                wrapper.style.alignItems = 'center';
+                wrapper.style.gap = '6px';
+                wrapper.style.marginBottom = '4px';
+            
+                const elemIdentifier = currentTab === 'comparaison' ? elem.path : elem.id;
+            
+                // On affiche la checkbox UNIQUEMENT si on est sur l'onglet comparaison
+                if (currentTab === 'comparaison') {
+                    const chk = document.createElement('input');
+                    chk.type = 'checkbox';
+                    chk.style.cursor = 'pointer';
+                    chk.style.width = '16px';
+                    chk.style.height = '16px';
+                    chk.checked = selectedForExtraction.has(elemIdentifier);
+                
+                    chk.onchange = (e) => {
+                        e.stopPropagation();
+                        if (chk.checked) {
+                            selectedForExtraction.add(elemIdentifier);
+                        } else {
+                            selectedForExtraction.delete(elemIdentifier);
+                        }
+                        updateExtractionButtonVisual();
+                    };
+                    wrapper.appendChild(chk);
+                }
+            
+                // Création du bouton pour l'élément
                 const btn = document.createElement('button');
                 btn.className = 'btn-catalogue';
-
-                const elemIdentifier = currentTab === 'comparaison' ? elem.path : elem.id;
+                btn.style.flex = '1';
+                btn.style.marginBottom = '0';
+            
                 const isSelected = (currentSelectedId === elemIdentifier);
-
+                if (isSelected) {
+                    btn.classList.add('comp-selected');
+                }
+            
+                // Texte & style selon l'onglet
                 if (currentTab === 'comparaison') {
                     const txtSuffix = isSelected ? '  👈 ( Ouvert )' : '';
                     btn.innerText = elem.path + txtSuffix;
                     btn.style.fontSize = "0.8rem";
-                    btn.style.wordBreak = "break-all";
-
-                    if (elem.status && elem.status.toLowerCase() === 'missing') {
+                    if (elem.status === 'missing') {
                         btn.classList.add('comp-missing');
                     } else {
                         btn.classList.add('comp-present');
@@ -763,20 +811,15 @@
                 } else {
                     const txtSuffix = isSelected ? '  👈 ( Ouvert )' : '';
                     btn.innerText = elem.buttonName + txtSuffix;
-
                     if (completedTasks.includes(elem.id)) {
                         btn.classList.add('valide');
                     }
                 }
             
-                if (isSelected) {
-                    btn.classList.add('comp-selected');
-                }
-            
                 btn.onclick = () => {
                     currentSelectedId = elemIdentifier;
                     localStorage.setItem('mcp_currentSelectedId', currentSelectedId);
-
+                
                     genererListe(filteredElements);
                 
                     if (currentTab === 'blocks' || currentTab === 'items') {
@@ -788,9 +831,99 @@
                     }
                     updateTaskButtonVisual();
                 };
-
-                container.appendChild(btn);
+            
+                wrapper.appendChild(btn);
+                container.appendChild(wrapper);
             });
+        
+            updateExtractionButtonVisual();
+        }
+
+        // Tout cocher / décocher UNIQUEMENT dans les éléments VISIBLES
+        function toggleSelectAll(select) {
+            currentFilteredElements.forEach(elem => {
+                const id = currentTab === 'comparaison' ? elem.path : elem.id;
+
+                if (filterOnlyMissing) {
+                    if (currentTab === 'comparaison' && elem.status && elem.status.toLowerCase() !== 'missing') return;
+                    if (currentTab !== 'comparaison' && completedTasks.includes(elem.id)) return;
+                }
+            
+                if (select) {
+                    selectedForExtraction.add(id);
+                } else {
+                    selectedForExtraction.delete(id);
+                }
+            });
+        
+            genererListe(currentFilteredElements);
+        }
+
+        // Met à jour le texte du bouton unique d'extraction
+        function updateExtractionButtonVisual() {
+            const btn = document.getElementById('extract-single-btn');
+            if (!btn) return;
+        
+            const count = selectedForExtraction.size;
+            if (count > 0) {
+                btn.innerText = `📦 Extraire la sélection (${count})`;
+                btn.style.backgroundColor = '#d81b60';
+            } else {
+                btn.innerText = "📦 Extraire le fichier";
+                btn.style.backgroundColor = '#e91e63';
+            }
+        }
+        
+        // Choisit l'extraction individuelle ou par lot
+        function gererActionExtraction() {
+            if (selectedForExtraction.size > 0) {
+                extraireFichiersCoches();
+            } else {
+                extraireFichierSelectionne();
+            }
+        }
+
+        // Envoi du lot à l'API Flask
+        function extraireFichiersCoches() {
+            if (selectedForExtraction.size === 0) return;
+        
+            const listPaths = Array.from(selectedForExtraction);
+            const btn = document.getElementById('extract-single-btn');
+            const oldText = btn.innerText;
+        
+            btn.innerText = "⏳ Extraction en cours...";
+            btn.disabled = true;
+        
+            fetch('http://localhost:5000/extract-batch-files', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paths: listPaths })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(`🎉 ${data.extracted_count} fichier(s) extrait(s) avec succès dans le dossier Extract !`);
+                    selectedForExtraction.clear();
+                    filtrerElements();
+                } else {
+                    alert("❌ Erreur : " + data.message);
+                }
+            })
+            .catch(err => {
+                alert("❌ Impossible de contacter le serveur.");
+            })
+            .finally(() => {
+                btn.innerText = oldText;
+                btn.disabled = false;
+            });
+        }
+
+        function updateToolbarVisibility() {
+            const toolbar = document.getElementById('toolbar-actions');
+            if (toolbar) {
+                // Affiche la barre uniquement si on est sur l'onglet comparaison
+                toolbar.style.display = (currentTab === 'comparaison') ? 'flex' : 'none';
+            }
         }
 
         function switchTab(type, resetSelection = true) {
@@ -806,7 +939,7 @@
             document.getElementById('tab-blocks').classList.toggle('actif', type === 'blocks');
             document.getElementById('tab-items').classList.toggle('actif', type === 'items');
             document.getElementById('tab-comparaison').classList.toggle('actif', type === 'comparaison');
-            
+            updateToolbarVisibility();
             genererBoutonsCategories();
             filtrerElements();
         }
@@ -821,7 +954,7 @@
             document.getElementById('tab-blocks').classList.remove('actif');
             document.getElementById('tab-items').classList.remove('actif');
             document.getElementById('tab-comparaison').classList.remove('actif');
-            
+            updateToolbarVisibility();
             genererBoutonsCategories();
             genererListe(dbCategories[catName]);
         }
@@ -865,14 +998,15 @@
                     return pathLoweCase.startsWith(filtreLowerCase + '/');
                 });
             }
-
+        
             const filtres = baseData.filter(elem => {
                 if (currentTab === 'comparaison') {
                     return elem.path && elem.path.toLowerCase().includes(query);
                 }
                 return elem.buttonName.toLowerCase().includes(query) || elem.id.toLowerCase().includes(query);
             });
-            
+
+            currentFilteredElements = filtres;
             genererListe(filtres);
         }
 
@@ -902,14 +1036,12 @@
             });
         }
 
-        // CHARGEMENT COMPARATIF DUO + TITRES CLIQUABLES
         function chargerFichiersComparaisonDiff(mainPath, nextPath) {
             const sectionCodeDiff = document.getElementById('section-code-viewer-diff');
             const sectionCodeSingle = document.getElementById('section-code-viewer');
             const boxMain = document.getElementById('code-box-main');
             const boxNext = document.getElementById('code-box-next');
 
-            // Binder l'ouverture système lors du clic sur les headers
             const headerMain = document.getElementById('header-main-file');
             const headerNext = document.getElementById('header-next-file');
             
@@ -922,7 +1054,6 @@
             boxMain.innerText = "⏳ Lecture du fichier Main...";
             boxNext.innerText = "⏳ Lecture du fichier Next...";
 
-            // Lecture Pack (Main)
             fetch(`http://localhost:5000/read-file`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -938,7 +1069,6 @@
             })
             .catch(err => { boxMain.innerText = "Erreur réseau au chargement de Pack (Main)"; });
 
-            // Lecture Pack (Next)
             fetch(`http://localhost:5000/read-file`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -968,9 +1098,9 @@
             document.getElementById('preview-title').innerText = elem.buttonName;
             document.getElementById('preview-id').innerText = elem.id;
 
-            const blockstateRow = document.getElementById('path-blockstate').parentElement;
+            // --- Gestion du Blockstate (Blocs) ---
+            const blockstateRow = document.getElementById('row-blockstate');
             const bStateSpan = document.getElementById('path-blockstate');
-            
             if (currentTab === 'blocks' && elem.blockstate) {
                 blockstateRow.style.display = 'block';
                 bStateSpan.innerText = elem.blockstate;
@@ -983,16 +1113,33 @@
                 blockstateRow.style.display = 'none';
                 bStateSpan.onclick = null;
             }
-
+        
+            // --- Gestion de l'Item Definition (Items) ---
+            const itemDefRow = document.getElementById('row-item-def');
+            const itemDefSpan = document.getElementById('path-item-def');
+            if (currentTab === 'items' && elem.item_definition) {
+                itemDefRow.style.display = 'block';
+                itemDefSpan.innerText = elem.item_definition;
+                itemDefSpan.className = "clickable-path";
+                itemDefSpan.onclick = () => {
+                    systemOpen(elem.item_definition, 'file');
+                    chargerFichierDansVisualiseur(elem.item_definition);
+                };
+            } else {
+                itemDefRow.style.display = 'none';
+                itemDefSpan.onclick = null;
+            }
+        
+            // --- Gestion des Modèles (Commune aux Blocs et Items) ---
             const modelSpan = document.getElementById('path-model');
             modelSpan.innerHTML = '';
-
+        
             let modelsList = elem.models || (elem.model ? [elem.model] : []);
-
+        
             if (modelsList.length > 0) {
                 modelsList.forEach((mPath, idx) => {
                     if (mPath.includes("None.json")) return;
-
+                
                     const pLink = document.createElement('span');
                     pLink.className = "clickable-path";
                     pLink.style.display = "block";
@@ -1005,28 +1152,29 @@
                     modelSpan.appendChild(pLink);
                 });
             }
-
+        
             if (!modelSpan.hasChildNodes()) {
                 modelSpan.innerText = "Non défini (Généré par le code du jeu)";
                 modelSpan.className = "";
                 modelSpan.onclick = null;
             }
-
+        
+            // --- Affichage des Textures ---
             const grid = document.getElementById('preview-textures-grid');
             grid.classList.remove('mode-texte');
             grid.innerHTML = '';
-
+        
             if(!elem.textures || Object.keys(elem.textures).length === 0) {
                 grid.innerHTML = '<p style="color: #aaa; font-style: italic;">Aucune texture détectée.</p>';
                 return;
             }
-
+        
             Object.keys(elem.textures).forEach(key => {
                 const cheminTexture = elem.textures[key];
                 const card = document.createElement('div');
                 card.className = 'card-texture';
                 card.onclick = () => systemOpen(cheminTexture, 'file');
-                
+
                 const resId = `res-${key}-${elem.id}`.replace(/:/g, '-').replace(/\//g, '-');
                 card.innerHTML = `
                     <img src="${getAntiCacheUrl(cheminTexture)}" onerror="handleImgError(this)" onload="afficherResolution(this, '${resId}')">
@@ -1085,10 +1233,10 @@
 
             const badge = document.getElementById('comp-status-badge');
             if (elem.status === 'missing') {
-                badge.innerText = "❌ ABSENT (Manquant dans ton pack)";
+                badge.innerText = "❌ ABSENT";
                 badge.style.color = "var(--rouge-manquant)";
             } else {
-                badge.innerText = "✔️ PRÉSENT (Déjà personnalisé !)";
+                badge.innerText = "✔️ PRÉSENT";
                 badge.style.color = "var(--accent)";
             }
 
@@ -1103,7 +1251,6 @@
             if (elem.filename.endsWith('.png')) {
                 document.getElementById('section-textures').style.display = 'block';
                 
-                // Carte 1 : Pack (Main)
                 const cardMain = document.createElement('div');
                 cardMain.className = 'card-texture';
                 cardMain.onclick = () => systemOpen(mainPath, 'file');
@@ -1116,7 +1263,6 @@
                 `;
                 grid.appendChild(cardMain);
 
-                // Carte 2 : Pack (Next)
                 const cardNext = document.createElement('div');
                 cardNext.className = 'card-texture';
                 cardNext.onclick = () => systemOpen(nextPath, 'file');
@@ -1129,7 +1275,6 @@
                 `;
                 grid.appendChild(cardNext);
 
-                // Carte 3 : Pack (Default)
                 const cardDefault = document.createElement('div');
                 cardDefault.className = 'card-texture';
                 cardDefault.onclick = () => systemOpen(defaultPath, 'file');
@@ -1142,7 +1287,6 @@
                 `;
                 grid.appendChild(cardDefault);
             } else {
-                // Fichiers de Structure (.json, .mcmeta) : Masquer la grille image et lancer la comparaison duo
                 document.getElementById('section-textures').style.display = 'none';
                 chargerFichiersComparaisonDiff(mainPath, nextPath);
             }
@@ -1354,7 +1498,6 @@
                 return;
             }
         
-            // Récupération du chemin relatif selon l'onglet ouvert
             let relativePath = currentSelectedId;
         
             const btn = document.getElementById('extract-single-btn');
