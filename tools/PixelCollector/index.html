@@ -18,7 +18,11 @@
       --border: #2d3139;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -41,7 +45,10 @@
       flex-wrap: wrap;
     }
 
-    h1 { font-size: 1.5rem; font-weight: 600; }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
 
     .header-actions {
       display: flex;
@@ -104,6 +111,7 @@
       -webkit-appearance: none;
       margin: 0;
     }
+
     .tolerance-input[type=number] {
       -moz-appearance: textfield;
     }
@@ -140,7 +148,9 @@
       transition: background 0.2s;
     }
 
-    .btn-save:hover { background: var(--accent-hover); }
+    .btn-save:hover {
+      background: var(--accent-hover);
+    }
 
     /* Zone globale */
     #export-container {
@@ -190,7 +200,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #61616169;
+      background: #121318;
       border-radius: 8px;
       padding: 16px;
       border: 1px dashed var(--border);
@@ -205,6 +215,40 @@
       height: auto;
       border-radius: 4px;
     }
+
+    /* Sélecteur de fond sous le Cadre 1 */
+    .bg-selector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .bg-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .bg-btn:hover {
+      transform: scale(1.15);
+    }
+
+    .bg-btn.active {
+      border-color: #38bdf8;
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
+    }
+
+    /* Couleurs des boutons */
+    .bg-btn[data-bg="#14151a"] { background-color: #14151a; }
+    .bg-btn[data-bg="#61616169"] { background-color: #616161; }
+    .bg-btn[data-bg="#e9e9e969"] { background-color: #e9e9e9; }
 
     .file-details {
       margin-top: 12px;
@@ -257,7 +301,7 @@
       width: 55px;
       height: 55px;
       border-radius: 5px;
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .color-info {
@@ -312,23 +356,24 @@
     }
   </style>
 </head>
+
 <body>
 
   <header>
     <h1>ColorCollector - Color Extractor</h1>
-    
-    <div class="header-actions">
-        <!-- Barre de tolérance -->
-        <div class="tolerance-container">
-            <label for="tolerance-slider">Tolérance :</label>
-            <input type="range" id="tolerance-slider" min="0" max="75" value="0" step="1">
-        
-            <!-- Zone de texte commutable -->
-            <span id="tolerance-val" class="tolerance-value" title="Cliquer pour modifier directement">0%</span>
-            <input type="number" id="tolerance-input" class="tolerance-input" min="0" max="75" style="display: none;">
-        </div>
 
-        <button id="save-btn" class="btn-save">💾 Sauvegarder (.PNG)</button>
+    <div class="header-actions">
+      <!-- Barre de tolérance -->
+      <div class="tolerance-container">
+        <label for="tolerance-slider">Tolérance :</label>
+        <input type="range" id="tolerance-slider" min="0" max="75" value="0" step="1">
+
+        <!-- Zone de texte commutable -->
+        <span id="tolerance-val" class="tolerance-value" title="Cliquer pour modifier directement">0%</span>
+        <input type="number" id="tolerance-input" class="tolerance-input" min="0" max="75" style="display: none;">
+      </div>
+
+      <button id="save-btn" class="btn-save">💾 Sauvegarder (.PNG)</button>
     </div>
   </header>
 
@@ -338,17 +383,25 @@
   </div>
 
   <div id="export-container">
-    
+
     <!-- Cadre 1 (Gauche, compact & sticky) -->
     <div class="frame frame-image">
       <h2>Cadre 1 : Image Analysée</h2>
-      <div class="image-preview-wrapper">
+      <div id="image-wrapper" class="image-preview-wrapper">
         <canvas id="preview-canvas"></canvas>
       </div>
       <div id="file-details" class="file-details" style="display: none;"></div>
       <p id="highlight-info" class="status-text">
         Cliquez sur une couleur du plateau pour la mettre en surbrillance.
       </p>
+
+      <!-- NOUVEAU : Changement de fond -->
+      <div class="bg-selector">
+        <span>Fond :</span>
+        <button class="bg-btn active" data-bg="#14151a" title="Fond Sombre (Défaut)"></button>
+        <button class="bg-btn" data-bg="#61616169" title="Fond Gris"></button>
+        <button class="bg-btn" data-bg="#e9e9e969" title="Fond Blanc"></button>
+      </div>
     </div>
 
     <!-- Cadre 2 (Droite, large et étalé) -->
@@ -383,8 +436,8 @@
     let originalPixelData = [];
     let activeHexColor = null;
 
-    const API_URL = (window.location.protocol === 'file:') 
-      ? 'http://localhost:8000/api/save' 
+    const API_URL = (window.location.protocol === 'file:')
+      ? 'http://localhost:8000/api/save'
       : '/api/save';
 
     dropZone.addEventListener('click', () => fileInput.click());
@@ -451,11 +504,29 @@
     // Fonction centrale pour mettre à jour le texte et recalculer
     function updateToleranceValue(val) {
       toleranceValDisplay.textContent = `${val}%`;
-    
+
       if (originalPixelData.length > 0) {
         processColors();
       }
     }
+
+    // Gestion du changement de couleur de fond de la zone de prévisualisation
+    const bgButtons = document.querySelectorAll('.bg-btn');
+    const imageWrapper = document.getElementById('image-wrapper');
+      
+    bgButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Retire la classe active de tous les boutons
+        bgButtons.forEach(b => b.classList.remove('active'));
+        
+        // Active le bouton cliqué
+        btn.classList.add('active');
+        
+        // Applique la couleur de fond sélectionnée
+        const newBg = btn.getAttribute('data-bg');
+        imageWrapper.style.backgroundColor = newBg;
+      });
+    });
 
     function handleFile(file) {
       if (!file.type.startsWith('image/')) return;
@@ -490,7 +561,7 @@
     function renderPixelArt(targetHex) {
       const targetSize = 512;
       const pixelScale = Math.max(1, Math.floor(targetSize / Math.max(originalImgWidth, originalImgHeight)));
-      
+
       const renderW = originalImgWidth * pixelScale;
       const renderH = originalImgHeight * pixelScale;
 
@@ -662,20 +733,21 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ image: base64Image, filename: filename })
         })
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === 'success') {
-            alert(` Succès ! Image exportée avec succès : /Save/${filename}`);
-          } else {
-            alert(` Erreur serveur : ${data.message}`);
-          }
-        })
-        .catch(err => {
-          colorGrid.classList.remove('exporting');
-          alert(" Impossible de joindre Script_Core.py.");
-        });
+          .then(res => res.json())
+          .then(data => {
+            if (data.status === 'success') {
+              alert(` Succès ! Image exportée avec succès : /Save/${filename}`);
+            } else {
+              alert(` Erreur serveur : ${data.message}`);
+            }
+          })
+          .catch(err => {
+            colorGrid.classList.remove('exporting');
+            alert(" Impossible de joindre Script_Core.py.");
+          });
       });
     });
   </script>
 </body>
+
 </html>
