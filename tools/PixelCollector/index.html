@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ColorCollector - Color Extractor</title>
+  <!-- Capture PNG -->
+  <script src="html2canvas.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #121318;
+      --card-bg: #1c1e24;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --text: #f3f4f6;
+      --border: #2d3139;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    header {
+      width: 100%;
+      max-width: 1400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    h1 { font-size: 1.5rem; font-weight: 600; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Barre de tolérance */
+    .tolerance-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+    
+    .tolerance-container input[type="range"] {
+      accent-color: var(--accent);
+      cursor: pointer;
+      width: 300px;
+    }
+
+    .tolerance-value {
+      font-family: monospace;
+      font-weight: bold;
+      color: #38bdf8;
+      min-width: 45px;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .tolerance-value:hover {
+      background: rgba(56, 189, 248, 0.15);
+    }
+
+    /* Input numérique lors de l'édition */
+    .tolerance-input {
+      width: 55px;
+      background: #14151a;
+      color: #38bdf8;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: bold;
+      font-size: 0.9rem;
+      padding: 2px 4px;
+      text-align: center;
+      outline: none;
+    }
+
+    /* Supprime les flèches d'incrémentation par défaut des inputs number pour un rendu plus propre */
+    .tolerance-input::-webkit-outer-spin-button,
+    .tolerance-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .tolerance-input[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    /* Zone Drop */
+    .drop-zone {
+      width: 100%;
+      max-width: 1400px;
+      padding: 20px;
+      border: 2px dashed var(--accent);
+      border-radius: 12px;
+      background: var(--card-bg);
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .drop-zone.dragover {
+      background: #252833;
+      border-color: #6366f1;
+    }
+
+    /* Bouton Sauvegarder */
+    .btn-save {
+      display: none;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+
+    .btn-save:hover { background: var(--accent-hover); }
+
+    /* Zone globale */
+    #export-container {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      /*max-width: 1400px*/
+      background: var(--bg-dark);
+      padding: 16px;
+      border-radius: 12px;
+      align-items: flex-start;
+    }
+
+    .frame {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Cadre 1 : Fixe et compact */
+    .frame-image {
+      flex: 0 0 340px;
+      position: sticky;
+      top: 20px;
+      align-items: center;
+    }
+
+    /* Cadre 2 : Étalé sur toute la largeur restante */
+    .frame-palette {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .frame h2 {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      color: #9ca3af;
+    }
+
+    /* Cadre 1 - Visualisation */
+    .image-preview-wrapper {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #14151a;
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px dashed var(--border);
+    }
+
+    canvas#preview-canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      max-width: 100%;
+      max-height: 280px;
+      width: auto;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .file-details {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #38bdf8;
+      text-align: center;
+    }
+
+    /* Cadre 2 - Grille large */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+      width: 100%;
+      max-height: 520px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .color-grid.exporting {
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
+    /* Carte de couleur compacte */
+    .color-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #14151a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.2s;
+    }
+
+    .color-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    .color-card.active {
+      border: 2px solid #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    }
+
+    .color-swatch {
+      width: 55px;
+      height: 55px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .color-info {
+      margin-top: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .color-hex {
+      font-size: 0.75rem;
+      font-family: monospace;
+      font-weight: bold;
+      color: #f3f4f6;
+    }
+
+    .color-rgb {
+      font-size: 0.7rem;
+      font-family: monospace;
+      color: #9ca3af;
+    }
+
+    .status-text {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    /* Bulle flottante (Tooltip) */
+    .pixel-tooltip {
+      position: fixed;
+      pointer-events: none;
+      background: rgba(18, 19, 24, 0.92);
+      color: #38bdf8;
+      border: 1px solid var(--accent);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      transform: translate(-50%, -130%);
+      transition: opacity 0.15s ease, transform 0.05s ease-out;
+      z-index: 9999;
+    }
+
+    .pixel-tooltip.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>MCPackIndexer - Color Extractor Bridge</h1>
+    
+    <div class="header-actions">
+        <!-- Barre de tolérance -->
+        <div class="tolerance-container">
+            <label for="tolerance-slider">Tolérance :</label>
+            <input type="range" id="tolerance-slider" min="0" max="75" value="0" step="1">
+        
+            <!-- Zone de texte commutable -->
+            <span id="tolerance-val" class="tolerance-value" title="Cliquer pour modifier directement">0%</span>
+            <input type="number" id="tolerance-input" class="tolerance-input" min="0" max="75" style="display: none;">
+        </div>
+
+        <button id="save-btn" class="btn-save">💾 Sauvegarder (.PNG)</button>
+    </div>
+  </header>
+
+  <div id="drop-zone" class="drop-zone">
+    <p>Glissez & déposez une image ici ou <strong>cliquez pour parcourir</strong></p>
+    <input type="file" id="file-input" accept="image/*" style="display: none;">
+  </div>
+
+  <div id="export-container">
+    
+    <!-- Cadre 1 (Gauche, compact & sticky) -->
+    <div class="frame frame-image">
+      <h2>Cadre 1 : Image Analysée</h2>
+      <div class="image-preview-wrapper">
+        <canvas id="preview-canvas"></canvas>
+      </div>
+      <div id="file-details" class="file-details" style="display: none;"></div>
+      <p id="highlight-info" class="status-text">
+        Cliquez sur une couleur du plateau pour la mettre en surbrillance.
+      </p>
+    </div>
+
+    <!-- Cadre 2 (Droite, large et étalé) -->
+    <div class="frame frame-palette">
+      <h2>Cadre 2 : Palette (Couleurs uniques)</h2>
+      <div id="color-grid" class="color-grid"></div>
+      <p id="status" class="status-text">Aucune image chargée.</p>
+    </div>
+
+  </div>
+
+  <!-- Bulle flottante -->
+  <div id="pixel-tooltip" class="pixel-tooltip"></div>
+
+  <script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const previewCanvas = document.getElementById('preview-canvas');
+    const ctx = previewCanvas.getContext('2d');
+    const colorGrid = document.getElementById('color-grid');
+    const saveBtn = document.getElementById('save-btn');
+    const statusText = document.getElementById('status');
+    const fileDetails = document.getElementById('file-details');
+    const tooltip = document.getElementById('pixel-tooltip');
+
+    const toleranceSlider = document.getElementById('tolerance-slider');
+    const toleranceValDisplay = document.getElementById('tolerance-val');
+    const toleranceInput = document.getElementById('tolerance-input');
+
+    let originalImgWidth = 0;
+    let originalImgHeight = 0;
+    let originalPixelData = [];
+    let activeHexColor = null;
+
+    const API_URL = (window.location.protocol === 'file:') 
+      ? 'http://localhost:8000/api/save' 
+      : '/api/save';
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length) handleFile(e.target.files[0]);
+    });
+
+    // Événement déplacement du curseur de tolérance
+    // 1. Déplacement manuel de la barre (Slider)
+    toleranceSlider.addEventListener('input', (e) => {
+      updateToleranceValue(e.target.value);
+    });
+
+    // 2. Clic sur le texte pour ouvrir le mode Édition
+    toleranceValDisplay.addEventListener('click', () => {
+      toleranceInput.value = toleranceSlider.value;
+      toleranceValDisplay.style.display = 'none';
+      toleranceInput.style.display = 'inline-block';
+      toleranceInput.focus();
+      toleranceInput.select();
+    });
+
+    // 3. Validation de la saisie au clavier (Entrée)
+    toleranceInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        validateAndApplyInput();
+      }
+    });
+
+    // 4. Validation de la saisie à la perte de focus (Clic ailleurs)
+    toleranceInput.addEventListener('blur', () => {
+      validateAndApplyInput();
+    });
+
+    // Fonction de correction et d'application de la tolérance
+    function validateAndApplyInput() {
+      let val = parseInt(toleranceInput.value, 10);
+
+      // Correction automatique si vide, NaN ou hors limites (0-75)
+      if (isNaN(val)) {
+        val = parseInt(toleranceSlider.value, 10);
+      } else if (val < 0) {
+        val = 0;
+      } else if (val > 75) {
+        val = 75;
+      }
+
+      // Remise en place de l'affichage texte
+      toleranceInput.style.display = 'none';
+      toleranceValDisplay.style.display = 'inline-block';
+
+      // Synchronise le slider et relance l'analyse
+      toleranceSlider.value = val;
+      updateToleranceValue(val);
+    }
+
+    // Fonction centrale pour mettre à jour le texte et recalculer
+    function updateToleranceValue(val) {
+      toleranceValDisplay.textContent = `${val}%`;
+    
+      if (originalPixelData.length > 0) {
+        processColors();
+      }
+    }
+
+    function handleFile(file) {
+      if (!file.type.startsWith('image/')) return;
+
+      saveBtn.style.display = 'none';
+      colorGrid.innerHTML = '';
+      statusText.textContent = "Analyse des couleurs en cours...";
+
+      const img = new Image();
+      img.onload = () => {
+        originalImgWidth = img.width;
+        originalImgHeight = img.height;
+
+        fileDetails.textContent = `${file.name} (${img.width} x ${img.height} px)`;
+        fileDetails.style.display = 'block';
+
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = img.width;
+        tempCanvas.height = img.height;
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCtx.drawImage(img, 0, 0);
+
+        const imgData = tempCtx.getImageData(0, 0, img.width, img.height);
+        originalPixelData = new Uint8ClampedArray(imgData.data);
+
+        renderPixelArt(null);
+        setTimeout(() => processColors(), 50);
+      };
+      img.src = URL.createObjectURL(file);
+    }
+
+    function renderPixelArt(targetHex) {
+      const targetSize = 512;
+      const pixelScale = Math.max(1, Math.floor(targetSize / Math.max(originalImgWidth, originalImgHeight)));
+      
+      const renderW = originalImgWidth * pixelScale;
+      const renderH = originalImgHeight * pixelScale;
+
+      previewCanvas.width = renderW;
+      previewCanvas.height = renderH;
+
+      ctx.imageSmoothingEnabled = false;
+
+      const tolerancePercent = parseInt(toleranceSlider.value, 10);
+
+      for (let y = 0; y < originalImgHeight; y++) {
+        for (let x = 0; x < originalImgWidth; x++) {
+          const idx = (y * originalImgWidth + x) * 4;
+          const r = originalPixelData[idx];
+          const g = originalPixelData[idx + 1];
+          const b = originalPixelData[idx + 2];
+          const a = originalPixelData[idx + 3];
+
+          if (a === 0) continue;
+
+          // On applique le même lissage de tolérance pour le surbrillance canvas
+          const qR = quantizeValue(r, tolerancePercent);
+          const qG = quantizeValue(g, tolerancePercent);
+          const qB = quantizeValue(b, tolerancePercent);
+          const hex = rgbToHex(qR, qG, qB);
+
+          if (!targetHex) {
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a / 255})`;
+          } else if (hex === targetHex) {
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+          } else {
+            ctx.fillStyle = `rgba(${Math.floor(r * 0.15)}, ${Math.floor(g * 0.15)}, ${Math.floor(b * 0.15)}, 0.8)`;
+          }
+
+          ctx.fillRect(x * pixelScale, y * pixelScale, pixelScale, pixelScale);
+        }
+      }
+    }
+
+    // Fonction de quantification selon le % de tolérance
+    function quantizeValue(value, tolerancePercent) {
+      if (tolerancePercent === 0) return value;
+      // Convertit le % (0-75) en taille de pas (bucket size) de 1 à ~100
+      const step = Math.max(1, Math.round((tolerancePercent / 100) * 128));
+      return Math.min(255, Math.floor(value / step) * step + Math.floor(step / 2));
+    }
+
+    function rgbToHex(r, g, b) {
+      return "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+
+    function processColors() {
+      const data = originalPixelData;
+      const colorMap = new Map();
+      const tolerancePercent = parseInt(toleranceSlider.value, 10);
+
+      for (let i = 0; i < data.length; i += 4) {
+        const a = data[i + 3];
+        if (a === 0) continue;
+
+        let r = data[i];
+        let g = data[i + 1];
+        let b = data[i + 2];
+
+        // Quantification si tolérance > 0
+        r = quantizeValue(r, tolerancePercent);
+        g = quantizeValue(g, tolerancePercent);
+        b = quantizeValue(b, tolerancePercent);
+
+        const hex = rgbToHex(r, g, b);
+
+        if (!colorMap.has(hex)) {
+          colorMap.set(hex, { r, g, b, count: 1 });
+        } else {
+          colorMap.get(hex).count++;
+        }
+      }
+
+      colorGrid.innerHTML = '';
+      colorMap.forEach((rgb, hex) => {
+        const card = document.createElement('div');
+        card.className = 'color-card';
+        card.dataset.hex = hex;
+
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch';
+        swatch.style.backgroundColor = hex;
+
+        const info = document.createElement('div');
+        info.className = 'color-info';
+
+        const hexCode = document.createElement('span');
+        hexCode.className = 'color-hex';
+        hexCode.textContent = hex.toUpperCase();
+
+        const rgbCode = document.createElement('span');
+        rgbCode.className = 'color-rgb';
+        rgbCode.textContent = `RGB(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+
+        info.appendChild(hexCode);
+        info.appendChild(rgbCode);
+
+        card.appendChild(swatch);
+        card.appendChild(info);
+
+        // Bulle survol
+        card.addEventListener('mouseenter', () => {
+          tooltip.textContent = `(${rgb.count}) pixel${rgb.count > 1 ? 's' : ''} existant(e)${rgb.count > 1 ? 's' : ''}`;
+          tooltip.classList.add('visible');
+        });
+
+        card.addEventListener('mousemove', (e) => {
+          tooltip.style.left = `${e.clientX}px`;
+          tooltip.style.top = `${e.clientY}px`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          tooltip.classList.remove('visible');
+        });
+
+        card.addEventListener('click', () => highlightColor(hex));
+
+        colorGrid.appendChild(card);
+      });
+
+      // Si une couleur était déjà sélectionnée, ré-applique la surbrillance
+      if (activeHexColor) {
+        renderPixelArt(activeHexColor);
+      }
+
+      statusText.textContent = `${colorMap.size} couleur(s) trouvée(s).`;
+      saveBtn.style.display = 'inline-block';
+    }
+
+    function highlightColor(targetHex) {
+      const cards = document.querySelectorAll('.color-card');
+
+      if (activeHexColor === targetHex) {
+        activeHexColor = null;
+        cards.forEach(c => c.classList.remove('active'));
+        renderPixelArt(null);
+        return;
+      }
+
+      activeHexColor = targetHex;
+      cards.forEach(c => c.classList.toggle('active', c.dataset.hex === targetHex));
+      renderPixelArt(targetHex);
+    }
+
+    /* Sauvegarde optimisée */
+    saveBtn.addEventListener('click', () => {
+      const exportElem = document.getElementById('export-container');
+
+      tooltip.classList.remove('visible');
+      colorGrid.classList.add('exporting');
+
+      html2canvas(exportElem, {
+        backgroundColor: '#121318',
+        scale: 2,
+        imageTimeout: 0
+      }).then(canvas => {
+        colorGrid.classList.remove('exporting');
+
+        const base64Image = canvas.toDataURL('image/png');
+        const filename = `palette_${Date.now()}.png`;
+
+        fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: base64Image, filename: filename })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            alert(` Succès ! Image exportée avec succès : /Save/${filename}`);
+          } else {
+            alert(` Erreur serveur : ${data.message}`);
+          }
+        })
+        .catch(err => {
+          colorGrid.classList.remove('exporting');
+          alert(" Impossible de joindre Script_Core.py.");
+        });
+      });
+    });
+  </script>
+</body>
+</html>
