@@ -522,7 +522,7 @@
           } else if (hex === targetHex) {
             ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
           } else {
-            ctx.fillStyle = `rgba(${Math.floor(r * 0.15)}, ${Math.floor(g * 0.15)}, ${Math.floor(b * 0.15)}, 0.35)`;
+            ctx.fillStyle = `rgba(${Math.floor(r * 0.15)}, ${Math.floor(g * 0.15)}, ${Math.floor(b * 0.15)}, 0.15)`;
           }
 
           ctx.fillRect(x * pixelScale, y * pixelScale, pixelScale, pixelScale);
