@@ -16,6 +16,9 @@
       --accent-hover: #4338ca;
       --text: #f3f4f6;
       --border: #2d3139;
+      --bg-btn-1: #14151a;
+      --bg-btn-2: #8d8d8d;
+      --bg-btn-3: #f8f8f8;
     }
 
     * {
@@ -247,8 +250,8 @@
 
     /* Couleurs des boutons */
     .bg-btn[data-bg="#14151a"] { background-color: #14151a; }
-    .bg-btn[data-bg="#61616169"] { background-color: #616161; }
-    .bg-btn[data-bg="#e9e9e969"] { background-color: #e9e9e9; }
+    .bg-btn[data-bg="#8d8d8d"] { background-color: #8d8d8d; }
+    .bg-btn[data-bg="#f8f8f8"] { background-color: #f8f8f8; }
 
     .file-details {
       margin-top: 12px;
@@ -399,8 +402,8 @@
       <div class="bg-selector">
         <span>Fond :</span>
         <button class="bg-btn active" data-bg="#14151a" title="Fond Sombre (Défaut)"></button>
-        <button class="bg-btn" data-bg="#61616169" title="Fond Gris"></button>
-        <button class="bg-btn" data-bg="#e9e9e969" title="Fond Blanc"></button>
+        <button class="bg-btn" data-bg="#8d8d8d" title="Fond Gris"></button>
+        <button class="bg-btn" data-bg="#f8f8f8" title="Fond Blanc"></button>
       </div>
     </div>
 
@@ -513,15 +516,15 @@
     // Gestion du changement de couleur de fond de la zone de prévisualisation
     const bgButtons = document.querySelectorAll('.bg-btn');
     const imageWrapper = document.getElementById('image-wrapper');
-      
+
     bgButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         // Retire la classe active de tous les boutons
         bgButtons.forEach(b => b.classList.remove('active'));
-        
+
         // Active le bouton cliqué
         btn.classList.add('active');
-        
+
         // Applique la couleur de fond sélectionnée
         const newBg = btn.getAttribute('data-bg');
         imageWrapper.style.backgroundColor = newBg;
@@ -593,7 +596,7 @@
           } else if (hex === targetHex) {
             ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
           } else {
-            ctx.fillStyle = `rgba(${Math.floor(r * 0.15)}, ${Math.floor(g * 0.15)}, ${Math.floor(b * 0.15)}, 0.15)`;
+            ctx.fillStyle = `rgba(${Math.floor(r * 0.15)}, ${Math.floor(g * 0.15)}, ${Math.floor(b * 0.15)}, 0.5)`;
           }
 
           ctx.fillRect(x * pixelScale, y * pixelScale, pixelScale, pixelScale);
