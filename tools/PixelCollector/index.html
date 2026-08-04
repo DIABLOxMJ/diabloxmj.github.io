@@ -470,7 +470,8 @@
     let originalImgHeight = 0;
     let originalPixelData = [];
     let activeHexColor = null;
-    let currentSortMode = 'find'; // 'find' ou 'dominant'
+    let currentSortMode = 'find';
+    let currentFileName = 'image';
 
     const API_URL = (window.location.protocol === 'file:')
       ? 'http://localhost:8000/api/save'
@@ -568,6 +569,7 @@
 
     function handleFile(file) {
       if (!file.type.startsWith('image/')) return;
+      currentFileName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
 
       saveBtn.style.display = 'none';
       colorGrid.innerHTML = '';
@@ -765,7 +767,7 @@
         colorGrid.classList.remove('exporting');
 
         const base64Image = canvas.toDataURL('image/png');
-        const filename = `palette_${Date.now()}.png`;
+        const filename = `${currentFileName}_${Date.now()}.png`;
 
         fetch(API_URL, {
           method: 'POST',

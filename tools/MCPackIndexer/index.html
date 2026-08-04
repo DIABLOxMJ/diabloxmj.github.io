@@ -376,6 +376,7 @@
         </div>
         <div class="search-container">
             <input type="text" id="search" class="search-bar" placeholder="Rechercher un élément..." oninput="onSearchInput()">
+            <button id="btn-filter-diff" class="btn-filter-toggle" onclick="toggleFilterDiff()" title="Filtrer uniquement les fichiers avec du contenu différent">⚠️ Différents</button>
             <button id="btn-filter-missing" class="btn-filter-toggle" onclick="toggleFilterMissing()" title="Masquer les éléments terminés / présents">👁️ Manquants</button>
         </div>
         <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; margin-bottom: 8px;">
@@ -476,6 +477,7 @@
     <script>
         let currentTab = localStorage.getItem('mcp_currentTab') || 'blocks'; 
         let currentSelectedId = localStorage.getItem('mcp_currentSelectedId') || null;
+        let filterOnlyDiff = JSON.parse(localStorage.getItem('mcp_filterOnlyDiff')) || false;
         let filterOnlyMissing = JSON.parse(localStorage.getItem('mcp_filterOnlyMissing')) || false;
         
         let imageSize = parseInt(localStorage.getItem('mcp_imageSize')) || 256;
@@ -505,6 +507,9 @@
 
             const searchInput = document.getElementById('search');
             if (searchInput) searchInput.value = savedSearchQuery;
+            
+            const btnFilterDiff = document.getElementById('btn-filter-diff');
+            if(filterOnlyDiff && btnFilterDiff) btnFilterDiff.classList.add('active');
 
             const btnFilter = document.getElementById('btn-filter-missing');
             if(filterOnlyMissing) btnFilter.classList.add('active');
@@ -603,6 +608,16 @@
                 container.style.display = 'none';
                 btn.innerText = 'Afficher';
             }
+        }
+
+        function toggleFilterDiff() {
+            filterOnlyDiff = !filterOnlyDiff;
+            localStorage.setItem('mcp_filterOnlyDiff', filterOnlyDiff);
+
+            const btnFilter = document.getElementById('btn-filter-diff');
+            if (btnFilter) btnFilter.classList.toggle('active', filterOnlyDiff);
+
+            filtrerElements();
         }
 
         function toggleFilterMissing() {
@@ -744,6 +759,11 @@
                     filteredElements = filteredElements.filter(e => !completedTasks.includes(e.id));
                 }
             }
+            
+            // --- NOUVEAU : Filtrage des fichiers avec du contenu différent ---
+            if (filterOnlyDiff && currentTab === 'comparaison') {
+                filteredElements = filteredElements.filter(e => e.has_content_diff === true);
+            }
         
             // Mise à jour du compteur d'éléments visibles
             const counterSpan = document.getElementById('counter-elements-visible');
@@ -800,8 +820,9 @@
             
                 // Texte & style selon l'onglet
                 if (currentTab === 'comparaison') {
+                    const diffEmoji = elem.has_content_diff ? ' ⚠️' : '';
                     const txtSuffix = isSelected ? '  👈 ( Ouvert )' : '';
-                    btn.innerText = elem.path + txtSuffix;
+                    btn.innerText = elem.path + diffEmoji + txtSuffix;
                     btn.style.fontSize = "0.8rem";
                     if (elem.status === 'missing') {
                         btn.classList.add('comp-missing');
@@ -839,25 +860,31 @@
             updateExtractionButtonVisual();
         }
 
-        // Tout cocher / décocher UNIQUEMENT dans les éléments VISIBLES
-        function toggleSelectAll(select) {
-            currentFilteredElements.forEach(elem => {
-                const id = currentTab === 'comparaison' ? elem.path : elem.id;
+        // Tout cocher / décocher UNIQUEMENT dans les éléments VISIBLES et FILTRÉS
+function toggleSelectAll(select) {
+    currentFilteredElements.forEach(elem => {
+        const id = currentTab === 'comparaison' ? elem.path : elem.id;
 
-                if (filterOnlyMissing) {
-                    if (currentTab === 'comparaison' && elem.status && elem.status.toLowerCase() !== 'missing') return;
-                    if (currentTab !== 'comparaison' && completedTasks.includes(elem.id)) return;
-                }
-            
-                if (select) {
-                    selectedForExtraction.add(id);
-                } else {
-                    selectedForExtraction.delete(id);
-                }
-            });
-        
-            genererListe(currentFilteredElements);
+        // Respect du filtre "Manquants"
+        if (filterOnlyMissing) {
+            if (currentTab === 'comparaison' && elem.status && elem.status.toLowerCase() !== 'missing') return;
+            if (currentTab !== 'comparaison' && completedTasks.includes(elem.id)) return;
         }
+
+        // Respect du filtre "Différents"
+        if (filterOnlyDiff && currentTab === 'comparaison') {
+            if (!elem.has_content_diff) return;
+        }
+    
+        if (select) {
+            selectedForExtraction.add(id);
+        } else {
+            selectedForExtraction.delete(id);
+        }
+    });
+
+    genererListe(currentFilteredElements);
+}
 
         // Met à jour le texte du bouton unique d'extraction
         function updateExtractionButtonVisual() {
@@ -1001,7 +1028,9 @@
         
             const filtres = baseData.filter(elem => {
                 if (currentTab === 'comparaison') {
-                    return elem.path && elem.path.toLowerCase().includes(query);
+                    const matchesQuery = elem.path && elem.path.toLowerCase().includes(query);
+                    const matchesEmoji = (query === '⚠️' || query === 'diff') && elem.has_content_diff;
+                    return matchesQuery || matchesEmoji;
                 }
                 return elem.buttonName.toLowerCase().includes(query) || elem.id.toLowerCase().includes(query);
             });
