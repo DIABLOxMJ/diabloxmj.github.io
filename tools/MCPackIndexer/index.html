@@ -1012,12 +1012,12 @@
         function filtrerElements() {
             const rawQuery = (document.getElementById('search').value || '').trim();
             let baseData = [];
-                
+
             if (currentTab === 'blocks') baseData = dbBlocks;
             else if (currentTab === 'items') baseData = dbItems;
             else if (currentTab === 'comparaison') baseData = dbComparaison;
             else baseData = dbCategories[currentTab] || [];
-                
+
             // Filtrage par dossier dans le comparateur
             if (currentTab === 'comparaison' && filterComparatorFolder) {
                 baseData = baseData.filter(e => {
@@ -1096,7 +1096,7 @@
             });
         }
 
-        function chargerFichiersComparaisonDiff(mainPath, nextPath) {
+        function chargerFichiersComparaisonDiff(mainPath, nextPath, defaultPath) {
             const sectionCodeDiff = document.getElementById('section-code-viewer-diff');
             const sectionCodeSingle = document.getElementById('section-code-viewer');
             const boxMain = document.getElementById('code-box-main');
@@ -1104,8 +1104,9 @@
 
             const headerMain = document.getElementById('header-main-file');
             const headerNext = document.getElementById('header-next-file');
-            
+
             headerMain.onclick = () => systemOpen(mainPath, 'folder');
+            // Le clic pointe vers nextPath si disponible, sinon on peut utiliser defaultPath
             headerNext.onclick = () => systemOpen(nextPath, 'folder');
 
             sectionCodeSingle.style.display = 'none';
@@ -1114,6 +1115,7 @@
             boxMain.innerText = "⏳ Lecture du fichier Main...";
             boxNext.innerText = "⏳ Lecture du fichier Next...";
 
+            // 1. Chargement du fichier Pack (Main)
             fetch(`http://localhost:5000/read-file`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1128,7 +1130,8 @@
                 }
             })
             .catch(err => { boxMain.innerText = "Erreur réseau au chargement de Pack (Main)"; });
-
+        
+            // 2. Chargement du fichier Pack (Next) avec fallback vers Pack (Default)
             fetch(`http://localhost:5000/read-file`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1137,12 +1140,31 @@
             .then(r => r.json())
             .then(data => {
                 if (data.status === 'success') {
+                    headerNext.innerText = "📁 Pack (Next) - Nouveau ↗️";
                     boxNext.innerHTML = formatCodeWithLineNumbers(data.content);
                 } else {
-                    boxNext.innerText = `⚠️ Fichier introuvable dans Pack (Next).\nChemin : ${nextPath}`;
+                    // Fichier non trouvé dans Next -> Tentative de repli sur Default
+                    console.warn(`[Next] non trouvé (${nextPath}). Tentative sur [Default]...`);
+                    return fetch(`http://localhost:5000/read-file`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ path: defaultPath })
+                    })
+                    .then(r => r.json())
+                    .then(defaultData => {
+                        if (defaultData.status === 'success') {
+                            headerNext.innerText = "📁 Pack (Default) - Par défaut ↗️";
+                            headerNext.onclick = () => systemOpen(defaultPath, 'folder');
+                            boxNext.innerHTML = formatCodeWithLineNumbers(defaultData.content);
+                        } else {
+                            boxNext.innerText = `⚠️ Fichier introuvable dans Pack (Next) ni dans Pack (Default).\nNext : ${nextPath}\nDefault : ${defaultPath}`;
+                        }
+                    });
                 }
             })
-            .catch(err => { boxNext.innerText = "Erreur réseau au chargement de Pack (Next)"; });
+            .catch(err => { 
+                boxNext.innerText = "Erreur réseau au chargement du fichier de comparaison."; 
+            });
         }
 
         function afficherDetails(elem) {
@@ -1348,7 +1370,7 @@
                 grid.appendChild(cardDefault);
             } else {
                 document.getElementById('section-textures').style.display = 'none';
-                chargerFichiersComparaisonDiff(mainPath, nextPath);
+                chargerFichiersComparaisonDiff(mainPath, nextPath, defaultPath);
             }
         }
 
