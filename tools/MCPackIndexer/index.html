@@ -861,30 +861,30 @@
         }
 
         // Tout cocher / décocher UNIQUEMENT dans les éléments VISIBLES et FILTRÉS
-function toggleSelectAll(select) {
-    currentFilteredElements.forEach(elem => {
-        const id = currentTab === 'comparaison' ? elem.path : elem.id;
-
-        // Respect du filtre "Manquants"
-        if (filterOnlyMissing) {
-            if (currentTab === 'comparaison' && elem.status && elem.status.toLowerCase() !== 'missing') return;
-            if (currentTab !== 'comparaison' && completedTasks.includes(elem.id)) return;
+        function toggleSelectAll(select) {
+            currentFilteredElements.forEach(elem => {
+                const id = currentTab === 'comparaison' ? elem.path : elem.id;
+            
+                // Respect du filtre "Manquants"
+                if (filterOnlyMissing) {
+                    if (currentTab === 'comparaison' && elem.status && elem.status.toLowerCase() !== 'missing') return;
+                    if (currentTab !== 'comparaison' && completedTasks.includes(elem.id)) return;
+                }
+            
+                // Respect du filtre "Différents"
+                if (filterOnlyDiff && currentTab === 'comparaison') {
+                    if (!elem.has_content_diff) return;
+                }
+            
+                if (select) {
+                    selectedForExtraction.add(id);
+                } else {
+                    selectedForExtraction.delete(id);
+                }
+            });
+        
+            genererListe(currentFilteredElements);
         }
-
-        // Respect du filtre "Différents"
-        if (filterOnlyDiff && currentTab === 'comparaison') {
-            if (!elem.has_content_diff) return;
-        }
-    
-        if (select) {
-            selectedForExtraction.add(id);
-        } else {
-            selectedForExtraction.delete(id);
-        }
-    });
-
-    genererListe(currentFilteredElements);
-}
 
         // Met à jour le texte du bouton unique d'extraction
         function updateExtractionButtonVisual() {
@@ -1010,13 +1010,15 @@ function toggleSelectAll(select) {
         }
 
         function filtrerElements() {
-            const query = (document.getElementById('search').value || '').toLowerCase();
+            const rawQuery = (document.getElementById('search').value || '').trim();
             let baseData = [];
-            if(currentTab === 'blocks') baseData = dbBlocks;
-            else if(currentTab === 'items') baseData = dbItems;
-            else if(currentTab === 'comparaison') baseData = dbComparaison;
+                
+            if (currentTab === 'blocks') baseData = dbBlocks;
+            else if (currentTab === 'items') baseData = dbItems;
+            else if (currentTab === 'comparaison') baseData = dbComparaison;
             else baseData = dbCategories[currentTab] || [];
-
+                
+            // Filtrage par dossier dans le comparateur
             if (currentTab === 'comparaison' && filterComparatorFolder) {
                 baseData = baseData.filter(e => {
                     if (!e.path) return false;
@@ -1026,15 +1028,44 @@ function toggleSelectAll(select) {
                 });
             }
         
-            const filtres = baseData.filter(elem => {
-                if (currentTab === 'comparaison') {
-                    const matchesQuery = elem.path && elem.path.toLowerCase().includes(query);
-                    const matchesEmoji = (query === '⚠️' || query === 'diff') && elem.has_content_diff;
-                    return matchesQuery || matchesEmoji;
+            // --- Séparation des termes d'inclusion et d'exclusion ---
+            const tokens = rawQuery.toLowerCase().split(/\s+/).filter(t => t.length > 0);
+            const includes = [];
+            const excludes = [];
+        
+            tokens.forEach(token => {
+                if (token.startsWith('-') && token.length > 1) {
+                    excludes.push(token.substring(1)); // On retire le '-'
+                } else {
+                    includes.push(token);
                 }
-                return elem.buttonName.toLowerCase().includes(query) || elem.id.toLowerCase().includes(query);
             });
-
+        
+            const filtres = baseData.filter(elem => {
+                // Détermination du texte à tester (chemin ou nom + id)
+                let textToSearch = "";
+                if (currentTab === 'comparaison') {
+                    textToSearch = (elem.path || "").toLowerCase();
+                } else {
+                    textToSearch = ((elem.buttonName || "") + " " + (elem.id || "")).toLowerCase();
+                }
+            
+                // 1. Vérification des EXCLUSIONS (si un terme exclu est trouvé, on élimine immédiatement l'élément)
+                const isExcluded = excludes.some(ex => textToSearch.includes(ex));
+                if (isExcluded) return false;
+            
+                // 2. Vérification des INCLUSIONS
+                if (includes.length === 0) return true; // Si l'utilisateur n'a tapé que des exclusions (ex: "-glass")
+            
+                return includes.every(inc => {
+                    // Prise en compte spéciale de l'émoji ou du terme diff pour l'onglet comparaison
+                    if (currentTab === 'comparaison' && (inc === '⚠️' || inc === 'diff')) {
+                        return elem.has_content_diff === true;
+                    }
+                    return textToSearch.includes(inc);
+                });
+            });
+        
             currentFilteredElements = filtres;
             genererListe(filtres);
         }
