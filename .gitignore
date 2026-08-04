@@ -20,3 +20,5 @@ tools/python-manager-26.2.msix
 desktop.ini
 /tools/MCPackIndexer/Extract_2
 /tools/PixelCollector/Save
+/tools/MCPackIndexer/Pack (Main) faithful
+/tools/MCPackIndexer/Pack (Next) faithful

@@ -73,6 +73,10 @@
             "5": {
                 "version": "1.18.2",
                 "download": "packs/Beta_Legacy/Beta_Legacy_1.18.2.zip"
+            },
+            "6": {
+                "version": "b1.7.3",
+                "download": "packs/Beta_Legacy/Beta_Legacy_b1.7.3.zip"
             }
         }
     },
