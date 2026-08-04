@@ -3,3 +3,6 @@
 
 [01/08/2026]
 - Correction les sources modèles (Panneaux, Lit…)
+
+[04/08/2026]
+- Suppression et formatage complet des fichiers json

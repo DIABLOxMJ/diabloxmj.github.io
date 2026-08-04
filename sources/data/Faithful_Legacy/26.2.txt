@@ -9,3 +9,6 @@
 [03/08/2026]
 - Changement des sons pour ne garder uniquement C418
 - Changement des sons pour les animaux (Poulets, Vaches et Cochons)
+
+[04/08/2026]
+- Suppression et formatage complet des fichiers json
