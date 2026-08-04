@@ -108,7 +108,7 @@
       outline: none;
     }
 
-    /* Supprime les flèches d'incrémentation par défaut des inputs number pour un rendu plus propre */
+    /* Supprime les flèches d'incrémentation par défaut des inputs number */
     .tolerance-input::-webkit-outer-spin-button,
     .tolerance-input::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -160,7 +160,6 @@
       display: flex;
       gap: 20px;
       width: 100%;
-      /*max-width: 1400px*/
       background: var(--bg-dark);
       padding: 16px;
       border-radius: 12px;
@@ -248,10 +247,54 @@
       box-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
     }
 
-    /* Couleurs des boutons */
     .bg-btn[data-bg="#14151a"] { background-color: #14151a; }
     .bg-btn[data-bg="#8d8d8d"] { background-color: #8d8d8d; }
     .bg-btn[data-bg="#f8f8f8"] { background-color: #f8f8f8; }
+
+    /* Sélecteur de tri sous Cadre 1 */
+    .sort-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+      margin-top: 14px;
+    }
+
+    .sort-selector span {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      text-align: center;
+    }
+
+    .sort-buttons {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .sort-btn {
+      flex: 1;
+      padding: 6px 8px;
+      background: #14151a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: #9ca3af;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .sort-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .sort-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
 
     .file-details {
       margin-top: 12px;
@@ -264,7 +307,7 @@
     /* Cadre 2 - Grille large */
     .color-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
       gap: 10px;
       width: 100%;
       max-height: 520px;
@@ -285,19 +328,26 @@
       background: #14151a;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 6px;
+      padding: 8px 6px;
       cursor: pointer;
       transition: transform 0.1s, border-color 0.2s;
     }
 
     .color-card:hover {
-      transform: translateY(-2px);
+      /*transform: translateY(-2px);*/
       border-color: var(--accent);
     }
 
     .color-card.active {
       border: 2px solid #22c55e;
       box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    }
+
+    .color-count {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #38bdf8;
+      margin-bottom: 4px;
     }
 
     .color-swatch {
@@ -333,29 +383,6 @@
       color: #6b7280;
       margin-top: 12px;
       text-align: center;
-    }
-
-    /* Bulle flottante (Tooltip) */
-    .pixel-tooltip {
-      position: fixed;
-      pointer-events: none;
-      background: rgba(18, 19, 24, 0.92);
-      color: #38bdf8;
-      border: 1px solid var(--accent);
-      border-radius: 20px;
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(4px);
-      opacity: 0;
-      transform: translate(-50%, -130%);
-      transition: opacity 0.15s ease, transform 0.05s ease-out;
-      z-index: 9999;
-    }
-
-    .pixel-tooltip.visible {
-      opacity: 1;
     }
   </style>
 </head>
@@ -398,12 +425,21 @@
         Cliquez sur une couleur du plateau pour la mettre en surbrillance.
       </p>
 
-      <!-- NOUVEAU : Changement de fond -->
+      <!-- Changement de fond -->
       <div class="bg-selector">
         <span>Fond :</span>
         <button class="bg-btn active" data-bg="#14151a" title="Fond Sombre (Défaut)"></button>
         <button class="bg-btn" data-bg="#8d8d8d" title="Fond Gris"></button>
         <button class="bg-btn" data-bg="#f8f8f8" title="Fond Blanc"></button>
+      </div>
+
+      <!-- NOUVEAU : Changement d'ordre de tri -->
+      <div class="sort-selector">
+        <span>Tri de la palette :</span>
+        <div class="sort-buttons">
+          <button class="sort-btn active" data-sort="find" title="Par ordre de scan">Trouvaille</button>
+          <button class="sort-btn" data-sort="dominant" title="Par nombre de pixels (décroissant)">Dominante</button>
+        </div>
       </div>
     </div>
 
@@ -416,9 +452,6 @@
 
   </div>
 
-  <!-- Bulle flottante -->
-  <div id="pixel-tooltip" class="pixel-tooltip"></div>
-
   <script>
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input');
@@ -428,7 +461,6 @@
     const saveBtn = document.getElementById('save-btn');
     const statusText = document.getElementById('status');
     const fileDetails = document.getElementById('file-details');
-    const tooltip = document.getElementById('pixel-tooltip');
 
     const toleranceSlider = document.getElementById('tolerance-slider');
     const toleranceValDisplay = document.getElementById('tolerance-val');
@@ -438,6 +470,7 @@
     let originalImgHeight = 0;
     let originalPixelData = [];
     let activeHexColor = null;
+    let currentSortMode = 'find'; // 'find' ou 'dominant'
 
     const API_URL = (window.location.protocol === 'file:')
       ? 'http://localhost:8000/api/save'
@@ -455,13 +488,12 @@
       if (e.target.files.length) handleFile(e.target.files[0]);
     });
 
-    // Événement déplacement du curseur de tolérance
-    // 1. Déplacement manuel de la barre (Slider)
+    // 1. Déplacement manuel du slider de tolérance
     toleranceSlider.addEventListener('input', (e) => {
       updateToleranceValue(e.target.value);
     });
 
-    // 2. Clic sur le texte pour ouvrir le mode Édition
+    // 2. Clic sur le texte pour passer en édition
     toleranceValDisplay.addEventListener('click', () => {
       toleranceInput.value = toleranceSlider.value;
       toleranceValDisplay.style.display = 'none';
@@ -477,16 +509,14 @@
       }
     });
 
-    // 4. Validation de la saisie à la perte de focus (Clic ailleurs)
+    // 4. Validation à la perte de focus
     toleranceInput.addEventListener('blur', () => {
       validateAndApplyInput();
     });
 
-    // Fonction de correction et d'application de la tolérance
     function validateAndApplyInput() {
       let val = parseInt(toleranceInput.value, 10);
 
-      // Correction automatique si vide, NaN ou hors limites (0-75)
       if (isNaN(val)) {
         val = parseInt(toleranceSlider.value, 10);
       } else if (val < 0) {
@@ -495,16 +525,13 @@
         val = 75;
       }
 
-      // Remise en place de l'affichage texte
       toleranceInput.style.display = 'none';
       toleranceValDisplay.style.display = 'inline-block';
 
-      // Synchronise le slider et relance l'analyse
       toleranceSlider.value = val;
       updateToleranceValue(val);
     }
 
-    // Fonction centrale pour mettre à jour le texte et recalculer
     function updateToleranceValue(val) {
       toleranceValDisplay.textContent = `${val}%`;
 
@@ -513,21 +540,29 @@
       }
     }
 
-    // Gestion du changement de couleur de fond de la zone de prévisualisation
+    // Changement de fond
     const bgButtons = document.querySelectorAll('.bg-btn');
     const imageWrapper = document.getElementById('image-wrapper');
 
     bgButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Retire la classe active de tous les boutons
         bgButtons.forEach(b => b.classList.remove('active'));
-
-        // Active le bouton cliqué
         btn.classList.add('active');
-
-        // Applique la couleur de fond sélectionnée
         const newBg = btn.getAttribute('data-bg');
         imageWrapper.style.backgroundColor = newBg;
+      });
+    });
+
+    // Changement de mode de tri
+    const sortButtons = document.querySelectorAll('.sort-btn');
+    sortButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sortButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentSortMode = btn.getAttribute('data-sort');
+        if (originalPixelData.length > 0) {
+          processColors();
+        }
       });
     });
 
@@ -585,7 +620,6 @@
 
           if (a === 0) continue;
 
-          // On applique le même lissage de tolérance pour le surbrillance canvas
           const qR = quantizeValue(r, tolerancePercent);
           const qG = quantizeValue(g, tolerancePercent);
           const qB = quantizeValue(b, tolerancePercent);
@@ -604,10 +638,8 @@
       }
     }
 
-    // Fonction de quantification selon le % de tolérance
     function quantizeValue(value, tolerancePercent) {
       if (tolerancePercent === 0) return value;
-      // Convertit le % (0-75) en taille de pas (bucket size) de 1 à ~100
       const step = Math.max(1, Math.round((tolerancePercent / 100) * 128));
       return Math.min(255, Math.floor(value / step) * step + Math.floor(step / 2));
     }
@@ -629,7 +661,6 @@
         let g = data[i + 1];
         let b = data[i + 2];
 
-        // Quantification si tolérance > 0
         r = quantizeValue(r, tolerancePercent);
         g = quantizeValue(g, tolerancePercent);
         b = quantizeValue(b, tolerancePercent);
@@ -643,54 +674,60 @@
         }
       }
 
+      // Conversion de la Map en tableau pour appliquer le tri
+      let colorEntries = Array.from(colorMap.entries()).map(([hex, data]) => ({
+        hex,
+        ...data
+      }));
+
+      // Application du tri si sélectionné
+      if (currentSortMode === 'dominant') {
+        colorEntries.sort((a, b) => b.count - a.count);
+      }
+
       colorGrid.innerHTML = '';
-      colorMap.forEach((rgb, hex) => {
+      colorEntries.forEach((item) => {
         const card = document.createElement('div');
         card.className = 'color-card';
-        card.dataset.hex = hex;
+        card.dataset.hex = item.hex;
 
+        // 1. Nombre de pixels trouvés
+        const countDisplay = document.createElement('span');
+        countDisplay.className = 'color-count';
+        countDisplay.textContent = `(${item.count}) trouvé(s)`;
+
+        // 2. Texture pixel (Swatch)
         const swatch = document.createElement('div');
         swatch.className = 'color-swatch';
-        swatch.style.backgroundColor = hex;
+        swatch.style.backgroundColor = item.hex;
 
+        // Informations (HEX & RGB)
         const info = document.createElement('div');
         info.className = 'color-info';
 
+        // 3. Code HEX
         const hexCode = document.createElement('span');
         hexCode.className = 'color-hex';
-        hexCode.textContent = hex.toUpperCase();
+        hexCode.textContent = item.hex.toUpperCase();
 
+        // 4. Code RGB
         const rgbCode = document.createElement('span');
         rgbCode.className = 'color-rgb';
-        rgbCode.textContent = `RGB(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+        rgbCode.textContent = `RGB(${item.r}, ${item.g}, ${item.b})`;
 
         info.appendChild(hexCode);
         info.appendChild(rgbCode);
 
+        // Assemblage de la carte dans l'ordre demandé
+        card.appendChild(countDisplay);
         card.appendChild(swatch);
         card.appendChild(info);
 
-        // Bulle survol
-        card.addEventListener('mouseenter', () => {
-          tooltip.textContent = `(${rgb.count}) pixel${rgb.count > 1 ? 's' : ''} existant(e)${rgb.count > 1 ? 's' : ''}`;
-          tooltip.classList.add('visible');
-        });
-
-        card.addEventListener('mousemove', (e) => {
-          tooltip.style.left = `${e.clientX}px`;
-          tooltip.style.top = `${e.clientY}px`;
-        });
-
-        card.addEventListener('mouseleave', () => {
-          tooltip.classList.remove('visible');
-        });
-
-        card.addEventListener('click', () => highlightColor(hex));
+        card.addEventListener('click', () => highlightColor(item.hex));
 
         colorGrid.appendChild(card);
       });
 
-      // Si une couleur était déjà sélectionnée, ré-applique la surbrillance
       if (activeHexColor) {
         renderPixelArt(activeHexColor);
       }
@@ -718,7 +755,6 @@
     saveBtn.addEventListener('click', () => {
       const exportElem = document.getElementById('export-container');
 
-      tooltip.classList.remove('visible');
       colorGrid.classList.add('exporting');
 
       html2canvas(exportElem, {
@@ -752,5 +788,4 @@
     });
   </script>
 </body>
-
 </html>
