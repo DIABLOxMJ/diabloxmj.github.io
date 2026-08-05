@@ -1,0 +1,24 @@
+Le processus d'installation facile m'a permis de tout mettre en marche en environ 20 minutes sur Windows, je suis sur Windows 11
+
+1. Ouvrez PowerShell en tant qu'administrateur.
+
+2. Installez les outils requis :
+winget install --id Git.Git -e
+winget install --id Kitware.CMake -e
+winget install --id Ninja-build.Ninja -e
+winget install --id Microsoft.VisualStudio.2022.Community -e --override "--add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended --passive --norestart"
+
+- Faites attention à PowerShell car il peut vous demander d'appuyer sur entrée pour exécuter les commandes dans l'ordre
+- Vous pouvez fermer la fenêtre PowerShell après cela
+
+4. Utilisez la recherche Windows et trouvez et ouvrez “x64 Native Tools Command Prompt for VS 2022”.
+Cela ouvrira un nouveau terminal où vous exécuterez les commandes à l'étape 5
+
+5. Clonez et construisez Aseprite :
+
+cd C:\
+git clone --recursive https://github.com/aseprite/aseprite.git
+cd C:\aseprite
+build.cmd --auto
+
+6. Quand la construction est terminée, l’exécutable devrait être ici : C:\aseprite\build\bin\aseprite.exe
