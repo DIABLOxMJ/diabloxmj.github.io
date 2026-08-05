@@ -161,7 +161,7 @@
             color: var(--texte);
             border: 1px solid var(--bg-bouton-hover);
             padding-top: 5px;
-            padding-bottom: 5px;
+            padding-bottom: 8px;
             padding-left: 10px;
             padding-right: 10px;
             border-radius: 4px;
@@ -369,17 +369,20 @@
             Catalogue
             <button class="btn-toggle-errors" onclick="togglePanneauElements()" id="toggle-elements-btn" title="Afficher/Masquer les éléments">☰ Éléments</button>
         </h2>
-        <div class="onglets">
-            <button id="tab-blocks" class="onglet-btn actif" onclick="switchTab('blocks')">Blocs</button>
-            <button id="tab-items" class="onglet-btn" onclick="switchTab('items')">Items</button>
+        <div class="onglets" style="padding-bottom: 8px; border-bottom: 2px solid var(--bg-bouton);">
+            <button id="tab-inspection" class="onglet-btn actif">🔬 Inspection</button>
             <button id="tab-comparaison" class="onglet-btn" onclick="switchTab('comparaison')">🔎 Comparateur</button>
         </div>
-        <div class="search-container">
+        <div class="Sous-Menu-1-onglets" style="padding-bottom: 8px; border-bottom: 2px solid var(--bg-bouton);">
+            <button id="tab-blocks" class="onglet-btn actif" onclick="switchTab('blocks')">Blocs</button>
+            <button id="tab-items" class="onglet-btn" onclick="switchTab('items')">Items</button>
+        </div>
+        <div class="search-container" style="padding-top: 12px; border-bottom: 2px solid var(--bg-bouton);">
             <input type="text" id="search" class="search-bar" placeholder="Rechercher un élément..." oninput="onSearchInput()">
             <button id="btn-filter-diff" class="btn-filter-toggle" onclick="toggleFilterDiff()" title="Filtrer uniquement les fichiers avec du contenu différent">⚠️ Différents</button>
             <button id="btn-filter-missing" class="btn-filter-toggle" onclick="toggleFilterMissing()" title="Masquer les éléments terminés / présents">👁️ Manquants</button>
         </div>
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; margin-bottom: 8px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 2px solid var(--bg-bouton);">
             <div style="display: flex; gap: 5px;">
                 <div id="toolbar-actions" class="toolbar-actions" style="display: flex; gap: 5px;">
                     <button class="btn-toggle-errors" onclick="toggleSelectAll(true)" style="font-size: 0.75rem;">☑️ Tout cocher</button>
