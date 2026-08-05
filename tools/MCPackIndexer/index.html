@@ -45,18 +45,16 @@
         #cadre-liste { width: 34%; background-color: var(--bg-cadre); }
         #cadre-aperçu { width: 66%; background-color: #2d2d38; border-right: none; overflow-y: auto; }
 
-        
         #cadre-outils {
             position: absolute; top: 15px; left: 15px; width: 20%; height: calc(100% - 30px);
             background-color: rgb(36, 36, 43, 0.5); padding: 15px; border-radius: 8px;
             box-shadow: 0 8px 32px var(--shadow); border: 1px solid #2d2d37;
             display: flex; flex-direction: column; z-index: 10;
-            backdrop-filter: blur(4px); /* Petit effet optionnel pour lier la transparence */
+            backdrop-filter: blur(4px);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
         }
         #cadre-outils.hidden { transform: translateX(-280px); opacity: 0; pointer-events: none; }
         .search-bar { width: 100%; padding: 8px 12px; margin-bottom: 12px; background-color: var(--bg-principal); border: 1px solid #333; border-radius: 4px; color: var(--texte); font-size: 0.85rem; }
-
 
         h2 {
             font-size: 1.2rem;
@@ -178,7 +176,7 @@
             border-color: #ff9800;
         }
 
-        .onglets { display: flex; margin-bottom: 10px; gap: 5px; }
+        .onglets, .Sous-Menu-1-onglets { display: flex; margin-bottom: 10px; gap: 5px; }
         .onglet-btn {
             flex: 1;
             padding: 8px;
@@ -194,7 +192,6 @@
 
         .clickable-path {
             color: #64b5f6;
-            /*text-decoration: underline;*/
             cursor: pointer;
             font-family: monospace;
             word-break: break-all;
@@ -203,7 +200,6 @@
 
         .clickable-header {
             cursor: pointer;
-            /*text-decoration: underline;*/
             transition: opacity 0.2s;
         }
         .clickable-header:hover {
@@ -369,19 +365,25 @@
             Catalogue
             <button class="btn-toggle-errors" onclick="togglePanneauElements()" id="toggle-elements-btn" title="Afficher/Masquer les éléments">☰ Éléments</button>
         </h2>
+        
+        <!-- NIVEAU 1 : ONGLETS PRINCIPAUX -->
         <div class="onglets" style="padding-bottom: 8px; border-bottom: 2px solid var(--bg-bouton);">
-            <button id="tab-inspection" class="onglet-btn actif">🔬 Inspection</button>
+            <button id="tab-inspection" class="onglet-btn actif" onclick="switchToInspectionMode()">🔬 Inspection</button>
             <button id="tab-comparaison" class="onglet-btn" onclick="switchTab('comparaison')">🔎 Comparateur</button>
         </div>
-        <div class="Sous-Menu-1-onglets" style="padding-bottom: 8px; border-bottom: 2px solid var(--bg-bouton);">
+        
+        <!-- NIVEAU 2 : SOUS-MENU DE L'INSPECTION (BLOCS / ITEMS) -->
+        <div id="sub-menu-inspection" class="Sous-Menu-1-onglets" style="padding-bottom: 8px; border-bottom: 2px solid var(--bg-bouton);">
             <button id="tab-blocks" class="onglet-btn actif" onclick="switchTab('blocks')">Blocs</button>
             <button id="tab-items" class="onglet-btn" onclick="switchTab('items')">Items</button>
         </div>
-        <div class="search-container" style="padding-top: 12px; border-bottom: 2px solid var(--bg-bouton);">
+
+        <div class="search-container" style="border-bottom: 2px solid var(--bg-bouton);">
             <input type="text" id="search" class="search-bar" placeholder="Rechercher un élément..." oninput="onSearchInput()">
-            <button id="btn-filter-diff" class="btn-filter-toggle" onclick="toggleFilterDiff()" title="Filtrer uniquement les fichiers avec du contenu différent">⚠️ Différents</button>
-            <button id="btn-filter-missing" class="btn-filter-toggle" onclick="toggleFilterMissing()" title="Masquer les éléments terminés / présents">👁️ Manquants</button>
+            <button id="btn-filter-diff" class="btn-filter-toggle" onclick="toggleFilterDiff()" title="Filtrer uniquement les fichiers avec du contenu différent" style="display: none;">⚠️ Différents</button>
+            <button id="btn-filter-missing" class="btn-filter-toggle" onclick="toggleFilterMissing()" title="Masquer les éléments terminés / présents" style="display: none;">👁️ Manquants</button>
         </div>
+
         <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 2px solid var(--bg-bouton);">
             <div style="display: flex; gap: 5px;">
                 <div id="toolbar-actions" class="toolbar-actions" style="display: flex; gap: 5px;">
@@ -398,7 +400,6 @@
     </div>
 
     <div id="cadre-outils">
-
         <h2 class="section-title-container" style="margin-bottom: 8px;">
             Outils Index
             <button class="btn-toggle-errors" onclick="toggleOutilsIndex()" id="btn-toggle-outils">Masquer</button>
@@ -479,6 +480,7 @@
 
     <script>
         let currentTab = localStorage.getItem('mcp_currentTab') || 'blocks'; 
+        let lastInspectionTab = localStorage.getItem('mcp_lastInspectionTab') || 'blocks';
         let currentSelectedId = localStorage.getItem('mcp_currentSelectedId') || null;
         let filterOnlyDiff = JSON.parse(localStorage.getItem('mcp_filterOnlyDiff')) || false;
         let filterOnlyMissing = JSON.parse(localStorage.getItem('mcp_filterOnlyMissing')) || false;
@@ -496,7 +498,7 @@
         let dbItems = [];
         let dbCategories = {};
         let dbComparaison = [];
-        let currentFilteredElements = []; // Stocke les éléments actuellement filtrés/visibles
+        let currentFilteredElements = [];
 
         let completedTasks = JSON.parse(localStorage.getItem('mcp_completedTasks')) || [];
         let selectedForExtraction = new Set();
@@ -515,7 +517,7 @@
             if(filterOnlyDiff && btnFilterDiff) btnFilterDiff.classList.add('active');
 
             const btnFilter = document.getElementById('btn-filter-missing');
-            if(filterOnlyMissing) btnFilter.classList.add('active');
+            if(filterOnlyMissing && btnFilter) btnFilter.classList.add('active');
 
             Promise.all([
                 fetch(`http://localhost:5000/get-index/blocks`).then(r => r.ok ? r.json() : []),
@@ -628,7 +630,7 @@
             localStorage.setItem('mcp_filterOnlyMissing', filterOnlyMissing);
             
             const btnFilter = document.getElementById('btn-filter-missing');
-            btnFilter.classList.toggle('active', filterOnlyMissing);
+            if (btnFilter) btnFilter.classList.toggle('active', filterOnlyMissing);
             
             filtrerElements();
         }
@@ -763,12 +765,10 @@
                 }
             }
             
-            // --- NOUVEAU : Filtrage des fichiers avec du contenu différent ---
             if (filterOnlyDiff && currentTab === 'comparaison') {
                 filteredElements = filteredElements.filter(e => e.has_content_diff === true);
             }
         
-            // Mise à jour du compteur d'éléments visibles
             const counterSpan = document.getElementById('counter-elements-visible');
             if (counterSpan) {
                 counterSpan.innerText = `${filteredElements.length} élément(s)`;
@@ -789,7 +789,6 @@
             
                 const elemIdentifier = currentTab === 'comparaison' ? elem.path : elem.id;
             
-                // On affiche la checkbox UNIQUEMENT si on est sur l'onglet comparaison
                 if (currentTab === 'comparaison') {
                     const chk = document.createElement('input');
                     chk.type = 'checkbox';
@@ -810,7 +809,6 @@
                     wrapper.appendChild(chk);
                 }
             
-                // Création du bouton pour l'élément
                 const btn = document.createElement('button');
                 btn.className = 'btn-catalogue';
                 btn.style.flex = '1';
@@ -821,7 +819,6 @@
                     btn.classList.add('comp-selected');
                 }
             
-                // Texte & style selon l'onglet
                 if (currentTab === 'comparaison') {
                     const diffEmoji = elem.has_content_diff ? ' ⚠️' : '';
                     const txtSuffix = isSelected ? '  👈 ( Ouvert )' : '';
@@ -863,18 +860,15 @@
             updateExtractionButtonVisual();
         }
 
-        // Tout cocher / décocher UNIQUEMENT dans les éléments VISIBLES et FILTRÉS
         function toggleSelectAll(select) {
             currentFilteredElements.forEach(elem => {
                 const id = currentTab === 'comparaison' ? elem.path : elem.id;
             
-                // Respect du filtre "Manquants"
                 if (filterOnlyMissing) {
                     if (currentTab === 'comparaison' && elem.status && elem.status.toLowerCase() !== 'missing') return;
                     if (currentTab !== 'comparaison' && completedTasks.includes(elem.id)) return;
                 }
             
-                // Respect du filtre "Différents"
                 if (filterOnlyDiff && currentTab === 'comparaison') {
                     if (!elem.has_content_diff) return;
                 }
@@ -889,7 +883,6 @@
             genererListe(currentFilteredElements);
         }
 
-        // Met à jour le texte du bouton unique d'extraction
         function updateExtractionButtonVisual() {
             const btn = document.getElementById('extract-single-btn');
             if (!btn) return;
@@ -904,7 +897,6 @@
             }
         }
         
-        // Choisit l'extraction individuelle ou par lot
         function gererActionExtraction() {
             if (selectedForExtraction.size > 0) {
                 extraireFichiersCoches();
@@ -913,7 +905,6 @@
             }
         }
 
-        // Envoi du lot à l'API Flask
         function extraireFichiersCoches() {
             if (selectedForExtraction.size === 0) return;
         
@@ -951,24 +942,58 @@
         function updateToolbarVisibility() {
             const toolbar = document.getElementById('toolbar-actions');
             if (toolbar) {
-                // Affiche la barre uniquement si on est sur l'onglet comparaison
                 toolbar.style.display = (currentTab === 'comparaison') ? 'flex' : 'none';
             }
+        }
+
+        function switchToInspectionMode() {
+            switchTab(lastInspectionTab, true);
         }
 
         function switchTab(type, resetSelection = true) {
             currentTab = type;
             localStorage.setItem('mcp_currentTab', type);
-            if(resetSelection) resetSelectedElement();
+            if (type === 'blocks' || type === 'items') {
+                lastInspectionTab = type;
+                localStorage.setItem('mcp_lastInspectionTab', type);
+            }
+
+            if (resetSelection) resetSelectedElement();
 
             if (type !== 'comparaison') {
                 filterComparatorFolder = null;
                 localStorage.removeItem('mcp_filterComparatorFolder');
             }
 
+            const subMenu = document.getElementById('sub-menu-inspection');
+            const tabInspection = document.getElementById('tab-inspection');
+            const tabComparaison = document.getElementById('tab-comparaison');
+            const btnDiff = document.getElementById('btn-filter-diff');
+            const btnMissing = document.getElementById('btn-filter-missing');
+
+            if (type === 'blocks' || type === 'items') {
+                subMenu.style.display = 'flex';
+                tabInspection.classList.add('actif');
+                tabComparaison.classList.remove('actif');
+                btnDiff.style.display = 'none';
+                btnMissing.style.display = 'none';
+            } else if (type === 'comparaison') {
+                subMenu.style.display = 'none';
+                tabInspection.classList.remove('actif');
+                tabComparaison.classList.add('actif');
+                btnDiff.style.display = 'flex';
+                btnMissing.style.display = 'flex';
+            } else {
+                subMenu.style.display = 'none';
+                tabInspection.classList.remove('actif');
+                tabComparaison.classList.remove('actif');
+                btnDiff.style.display = 'none';
+                btnMissing.style.display = 'none';
+            }
+
             document.getElementById('tab-blocks').classList.toggle('actif', type === 'blocks');
             document.getElementById('tab-items').classList.toggle('actif', type === 'items');
-            document.getElementById('tab-comparaison').classList.toggle('actif', type === 'comparaison');
+
             updateToolbarVisibility();
             genererBoutonsCategories();
             filtrerElements();
@@ -981,9 +1006,15 @@
             filterComparatorFolder = null;
             localStorage.removeItem('mcp_filterComparatorFolder');
 
+            document.getElementById('sub-menu-inspection').style.display = 'none';
+            document.getElementById('tab-inspection').classList.remove('actif');
             document.getElementById('tab-blocks').classList.remove('actif');
             document.getElementById('tab-items').classList.remove('actif');
             document.getElementById('tab-comparaison').classList.remove('actif');
+
+            document.getElementById('btn-filter-diff').style.display = 'none';
+            document.getElementById('btn-filter-missing').style.display = 'none';
+
             updateToolbarVisibility();
             genererBoutonsCategories();
             genererListe(dbCategories[catName]);
@@ -1021,7 +1052,6 @@
             else if (currentTab === 'comparaison') baseData = dbComparaison;
             else baseData = dbCategories[currentTab] || [];
 
-            // Filtrage par dossier dans le comparateur
             if (currentTab === 'comparaison' && filterComparatorFolder) {
                 baseData = baseData.filter(e => {
                     if (!e.path) return false;
@@ -1031,21 +1061,19 @@
                 });
             }
         
-            // --- Séparation des termes d'inclusion et d'exclusion ---
             const tokens = rawQuery.toLowerCase().split(/\s+/).filter(t => t.length > 0);
             const includes = [];
             const excludes = [];
         
             tokens.forEach(token => {
                 if (token.startsWith('-') && token.length > 1) {
-                    excludes.push(token.substring(1)); // On retire le '-'
+                    excludes.push(token.substring(1));
                 } else {
                     includes.push(token);
                 }
             });
         
             const filtres = baseData.filter(elem => {
-                // Détermination du texte à tester (chemin ou nom + id)
                 let textToSearch = "";
                 if (currentTab === 'comparaison') {
                     textToSearch = (elem.path || "").toLowerCase();
@@ -1053,15 +1081,12 @@
                     textToSearch = ((elem.buttonName || "") + " " + (elem.id || "")).toLowerCase();
                 }
             
-                // 1. Vérification des EXCLUSIONS (si un terme exclu est trouvé, on élimine immédiatement l'élément)
                 const isExcluded = excludes.some(ex => textToSearch.includes(ex));
                 if (isExcluded) return false;
             
-                // 2. Vérification des INCLUSIONS
-                if (includes.length === 0) return true; // Si l'utilisateur n'a tapé que des exclusions (ex: "-glass")
+                if (includes.length === 0) return true;
             
                 return includes.every(inc => {
-                    // Prise en compte spéciale de l'émoji ou du terme diff pour l'onglet comparaison
                     if (currentTab === 'comparaison' && (inc === '⚠️' || inc === 'diff')) {
                         return elem.has_content_diff === true;
                     }
@@ -1109,7 +1134,6 @@
             const headerNext = document.getElementById('header-next-file');
 
             headerMain.onclick = () => systemOpen(mainPath, 'folder');
-            // Le clic pointe vers nextPath si disponible, sinon on peut utiliser defaultPath
             headerNext.onclick = () => systemOpen(nextPath, 'folder');
 
             sectionCodeSingle.style.display = 'none';
@@ -1118,7 +1142,6 @@
             boxMain.innerText = "⏳ Lecture du fichier Main...";
             boxNext.innerText = "⏳ Lecture du fichier Next...";
 
-            // 1. Chargement du fichier Pack (Main)
             fetch(`http://localhost:5000/read-file`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1134,7 +1157,6 @@
             })
             .catch(err => { boxMain.innerText = "Erreur réseau au chargement de Pack (Main)"; });
         
-            // 2. Chargement du fichier Pack (Next) avec fallback vers Pack (Default)
             fetch(`http://localhost:5000/read-file`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1146,7 +1168,6 @@
                     headerNext.innerText = "📁 Pack (Next) - Nouveau ↗️";
                     boxNext.innerHTML = formatCodeWithLineNumbers(data.content);
                 } else {
-                    // Fichier non trouvé dans Next -> Tentative de repli sur Default
                     console.warn(`[Next] non trouvé (${nextPath}). Tentative sur [Default]...`);
                     return fetch(`http://localhost:5000/read-file`, {
                         method: 'POST',
@@ -1183,7 +1204,6 @@
             document.getElementById('preview-title').innerText = elem.buttonName;
             document.getElementById('preview-id').innerText = elem.id;
 
-            // --- Gestion du Blockstate (Blocs) ---
             const blockstateRow = document.getElementById('row-blockstate');
             const bStateSpan = document.getElementById('path-blockstate');
             if (currentTab === 'blocks' && elem.blockstate) {
@@ -1191,7 +1211,7 @@
                 bStateSpan.innerText = elem.blockstate;
                 bStateSpan.className = "clickable-path";
                 bStateSpan.onclick = () => {
-                    systemOpen(elem.blockstate, 'file');
+                    // systemOpen(elem.blockstate, 'file');
                     chargerFichierDansVisualiseur(elem.blockstate);
                 };
             } else {
@@ -1199,7 +1219,6 @@
                 bStateSpan.onclick = null;
             }
         
-            // --- Gestion de l'Item Definition (Items) ---
             const itemDefRow = document.getElementById('row-item-def');
             const itemDefSpan = document.getElementById('path-item-def');
             if (currentTab === 'items' && elem.item_definition) {
@@ -1207,7 +1226,7 @@
                 itemDefSpan.innerText = elem.item_definition;
                 itemDefSpan.className = "clickable-path";
                 itemDefSpan.onclick = () => {
-                    systemOpen(elem.item_definition, 'file');
+                    // systemOpen(elem.item_definition, 'file');
                     chargerFichierDansVisualiseur(elem.item_definition);
                 };
             } else {
@@ -1215,7 +1234,6 @@
                 itemDefSpan.onclick = null;
             }
         
-            // --- Gestion des Modèles (Commune aux Blocs et Items) ---
             const modelSpan = document.getElementById('path-model');
             modelSpan.innerHTML = '';
         
@@ -1231,7 +1249,7 @@
                     pLink.style.marginTop = idx > 0 ? "2px" : "0px";
                     pLink.innerText = (modelsList.length > 1 ? `• ` : '') + mPath;
                     pLink.onclick = () => {
-                        systemOpen(mPath, 'file');
+                        // systemOpen(mPath, 'file');
                         chargerFichierDansVisualiseur(mPath);
                     };
                     modelSpan.appendChild(pLink);
@@ -1244,7 +1262,6 @@
                 modelSpan.onclick = null;
             }
         
-            // --- Affichage des Textures ---
             const grid = document.getElementById('preview-textures-grid');
             grid.classList.remove('mode-texte');
             grid.innerHTML = '';
@@ -1525,16 +1542,7 @@
                 .then(data => {
                     dbComparaison = data; 
                     console.log("Données chargées, éléments :", dbComparaison.length);
-                    currentTab = 'comparaison'; 
-
-                    if (typeof filtrerElements === 'function') {
-                        filtrerElements();
-                        if (currentTab === 'comparaison') {
-                            genererBoutonsCategories();
-                        }
-                    } else {
-                        console.error("La fonction filtrerElements est introuvable !");
-                    }
+                    switchTab('comparaison', false);
                 })
                 .catch(error => {
                     console.error("Erreur :", error);

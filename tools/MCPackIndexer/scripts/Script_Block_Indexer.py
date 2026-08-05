@@ -109,11 +109,17 @@ def index_blocks():
         # Nettoyage des chemins de textures
         clean_textures = {}
         for key, val in combined_textures.items():
-            if val.startswith("#"):
-                clean_textures[key] = val
-            else:
-                clean_path = val.split(":")[-1] if ":" in val else val
-                clean_textures[key] = f"{PACK_DIR_SOURCE}/assets/minecraft/textures/{clean_path}.png"
+            # Si val est un dictionnaire (ex: objets de textures avancées), on extrait le chemin si possible
+            if isinstance(val, dict):
+                val = val.get("texture") or val.get("image") or ""
+
+            # S'assurer que val est une chaîne de caractères non vide
+            if isinstance(val, str) and val:
+                if val.startswith("#"):
+                    clean_textures[key] = val
+                else:
+                    clean_path = val.split(":")[-1] if ":" in val else val
+                    clean_textures[key] = f"{PACK_DIR_SOURCE}/assets/minecraft/textures/{clean_path}.png"
 
         block_entry = {
             "id": block_id,
