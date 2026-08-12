@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/orientable_vertical",
-  "textures": {
-    "front": "dimersion:block/mj_autobreaker/mj_autobreaker_front_vertical",
-    "side": "dimersion:block/mj_autobreaker/mj_autobreaker_top"
-  }
-}

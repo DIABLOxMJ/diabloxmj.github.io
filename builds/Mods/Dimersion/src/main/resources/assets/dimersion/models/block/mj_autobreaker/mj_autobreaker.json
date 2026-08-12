@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "particle": "dimersion:block/mj_autobreaker/mj_autobreaker_side",
-    "front": "dimersion:block/mj_autobreaker/mj_autobreaker_front",
-    "side": "dimersion:block/mj_autobreaker/mj_autobreaker_side",
-    "top": "dimersion:block/mj_autobreaker/mj_autobreaker_top"
-  }
-}
