@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "id": "minecraft:cobblestone",
+          "weight": 70
+        },
+        {
+          "type": "minecraft:item",
+          "id": "minecraft:coal_ore",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "id": "minecraft:iron_ore",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "id": "minecraft:gold_ore",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "id": "minecraft:lapis_ore",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "id": "minecraft:redstone_ore",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "id": "minecraft:emerald_ore",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "id": "minecraft:diamond_ore",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "random_sequence": "minecraft:blocks/cobblestone"
+}
