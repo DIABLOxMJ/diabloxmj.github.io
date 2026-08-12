@@ -1,0 +1,19 @@
+{
+  "group": "axecavator",
+  "category": "equipment",
+  "result": {
+    "id": "dimersion:mj_axecavator_gold",
+    "count": 1
+  },
+  "type": "crafting_shaped",
+  "pattern": [
+    "GH",
+    "G#",
+    " #"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "H": "minecraft:nether_star",
+    "#": "minecraft:stick"
+  }
+}

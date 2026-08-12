@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.diabloxmj.client.mj_excavator.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

@@ -1,0 +1,17 @@
+{
+	"required": true,
+	"package": "com.diabloxmj.mj_skyislava.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"MJ_LavaSky_Mixin_Chunk",
+		"MJ_LavaSky_Mixin_Fluid",
+		"MJ_LavaSky_Mixin_Opacity",
+		"MJ_LavaSky_Mixin_Optimizer"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

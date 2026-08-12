@@ -1,0 +1,18 @@
+{
+  "group": "xpbottle",
+  "category": "misc",
+  "result": {
+    "id": "dimersion:mj_xpbottle_lvl4",
+    "count": 1
+  },
+  "type": "crafting_shaped",
+  "pattern": [
+    " G ",
+    "G#G",
+    " G "
+  ],
+  "key": {
+    "G": "minecraft:emerald_block",
+    "#": "minecraft:glass_bottle"
+  }
+}

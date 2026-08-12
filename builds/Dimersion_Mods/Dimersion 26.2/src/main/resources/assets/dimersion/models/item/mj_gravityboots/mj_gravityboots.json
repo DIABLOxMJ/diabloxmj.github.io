@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dimersion:item/mj_gravityboots/mj_gravityboots"
+  }
+}

@@ -1,0 +1,50 @@
+{
+	"schemaVersion": 1,
+	"id": "dimersion",
+	"version": "${version}",
+	"name": "Dimersion",
+	"description": "My Modpack",
+	"authors": [
+		"DIABLOxMJ"
+	],
+	"contact": {
+		"homepage": "https://diabloxmj.github.io/"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/dimersion/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.diabloxmj.mj_dimersion.MJ_Dimersion_Enter",
+			"com.diabloxmj.mj_autobreaker.MJ_AutoBreaker_Enter",
+			"com.diabloxmj.mj_excavator.MJ_Excavator_Enter",
+			"com.diabloxmj.mj_gravityboots.MJ_GravityBoots_Enter",
+			"com.diabloxmj.mj_fogvision.MJ_FogVision_Enter",
+			"com.diabloxmj.mj_xpbottle.MJ_XPBottle_Enter"
+		],
+		"client": [
+			"com.diabloxmj.client.mj_autobreaker.MJ_AutoBreaker_Client",
+			"com.diabloxmj.client.mj_excavator.MJ_Excavator_Client",
+			"com.diabloxmj.client.mj_fogvision.MJ_FogVision_Client",
+			"com.diabloxmj.client.mj_xpbottle.MJ_XPBottle_Client"
+		]
+	},
+	"mixins": [
+		"mj_fogvision.mixins.json",
+		{
+			"config": "mj_fogvision.client.mixins.json",
+			"environment": "client"
+		},
+		"mj_excavator.mixins.json",
+		{
+			"config": "mj_excavator.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
