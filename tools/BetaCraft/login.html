@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="keywords" content="launcher, proxy, minecraft, beta, alpha, classic, server">
+		<meta name="description" content="Website based on Minecraft Classic">
+		<meta name="author" content="DIABLOxMJ">
+
+		<title>BetaCraft FR - Accueil</title>
+		<link rel="icon" href="./sources/img/favicon.ico">
+		<link rel="stylesheet" href="./sources/css/page.css">
+		<link rel="stylesheet" href="./sources/css/login.css">
+	</head>
+
+	<body>
+		<header class="navigation-container">
+			<nav class="navigation">
+				<a class="navigation-home" title="BetaCraft FR" href="index.html">
+					<img class="navigation-logo" alt="Logo" src="./sources/img/logo.png">
+				</a>
+				<div class="navigation-link navigation-link--start">
+					<a class="navigation-link navigation-link--white" href="blog.html">Blog</a>
+					<a class="navigation-link navigation-link--white" href="download.html">Téléchargement</a>
+					<a class="navigation-link navigation-link--white" href="">Donation</a>
+				</div>
+				<div class="navigation-link navigation-link--end">
+					<a class="navigation-link" href="">Connexion</a>
+				</div>
+			</nav>
+		</header>
+
+		<main class="main">
+			<section>
+				<h1>Se connecter</h1>
+				<p>Pour obtenir un code d'accès, utilisez Minecraft 1.5.2 pour vous connecter au serveur.</p>
+				<p class="p--warning">
+					Assurez-vous de vous connecter au préalable à votre compte Microsoft avec une licence Minecraft Java Edition achetée.
+					<br>
+					Les jeux piratés ne sont pas pris en charge.
+				</p>
+				<form class="account-form" action="https://betacraft.uk/login" method="post">
+					<input type="hidden" name="csrf" value="2FSXX7JFDOAZMZ6LRX4XQDF2I3ZU65GJVQXIROFDYPAFKZYVT4EA">
+					<div>
+						<label class="account-form-label" for="username-field">Nom d'utilisateur</label>
+						<input class="form-input" type="text" name="username" placeholder="Username" id="username-field">
+					</div>
+					<div>
+						<label class="form-label" for="password-field">Code d'accès</label>
+						<input class="form-input" type="text" autocapitalize="characters" name="password" placeholder="XXXX-XXXX" id="password-field">
+						<span class="span--note">Les codes ne sont pas sensibles à la casse.<br>Vous pouvez également omettre le tiret (-)</span>
+					</div>
+					<input class="form-input" type="submit" value="Se connecter">
+				</form>
+			</section>
+			<section>
+				<p>En vous connectant, vous pouvez personnaliser l'apparence et la cape sur le proxy Betacraft.</p>
+				<p>C'est pratique si vous souhaitez conserver votre apparence détaillée pour les versions modernes et une apparence plus simple (mais compatible) pour les anciennes versions.</p>
+				<p>Vous pouvez également réinitialiser le cache de votre apparence au lieu d'attendre 7 jours pour sa mise à jour (super !).</p>
+			</section>
+		</main>
+
+		<footer class="footer">
+			<a target="_blank" href=""><img width="40" height="40" src="./sources/img/discord.svg" alt="Discord"></a>
+			<a target="_blank" href=""><img width="40" height="40" src="./sources/img/patreon.svg" alt="Patreon"></a>
+			<a target="_blank" href=""><img width="40" height="40" src="./sources/img/youtube.svg" alt="YouTube"></a>
+			<br><br>
+			BetaCraft 2026 — Ce site web n'est pas affilié à Mojang..
+			<a class="footer-link" href="legal.html#terms-of-service">Conditions d'utilisation</a>
+			| <a class="footer-link" href="legal.html#privacy-policy">Politique de confidentialité</a>
+		</footer>
+	</body>
+</html>

@@ -1,0 +1,41 @@
+.main {
+	display: grid;
+	place-content: revert;
+	font-family: Verdana, sans-serif;
+	font-size: 1em;
+	line-height: 1.5;
+	row-gap: 1em;
+	max-width: 50rem;
+}
+
+.navigation {
+	max-width: 50rem;
+}
+
+.unselectable {
+	user-select: none;
+}
+
+h1, h2, h3, h4, h5 {
+	color: white;
+}
+
+.p--nomargin {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.post-title {
+	margin-top: .33em;
+	margin-bottom: .33em;
+}
+
+.blog-post-image {
+	width: 100%;
+	image-rendering: smooth;
+}
+
+.span--note {
+	color: var(--color-light-gray);
+	font-size: smaller;
+}

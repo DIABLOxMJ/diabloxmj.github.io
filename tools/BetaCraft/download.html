@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="keywords" content="launcher, proxy, minecraft, beta, alpha, classic, server">
+		<meta name="description" content="Website based on Minecraft Classic">
+		<meta name="author" content="DIABLOxMJ">
+
+		<title>BetaCraft FR - Accueil</title>
+		<link rel="icon" href="./sources/img/favicon.ico">
+		<link rel="stylesheet" href="./sources/css/page.css">
+		<link rel="stylesheet" href="./sources/css/download.css">
+	</head>
+
+	<body>
+		<header class="navigation-container">
+			<nav class="navigation">
+				<a class="navigation-home" title="BetaCraft FR" href="index.html">
+					<img class="navigation-logo" alt="Logo" src="./sources/img/logo.png">
+				</a>
+				<div class="navigation-link navigation-link--start">
+					<a class="navigation-link navigation-link--white" href="blog.html">Blog</a>
+					<a class="navigation-link navigation-link--white" href="download.html">Téléchargement</a>
+					<a class="navigation-link navigation-link--white" href="">Donation</a>
+				</div>
+				<div class="navigation-link navigation-link--end">
+					<a class="navigation-link" href="login.html">Connexion</a>
+				</div>
+			</nav>
+		</header>
+
+		<main class="main">
+			<section class="download">
+				<section class="download dh">
+				<h1>Download our launcher</h1>
+				<p>Betacraft Launcher preserves legacy Minecraft versions, making them playable and functional in modern times.</p>
+			</section>
+			<div>
+				<section class="download-section">
+					<section class="download download-table-limit-width">
+						<h2>Betacraft Launcher v1</h2>
+						<p class="download-version-description">Made in Java, supports versions up to 1.5.2.</p>
+						<p class="download-version-description"><a href="https://www.java.com/download/manual.jsp" target="_blank">Java Runtime Environment</a> est requis.</p>
+						<table class="download-table-limit-width">
+							<tbody>
+								<tr>
+									<td>
+										<img class="smooth-img" width="16" height="16" src="./sources/img/windows-xp.webp"> Windows : <sup><a href="#windows-note-v1">1</a></sup>
+									</td>
+									<td class="button-size-limit">
+										<a class="button button--orange download-link" href="https://github.com/betacraftuk/betacraft-launcher/releases/download/1.09_17/launcher-1.09_17.exe">
+											Télécharger
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img class="smooth-img" width="16" height="16" src="./sources/img/arch-linux.webp"> Arch Linux : <sup><a href="#arch-linux-note-v1">2</a></sup>
+									</td>
+									<td>
+										<a class="button button--orange download-link" href="#arch-linux-instructions">Instructions</a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img class="smooth-img" width="16" height="16" src="./sources/img/generic-linux.webp"> Linux : <sup><a href="#linux-note-v1">3</a></sup>
+									</td>
+									<td>
+										<a class="button button--orange download-link" href="https://github.com/betacraftuk/betacraft-launcher/releases/download/1.09_17/launcher-1.09_17.jar">
+											Télécharger
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img class="smooth-img" width="16" height="16" src="./sources/img/macos-10.7.webp"> macOS : <sup><a href="#macos-note-v1">4</a></sup>
+									</td>
+									<td>
+										<a class="button button--orange download-link" href="https://github.com/betacraftuk/betacraft-launcher/releases/latest/download/BetaCraft-Launcher-macOS.zip">
+											Télécharger
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<a href="https://github.com/betacraftuk/betacraft-launcher/tree/v1" target="_blank">Code source</a>
+						<ol class="span--note">
+							<li id="windows-note-v1" tabindex="1">Windows x86-32 ou x86-64, au moins Windows XP.</li>
+							<li id="arch-linux-note-v1" tabindex="2">Arch Linux x86-64.</li>
+							<li id="linux-note-v1" tabindex="3">Any OS with Linux kernel x86-32 ou x86-64.</li>
+							<li id="macos-note-v1" tabindex="4">macOS x86-32 ou x86-64, au moins Mac OS X 10.7.</li>
+						</ol>
+					</section>
+					<aside class="download-now"><picture><img class="download-thumbnail smooth-img" src="./sources/img/launcher-v1.png" alt="Launcher UI screenshot"></picture></aside>
+				</section>
+				<section id="arch-linux-instructions">
+					<b>Arch Linux :</b>
+					<br>Installer <text class="mono">betacraft-launcher-bin</text><sup><a href="https://aur.archlinux.org/packages/betacraft-launcher-bin" target="_blank">*</a></sup>
+					depuis <a href="https://wiki.archlinux.org/title/Arch_User_Repository" target="_blank">AUR</a> pour une version stable,
+					ou <text class="mono">betacraft-launcher-git</text><sup><a href="https://aur.archlinux.org/packages/betacraft-launcher-git" target="_blank">*</a></sup>
+					pour compiler le dernier commit.
+				</section>
+			</div>
+			<section class="download-section">
+				<section class="download download-table-limit-width">
+					<h2>Betacraft Launcher v2 (alpha)</h2>
+					<p class="download-version-description">Développé en C++, compatible avec les versions jusqu'à 1.12.2.</p>
+					<p class="download-version-description">En phase alpha, des bugs et des changements rapides sont à prévoir.</p>
+					<table class="download-table-limit-width">
+						<tbody>
+							<tr>
+								<td><img class="smooth-img" width="16" height="16" src="./sources/img/windows-10.webp"> Windows : <sup><a href="#windows-note-v2">1</a></sup></td>
+								<td>
+									<a class="button button--orange download-link" href="https://github.com/betacraftuk/betacraft-launcher/releases/download/2.0.0-alpha.20230623/betacraft-2.0.0-alpha.20230623-win64.zip">x86|64</a>
+								</td>
+								<td><a class="button button--orange download-link link-disabled">aarch64</a></td>
+							</tr>
+							<tr>
+								<td><img class="smooth-img" width="16" height="16" src="./sources/img/generic-linux.webp"> Linux : <sup><a href="#linux-note-v2">2</a></sup></td>
+								<td><a class="button button--orange download-link link-disabled">x86|64</a></td>
+								<td><a class="button button--orange download-link link-disabled">aarch64</a></td>
+							</tr>
+							<tr>
+								<td><img class="smooth-img" width="16" height="16" src="./sources/img/macos-10.14.webp"> macOS : <sup><a href="#macos-note-v2">3</a></sup></td>
+								<td class="button-size-limit"><a class="button button--orange download-link" href="https://github.com/betacraftuk/betacraft-launcher/releases/download/2.0.0-alpha.20230623/betacraft-2.0.0-alpha.20230623-osx64.zip">x86|64</a></td>
+								<td class="button-size-limit"><a class="button button--orange download-link" href="https://files.betacraft.uk/fileshare/betacraft-aarch64-2024-04-01.zip">aarch64</a></td>
+							</tr>
+						</tbody>
+					</table>
+					<a href="https://github.com/betacraftuk/betacraft-launcher/tree/v2" target="_blank">Code source</a>
+					<ol class="span--note">
+						<li id="windows-note-v2" tabindex="1">Windows x86-64, au moins Windows 10 build 1809.</li>
+						<li id="linux-note-v2" tabindex="2">Indisponible sur Linux pour le moment.</li>
+						<li id="macos-note-v2" tabindex="3">macOS x86-64 ou aarch64, au moins macOS 13.0.</li>
+					</ol>
+				</section>
+				<aside class="download-now"><picture><img class="download-thumbnail smooth-img" src="./sources/img/Launcher-v2.png" alt="Launcher UI screenshot"></picture></aside>
+			</section>
+
+				<section class="download-section">
+					<section class="download download-table-limit-width">
+						<h2>LegacyFix</h2>
+						<p class="download-version-description">L'élément essentiel qui fait la qualité de Betacraft Launcher.</p>
+						<p class="download-version-description">Installable pour Prism Launcher et les instances MultiMC.</p>
+						<table class="download-table-limit-width">
+							<tbody>
+								<tr>
+									<td><img class="smooth-img" width="16" height="16" src="./sources/img/prism-launcher.webp"> Prism Launcher :</td>
+									<td class="button-size-limit">
+										<a class="button button--orange download-link" href="https://github.com/betacraftuk/legacyfix/blob/develop/docs/Prism%20Launcher.md" target="_blank">
+											Instructions
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td><img class="smooth-img" width="16" height="16" src="./sources/img/multimc.webp"> MultiMC :</td>
+									<td>
+										<a class="button button--orange download-link" href="https://github.com/betacraftuk/legacyfix/blob/develop/docs/MultiMC.md" target="_blank">
+											Instructions
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td>LegacyFix jar :</td>
+									<td>
+										<a class="button button--orange download-link" href="https://nightly.link/betacraftuk/legacyfix/workflows/gradle/develop/artifact.zip">
+											Télécharger
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<a href="https://github.com/betacraftuk/legacyfix" target="_blank">Code source</a>
+					</section>
+					<aside class="download-now"><picture><img class="download-thumbnail smooth-img" src="./sources/img/legacyfix.png" alt="Launcher promo image"></picture></aside>
+				</section>
+
+				<section class="download-section">
+					<h2>D'autres services publics sont disponibles <a href="utilities.html">ici</a>.</h2>
+				</section>
+			</section>
+		</main>
+
+		<footer class="footer">
+			<a target="_blank" href=""><img width="40" height="40" src="./sources/img/discord.svg" alt="Discord"></a>
+			<a target="_blank" href=""><img width="40" height="40" src="./sources/img/patreon.svg" alt="Patreon"></a>
+			<a target="_blank" href=""><img width="40" height="40" src="./sources/img/youtube.svg" alt="YouTube"></a>
+			<br><br>
+			BetaCraft 2026 — Ce site web n'est pas affilié à Mojang..
+			<a class="footer-link" href="legal.html#terms-of-service">Conditions d'utilisation</a>
+			| <a class="footer-link" href="legal.html#privacy-policy">Politique de confidentialité</a>
+		</footer>
+	</body>
+</html>

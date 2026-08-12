@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!-- saved from url=(0026)https://betacraft.uk/flags -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="keywords" content="betacraft, launcher, proxy, minecraft, beta, alpha, classic, server">
+	<meta name="generator" content="betacraftuk/homepage">
+	<meta name="description" content="WorldGuard flags available to players on Betacraft server">
+	<meta name="author" content="Betacraft Team">
+
+	<title>Claim flags - Betacraft</title>
+	<link rel="icon" href="https://betacraft.uk/assets/favicon.png" type="image/png">
+	<link rel="stylesheet" href="./Claim flags - Betacraft_files/style.css">
+	<link rel="stylesheet" href="./Claim flags - Betacraft_files/flags.css">
+	<link rel="stylesheet" href="./Claim flags - Betacraft_files/lists.css">
+</head>
+
+<body>
+	<header class="navigation-container" aria-label="Header">
+		<nav aria-label="Navigation and logo" class="navigation">
+			<a class="navigation__home" href="https://betacraft.uk/" title="Homepage" aria-label="Go to homepage">
+				<img class="navigation__logo" alt="Betacraft written in the old Minecraft logo style" src="./Claim flags - Betacraft_files/logo.png">
+			</a>
+			<div class="navigation__links navigation__links--start" aria-label="Site navigation">
+				<a class="navigation__link navigation__link--white" href="https://betacraft.uk/blog">Blog</a>
+				<a class="navigation__link navigation__link--white" href="https://betacraft.uk/downloads">Downloads</a>
+				<a class="navigation__link navigation__link--white" href="https://www.patreon.com/Betacraft">Donate</a>
+				
+			</div>
+			<div class="navigation__links navigation__links--end" aria-label="Account navigation">
+				
+				<a class="navigation__link" href="https://betacraft.uk/login">Log in</a>
+				
+			</div>
+		</nav>
+	</header>
+
+	
+	
+
+	
+<main class="main" aria-label="Main content">
+	<section aria-label="Flags">
+		<h1>Introduction to claim flags</h1>
+		Flags can be used to permit or forbid actions inside your claim.
+		<br><br>
+		Syntax:
+		<p class="mono">
+			/rg flag &lt;region id&gt; &lt;flag&gt; [state]
+		</p>
+		<h2>Available flags</h2>
+
+		<table>
+			<tbody><tr class="table-header">
+				<td class="table-header"><b>Flag</b></td>
+				<td class="table-header"><b>Possible states</b></td>
+				<td class="table-header"><b>Notes</b></td>
+			</tr>
+			<tr>
+				<td>chest-access<sup><a href="https://betacraft.uk/flags#default-deny">[deny]</a></sup></td>
+				<td>allow; deny; none</td>
+				<td class="wrap">If non-members can access containers in your claim. Setting <font class="mono">none</font> will always make containers inaccessible to non-member players.</td>
+			</tr>
+			<tr>
+				<td>creeper-explosion<sup><a href="https://betacraft.uk/flags#staff-default">[staff default]</a></sup></td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether creepers should explode in your claim.</td>
+			</tr>
+			<tr>
+				<td>deny-spawn</td>
+				<td>
+					One or many mob types,<br> separated by commas:<br>
+					<br>
+					Chicken<br>
+					Cow<br>
+					Creeper<br>
+					Ghast<br>
+					Pig<br>
+					PigZombie<br>
+					Sheep<br>
+					Skeleton<br>
+					Slime<br>
+					Spider<br>
+					Squid<br>
+					Wolf<br>
+					<br>
+					<i>leave empty to disable</i>
+				</td>
+				<td class="wrap">Mobs listed in this setting will not spawn inside your claim.</td>
+			</tr>
+			<tr>
+				<td>fire-spread<sup><a href="https://betacraft.uk/flags#staff-default">[staff default]</a></sup></td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether fire should burn flammable blocks in your claim.</td>
+			</tr>
+			<tr>
+				<td>ghast-fireball</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether ghast fireballs should cause explosions in your claim.</td>
+			</tr>
+			<tr>
+				<td>grass-growth</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether grass should spread in your claim.</td>
+			</tr>
+			<tr>
+				<td>ice-form</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether ice should form in winter biomes in your claim.</td>
+			</tr>
+			<tr>
+				<td>ice-melt</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether ice should melt in your claim.</td>
+			</tr>
+			<tr>
+				<td>item-drop<sup><a href="https://betacraft.uk/flags#affects-everyone">[everyone]</a></sup></td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether players should be allowed to drop items in your claim.</td>
+			</tr>
+			<tr>
+				<td>lava-fire</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether lava should set nearby blocks on fire in your claim.</td>
+			</tr>
+			<tr>
+				<td>leaf-decay</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether leaves should decay in your claim.</td>
+			</tr>
+			<tr>
+				<td>lighter</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether all players should be able to light things on fire in your claim. Non-members by default are restricted from doing so.</td>
+			</tr>
+			<tr>
+				<td>mob-spawning</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether mobs can spawn at all.</td>
+			</tr>
+			<tr>
+				<td>mushroom-growth</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether mushrooms should spread in your claim.</td>
+			</tr>
+			<tr>
+				<td>pistons</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether pistons should work in your claim.</td>
+			</tr>
+			<tr>
+				<td>snow-fall</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether snowfall should form snow on your claim.</td>
+			</tr>
+			<tr>
+				<td>snow-melt</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether snow should melt in your claim.</td>
+			</tr>
+			<tr>
+				<td>tnt</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether TNT should be placeable and explode in your claim.</td>
+			</tr>
+			<tr>
+				<td>use</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether non-members should be able to use levers, buttons, pressure plates, doors, etc. in your claim.</td>
+			</tr>
+			<tr>
+				<td>vehicle-destroy</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether non-members should be able to destroy vehicles (boats &amp; all kinds of minecarts) in your claim.</td>
+			</tr>
+			<tr>
+				<td>vehicle-place</td>
+				<td>allow; deny; none</td>
+				<td class="wrap">Whether non-members should be able to place vehicles (boats &amp; all kinds of minecarts) in your claim.</td>
+			</tr>
+		</tbody></table>
+
+		<ol>
+			<li tabindex="1" id="default-deny">This flag effectively acts as <font class="mono">deny</font> by default.</li>
+			<li tabindex="2" id="affects-everyone">This flag affects everyone in the claim: members, owners and non-members.</li>
+			<li tabindex="2" id="staff-default">This flag is by default set to <font class="mono">deny</font> by staff on claim creation.</li>
+		</ol>
+	</section>
+</main>
+
+	<footer class="footer" aria-label="Footer containing legal information">
+		Betacraft 2013-2026 — This website is not affiliated with Mojang.
+		<a class="footer__link" href="https://betacraft.uk/legal#terms-of-service">Terms of Service</a>
+		| <a class="footer__link" href="https://betacraft.uk/legal#privacy-policy">Privacy Policy</a>
+	</footer>
+
+
+
+<protonpass-root-c8c5 data-protonpass-role="root" data-protonpass-theme="os"><template shadowrootmode="closed"></template></protonpass-root-c8c5></body></html>

@@ -1,0 +1,18 @@
+.account-form {
+	max-width: 40em;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	row-gap: 1em;
+}
+
+.form-input {
+	margin-top: 0.25em;
+	width: 100%;
+	padding: 0.4em;
+}
+
+.form-submit {
+	width: 50%;
+	margin-top: 0.25em;
+}

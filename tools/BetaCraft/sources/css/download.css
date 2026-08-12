@@ -1,0 +1,119 @@
+.smooth-img {
+	image-rendering: smooth;
+}
+
+.span--note {
+	color: var(--color-light-gray);
+	font-size: smaller;
+	padding-left: 20px;
+}
+
+li {
+	padding: 3px;
+}
+
+li:focus {
+	color: #e0d0d0;
+	background-color: midnightblue;
+	border: 1px dashed white;
+	padding: 2px;
+}
+
+.mono {
+	margin-top: 5px;
+	font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+	background-color: black;
+	text-align: start !important;
+	overflow-wrap: break-word;
+}
+
+/* Download Button */
+.button {
+	background: linear-gradient(#9e9e9e, #4e4e4e);
+	color: var(--color-white);
+	font-weight: bold;
+	text-align: center;
+	display: flex;
+	place-items: center;
+	place-content: center;
+	border-radius: 0.25em;
+	padding: 0.5em 1em;
+}
+
+.button--orange {
+	background: linear-gradient(var(--color-orange), var(--color-orange-dark));
+}
+
+.button-size-limit {
+	width: 10%;
+}
+
+.download {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.download > a {
+	margin-top: 1rem;
+}
+
+.download-section {
+	display: flex;
+	flex-direction: row;
+}
+
+section.download-section {
+	margin-top: 2rem;
+}
+
+.download-table-limit-width {
+	max-width: 25rem;
+}
+
+.download-version-description {
+	margin-top: 0;
+}
+
+.download-link {
+	flex: 1;
+}
+
+.link-disabled {
+	user-select: none;
+	filter: grayscale(90%);
+}
+
+.download-thumbnail {
+	width: 80%;
+}
+
+picture:has(.download-thumbnail) {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+picture:has(.download-thumbnail) > img {
+	border-radius: 8px;
+	width: 90%;
+	height: auto;
+	box-shadow: 2px 2px 14px 0 rgba(0,0,0,0.4);
+	-webkit-box-shadow: 2px 2px 14px 0 rgba(0,0,0,0.4);
+	-moz-box-shadow: 2px 2px 14px 0 rgba(0,0,0,0.4);
+}
+
+@media (max-width: 55em) {
+	#arch-linux-instructions {
+		padding-top: 1em;
+	}
+
+	.download-section {
+		flex-direction: column;
+	}
+
+	.download-table-limit-width {
+		max-width: none;
+	}
+}
