@@ -1,24 +1,16 @@
+desktop.ini
 /backup
-/tools/MCPackIndexer/Extract
-/tools/MCPackIndexer/Extract_ver
-/tools/MCPackIndexer/IndexData
-/tools/MCPackIndexer/Pack (Main)
-/tools/MCPackIndexer/Pack (Next)
-/tools/MCPackIndexer/Pack (Next) 26.2
-/tools/MCPackIndexer/Pack (Default)
-/tools/MCPackIndexer/Pack (Download)
-/tools/MCPackIndexer/Pack (Sound)
-/tools/MCSoundExtractor
+/tools/MCPackIndexer/Extract*
+/tools/MCPackIndexer/IndexData*
+/tools/MCPackIndexer/Pack*
 /tools/AutoST/modele_ia
 /tools/AutoST/stock_srt
-tools/python-manager-26.2.msix
+/tools/python-manager-26.2.msix
 /tools/MCWiki
 /builds/Faithful_Legacy
 /builds/troll
-/builds/Mods/Dimersion/YarnDoc
-/builds/MJ_DataPacks
-desktop.ini
-/tools/MCPackIndexer/Extract_2
 /tools/PixelCollector/Save
-/tools/MCPackIndexer/Pack (Main) faithful
-/tools/MCPackIndexer/Pack (Next) faithful
+/tools/Aseprite
+/tools/BetaCraft/Claim*
+/tools/BetaCraft/Heart*
+/tools/BetaCraft/Server*
