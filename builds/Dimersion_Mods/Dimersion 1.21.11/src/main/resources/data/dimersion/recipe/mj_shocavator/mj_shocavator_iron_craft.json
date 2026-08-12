@@ -1,0 +1,19 @@
+{
+  "group": "shocavator",
+  "category": "equipment",
+  "result": {
+    "id": "dimersion:mj_shocavator_iron",
+    "count": 1
+  },
+  "type": "crafting_shaped",
+  "pattern": [
+    "G",
+    "H",
+    "#"
+  ],
+  "key": {
+    "G": "minecraft:iron_ingot",
+    "H": "minecraft:nether_star",
+    "#": "minecraft:stick"
+  }
+}

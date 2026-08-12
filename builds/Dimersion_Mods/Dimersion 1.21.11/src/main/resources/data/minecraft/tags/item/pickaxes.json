@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "dimersion:mj_pickavator_copper",
+    "dimersion:mj_pickavator_diamond",
+    "dimersion:mj_pickavator_gold",
+    "dimersion:mj_pickavator_iron",
+    "dimersion:mj_pickavator_netherite",
+    "dimersion:mj_pickavator_stone",
+    "dimersion:mj_pickavator_wood"
+  ]
+}
