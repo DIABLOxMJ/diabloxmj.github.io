@@ -1,0 +1,41 @@
+{
+	"PORT": 5000,
+	"MINECRAFT_PATH": "G:\\Minecraft",
+	"UI": {
+	  "appTitle": "MCPackIndexer - Gestionnaire de Pack",
+	  "rootFolders": [
+		"blockstates",
+		"font",
+		"lang",
+		"models",
+		"particles",
+		"sounds",
+		"texts",
+		"textures"
+	  ]
+	},
+	"PATHS": {
+	  "IndexData": "IndexData",
+	  "Indexer": {
+		"PACK_MAIN": "Pack (Main)/assets",
+		"PACK_NEXT": "Pack (Next)/assets"
+	  },
+	  "Comparaison": {
+		"PACK_MAIN": "Pack (Main)/assets",
+		"PACK_NEXT": "Pack (Next)/assets",
+		"PACK_DEFAULT": "Pack (Default)/assets"
+	  },
+	  "Extract": {
+		"EXTRACT_DIR": "Extract/assets"
+	  },
+	  "Sound": {
+		"SOUND_OUTPUT_DIR": "Pack (Sound)"
+	  }
+	},
+	"FILES": {
+	  "BLOCKS_INDEX": "Index_Details_Blocks.json",
+	  "ITEMS_INDEX": "Index_Details_Items.json",
+	  "CATEGORY_INDEX": "Index_Details_Category.json",
+	  "COMPARISON_REPORT": "Index_Comparaison_Missing.json"
+	}
+  }
